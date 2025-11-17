@@ -1,7 +1,7 @@
 # FlickCine
 
 O **FlickCine** é uma aplicação web inspirada no Tinder — mas, em vez de criar *matches* entre pessoas, cria *matches* entre **pessoas e filmes**.  
-O utilizador faz login, vê filmes e séries obtidos da **API OMDb**, e faz “swipe” para indicar se gosta ou não.  
+O utilizador faz login, vê filmes e séries obtidos da **API TMDb**, e faz “swipe” para indicar se gosta ou não.  
 Com base nas preferências, o sistema cria uma **watchlist personalizada**.
 
 ---
