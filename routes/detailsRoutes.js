@@ -1,0 +1,1 @@
+/* detalhes de cada filme ou série render com o ejs */
