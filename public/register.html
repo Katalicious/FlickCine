@@ -11,12 +11,14 @@
     <form action="/register" method="post">
         <label for="name">Nome:</label>
         <input type="text" id="name" name="name" placeholder="O teu nome completo" required>
+        <p id="BlurName"></p>
         <br>
         <label for="idade">Idade:</label>
         <input type="date" id="idade" name="idade" required>
         <br>
         <label for="email">Email:</label>
         <input type="email" id="email" name="email" placeholder="meuemail@exemplo.com" required>
+        <p id="BlurEmail"></p>
         <br>
         <label for="sexo">Sexo:</label>
         <br>
@@ -30,8 +32,7 @@
         <input type="radio" id="sexo" name="sexo" value="Outro" required>
         <br>
         <label for="password">Palavra-passe:</label>
-        <input type="password" id="password" name="password" pattern="(?=.*\d)(?=.*[a-z])(?=.*[A-Z]).{8,}" 
-        title="Deve conter pelo menos um número, uma letra maiúscula, uma letra minúscula e pelo menos 8 caracteres." required>
+        <input type="password" id="password" name="password" required>
         <br>
         <label for="confirm-password">Confirmar Palavra-passe:</label>
         <input type="password" id="confirm-password" name="confirm-password" required>
