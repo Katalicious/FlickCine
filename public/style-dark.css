@@ -37,6 +37,10 @@ body.dark-mode .slider:before {
     background-color: #FFFFFF;
 }
 
+body.dark-mode h1 {
+    color: #FFFFFF;
+}
+
 body.dark-mode .footer {
     background-color: #1D1D1D; 
     border-top: 1px solid rgba(255, 255, 255, 0.1);
@@ -57,3 +61,4 @@ body.dark-mode .img-light {
 body.dark-mode .img-dark {
     display: block !important;
 }
+

@@ -1,0 +1,359 @@
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+    font-family: sans-serif;
+}
+
+body {
+    display: flex;
+    flex-direction: column;
+    min-height: 100vh;
+    transition: background 0.3s ease, color 0.3s ease;
+    background: linear-gradient(to bottom, #FFFFFF, #D3D3D3);
+    background-attachment: fixed;
+    
+    color: #1D1D1D;
+}
+
+.container {
+    max-width: 1200px;
+    margin: 0 auto;
+    padding: 0 20px;
+}
+
+a {
+    text-decoration: none;
+    color: inherit;
+}
+
+img {
+    display: block;
+    max-width: 100%;
+}
+
+.img-dark {
+    display: none;
+}
+
+.main-content {
+    flex: 1; 
+}
+
+.header {
+    padding: 15px 0;
+    width: 100%;
+    transition: background-color 0.3s ease;
+    background-color: #FFFFFF; 
+    border-bottom: 1px solid #D3D3D3;
+    box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+}
+
+.header-content {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.logo {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    font-weight: bold;
+    font-size: 1.2rem;
+}
+
+.logo-icon {
+    display: flex;
+    align-items: center;
+}
+
+.logo-icon img {
+    height: 45px; 
+    width: auto;
+}
+
+.navbar {
+    display: flex;
+    gap: 20px;
+}
+
+.navbar a {
+    font-size: 0.9rem;
+    font-weight: 500;
+    color: #1D1D1D;
+}
+
+.actions {
+    display: flex;
+    align-items: center;
+    gap: 15px;
+}
+
+.btn {
+    padding: 8px 20px;
+    border-radius: 4px;
+    font-size: 0.9rem;
+    font-weight: bold;
+    transition: transform 0.1s;
+    cursor: pointer;
+}
+
+.btn:hover {
+    transform: translateY(-1px);
+}
+
+.btn-login {
+    background-color: transparent;
+    color: #1D1D1D;
+    border: 1px solid #1D1D1D;
+}
+
+.btn-signup {
+    background-color: #403747; 
+    color: #FFFFFF;
+    box-shadow: 0 4px 6px rgba(0,0,0,0.2);
+}
+
+.theme-switch-wrapper {
+    display: flex;
+    align-items: center;
+}
+
+.theme-switch {
+    display: inline-block;
+    height: 24px;
+    position: relative;
+    width: 50px;
+}
+
+.theme-switch input {
+    display: none;
+}
+
+.slider {
+    bottom: 0;
+    cursor: pointer;
+    left: 0;
+    position: absolute;
+    right: 0;
+    top: 0;
+    transition: .4s;
+    border-radius: 34px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 0 5px;
+    font-size: 8px;
+    overflow: hidden;
+    background-color: #D3D3D3;
+    color: #1D1D1D;
+    border: 1px solid #000000;
+}
+
+.slider:before {
+    bottom: 0; 
+    left: 0;
+    content: "";
+    height: 22px;
+    position: absolute;
+    transition: .4s;
+    width: 22px;
+    border-radius: 60%;
+    z-index: 2;
+    background-color: #FFFFFF;
+    box-shadow: 0 0.5px 2px #000000;
+}
+
+input:checked + .slider:before {
+    transform: translateX(26px);
+}
+
+/* Formulário de registo */
+
+.criar-conta {
+    text-align: center;
+    margin-top: 40px;
+    font-size: 2rem;
+    color: #403747; 
+    text-transform: uppercase;
+}
+
+.box {
+    max-width: 400px;
+    margin: 50px auto;
+    padding: 30px;
+    background-color: rgba(255, 255, 255, 0.8); 
+    border-radius: 8px;
+    box-shadow: 0 4px 8px rgba(0,0,0,0.1);
+}
+
+.termos-condicoes-box {
+    display: flex;
+    align-items: center;
+    margin-bottom: 15px;
+    font-size: 0.85rem;
+    color: #403747; 
+}
+
+select#sexo {
+    appearance: none;
+    width: 100%;
+    padding: 10px 35px 10px 10px;
+    font-size: 16px;
+    border: 1px solid #ccc;
+    border-radius: 4px;
+    background-color: #fff;
+    background-image: url('/docs/img/arrow-down.svg');
+    background-repeat: no-repeat;
+    background-position: right 10px center;
+    background-size: 20px;
+    cursor: pointer;
+}
+
+label {
+    display: block;
+    margin-bottom: 8px;
+    font-weight: 600;
+    color: #403747; 
+}
+
+label[for="checkbox"] {
+    margin-left: 8px;
+    font-weight: normal;
+    text-align: left;
+    margin-top: 14px;
+
+}
+
+label[for="checkbox"] a {
+    color: #403747; 
+    font-weight: bold;
+}
+
+label[for="checkbox"] a:hover {
+    color: #1D1D1D;
+    text-decoration: underline;
+}
+
+input[type="text"], input[type="email"], input[type="password"] {
+    width: 100%;
+    padding: 8px;
+    border: 1px solid #ccc;
+    border-radius: 4px;
+    font-size: 1rem;
+    margin-bottom: 15px;
+}
+
+input[type="date"] {
+    width: 100%;
+    padding: 8px;
+    border: 1px solid #ccc;
+    border-radius: 4px;
+    font-size: 1rem;
+    margin-bottom: 15px;
+    background-color: #fff;
+}
+
+input[type="checkbox"] {
+    height: 2em;
+    width: 2em;
+    vertical-align: middle;
+}
+
+select {
+    width: 100%;
+    padding: 8px;
+    border: 1px solid #ccc;
+    border-radius: 4px;
+    font-size: 1rem;
+    margin-bottom: 15px;
+    background-color: #fff;
+}
+
+.botaoregisto {
+    width: 100%;
+    padding: 10px;
+    background-color: #403747; 
+    color: #FFFFFF;
+    border: none;
+    border-radius: 4px;
+    font-size: 1rem;
+    font-weight: bold;
+    cursor: pointer;
+    transition: background-color 0.3s ease;
+}
+
+.parag-final {
+    display: block;
+    margin-top: 15px;
+    font-size: 0.9rem;
+    color: #403747; 
+    text-align: center;
+    
+}
+
+.parag-final a {
+    color: #403747; 
+    font-weight: bold;
+}
+
+.parag-final a:hover {
+    color: #1D1D1D;
+    text-decoration: underline;
+}
+
+.termos-condicoes {
+    font-size: 0.85rem;
+    color: #403747; 
+    margin-bottom: 15px;
+}
+
+
+/* */ 
+
+.footer {
+    padding: 20px 0 15px;
+    margin-top: auto;
+    transition: background-color 0.3s ease;
+    background-color: rgba(255, 255, 255, 0.5); 
+    border-top: 1px solid #D3D3D3;
+}
+
+.footer-content {
+    display: flex;
+    justify-content: space-between;
+    flex-wrap: wrap;
+    padding-bottom: 15px;
+    margin-bottom: 15px;
+    border-bottom: 1px solid #D3D3D3;
+}
+
+.footer-left {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 15px;
+}
+
+.social-icons {
+    display: flex;
+    gap: 15px;
+}
+
+.social-icons img {
+    height: 20px; 
+    width: auto;
+    transition: opacity 0.2s;
+}
+
+.footer-links {
+    display: flex;
+    gap: 30px;
+}
+
+.footer-bottom {
+    text-align: center;
+    font-size: 0.8rem;
+    color: #403747; 
+}
