@@ -1,9 +1,8 @@
 const express = require('express');
 const router = express.Router();
 
-// Placeholder route handlers for /auth
-router.get('/', (req, res) => {
-	res.send('Auth root');
+router.get('/register', (req, res) => {
+    res.render('register', { title: 'Register' });
 });
 
 module.exports = router;

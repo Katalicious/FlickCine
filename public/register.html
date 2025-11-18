@@ -1,0 +1,58 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+<body>
+    <h1>Criar Conta</h1>
+    <div class="box" id="create-account-box">
+    <form action="/register" method="post">
+        <label for="name">Nome:</label>
+        <input type="text" id="name" name="name" placeholder="O teu nome completo" required>
+        <br>
+        <label for="idade">Idade:</label>
+        <input type="date" id="idade" name="idade" required>
+        <br>
+        <label for="email">Email:</label>
+        <input type="email" id="email" name="email" placeholder="meuemail@exemplo.com" required>
+        <br>
+        <label for="sexo">Sexo:</label>
+        <br>
+        <label for="Masculino">Masculino</label>
+        <input type="radio" id="sexo" name="sexo" value="Masculino" required>
+        <br>
+        <label for="Feminino">Feminino</label>
+        <input type="radio" id="sexo" name="sexo" value="Feminino" required>
+        <br>
+        <label for="Outro">Outro</label>
+        <input type="radio" id="sexo" name="sexo" value="Outro" required>
+        <br>
+        <label for="password">Palavra-passe:</label>
+        <input type="password" id="password" name="password" pattern="(?=.*\d)(?=.*[a-z])(?=.*[A-Z]).{8,}" 
+        title="Deve conter pelo menos um número, uma letra maiúscula, uma letra minúscula e pelo menos 8 caracteres." required>
+        <br>
+        <label for="confirm-password">Confirmar Palavra-passe:</label>
+        <input type="password" id="confirm-password" name="confirm-password" required>
+        <br>
+        <button type="submit">Registar</button>
+        <br>
+
+        <p>Ao criar uma conta, estás a concordar com os nossos <a href="#">termos e condições de privacidade</a>.</p>
+        <button type="submit" class="botaoregisto">Registar conta</button>
+        <a href="/login">Já tem uma conta? Login</a>
+
+    </form>
+    </div>
+
+    <div id="mensagem-de-erro-palavra-passe">
+        <h3>A palavra-passe deve conter o seguinte:</h3>
+        <p id="letra" class="invalid">Uma letra <b>minúscula</b></p>
+        <p id="maiúscula" class="invalid">Uma letra <b>maiúscula</b></p>
+        <p id="numero" class="invalid">Um <b>número</b></p>
+        <p id="comprimento" class="invalid">Mínimo de <b>8 caracteres</b></p>
+    </div>
+    <script src="register.js"></script>
+</body>
+</html>
