@@ -1,8 +1,0 @@
-html,body { height:100%; margin:0; font-family: Arial, sans-serif; background:#f0f2f5; }
-.stack-container { width:320px; height:440px; margin:40px auto; position:relative; }
-ul.card-stack { list-style:none; margin:0; padding:0; width:100%; height:100%; position:relative; }
-ul.card-stack li { position:absolute; width:100%; height:100%; border-radius:10px; background:#ffffff; box-shadow:0 10px 30px rgba(0,0,0,0.12); display:flex; align-items:center; justify-content:center; font-size:22px; color:#222; touch-action: none; -ms-touch-action: none; transition: transform 220ms cubic-bezier(.2,.8,.2,1), box-shadow 160ms ease; }
-ul.card-stack li:nth-child(1) { transform: scale(0.98) translateY(10px); }
-ul.card-stack li:nth-child(2) { transform: scale(0.96) translateY(20px); }
-ul.card-stack li:nth-child(3) { transform: scale(0.94) translateY(30px); }
-ul.card-stack li.is-dragging { box-shadow:0 18px 40px rgba(0,0,0,0.18); }
