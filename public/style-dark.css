@@ -14,6 +14,12 @@ body.dark-mode .navbar a {
     color: #FFFFFF;
 }
 
+body.dark-mode .highlight-link {
+    background-color: transparent;
+    color: #FFFFFF !important;
+    border-bottom: 2px solid #FFFFFF; 
+}
+
 body.dark-mode .btn-login {
     background-color: transparent;
     color: #FFFFFF;
@@ -25,6 +31,12 @@ body.dark-mode .btn-signup {
     background-color: #FFFFFF;
     color: #403747; 
     box-shadow: 0 4px 8px #000000;
+}
+
+body.dark-mode .hero-explore-btn {
+    background-color: #1d1d1d;
+    color: #FFFFFF;
+    box-shadow: 5px 3px 5px #FFFFFF;
 }
 
 body.dark-mode .slider {
@@ -42,7 +54,7 @@ body.dark-mode h1 {
 }
 
 body.dark-mode .footer {
-    background-color: #1D1D1D; 
+    background-color: #1d1d1d   ; 
     border-top: 1px solid rgba(255, 255, 255, 0.1);
 }
 
@@ -54,6 +66,22 @@ body.dark-mode .footer-bottom {
     color: #D3D3D3;
 }
 
+body.dark-mode .features-header h2 {
+    color: #FFFFFF;
+}
+
+body.dark-mode .features-header .subtitle {
+    color: #D3D3D3;
+}
+
+body.dark-mode .feature-content h3 {
+    color: #FFFFFF;
+}
+
+body.dark-mode .feature-content p {
+    color: #D3D3D3;
+}
+
 body.dark-mode .img-light {
     display: none !important;
 }
@@ -61,4 +89,3 @@ body.dark-mode .img-light {
 body.dark-mode .img-dark {
     display: block !important;
 }
-

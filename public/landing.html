@@ -21,7 +21,7 @@
           <a href="#">Home</a>
           <a href="#">Sobre nós</a>
           <a href="#">Contacto</a>
-          <a href="#">Explora os teus gostos</a>
+          <a href="#features" class="highlight-link">Explora os teus gostos</a>
         </nav>
 
         <div class="actions">
@@ -48,7 +48,79 @@
       </div>
     </header>
 
-    <main class="main-content"></main>
+    <main class="main-content">
+      <section class="hero">
+    
+    <div class="hero-slides-container">
+        <div class="slide active-slide" style="background-image: url(../docs/img/interstellar.jpg);"></div>
+        <div class="slide" style="background-image: url(../docs/img/deadpool.jpg);"></div>
+        <div class="slide" style="background-image: url(../docs/img/avengers.jpg);"></div>
+        <div class="slide" style="background-image: url(../docs/img/horror.jpg);"></div> 
+    </div>
+
+    <div class="arrow arrow-left">
+        <span class="placeholder-arrow">&lt;</span>
+    </div>
+
+    <div class="arrow arrow-right">
+        <span class="placeholder-arrow">&gt;</span>
+    </div>
+    
+    <div class="container hero-container">
+        
+        <div class="hero-text">
+            <h1>FLICKCINE</h1>
+            <p>Descobre o que ver, sem perder tempo a escolher</p>
+            <a href="#features" class="btn hero-explore-btn">COMEÇAR A EXPLORAR</a>
+        </div>
+
+    </div>
+
+    <div class="hero-dots">
+    </div>
+</section>
+        <section class="features" id="features">
+            <div class="container">           
+                <div class="features-header">
+                    <h2>FlickCine — encontra o teu próximo filme ou série favoritos.</h2>
+                    <p class="subtitle">Descobre. Escolhe. Apaixona-te pelas histórias outra vez.</p>
+                </div>
+                <div class="features-grid">
+                    <div class="feature-item">
+                        <div class="feature-icon">
+                            <img src="../docs/img/swipe.png" alt="Swipe" class="img-light">
+                            <img src="../docs/img/swipe white.png" alt="Swipe" class="img-dark">
+                        </div>
+                        <div class="feature-content">
+                            <h3>Explora com um simples deslizar.</h3>
+                            <p>Deixa-te guiar por uma experiência intuitiva e visual — descobre novos filmes e séries ao teu ritmo.</p>
+                        </div>
+                    </div>
+                    <div class="feature-item">
+                        <div class="feature-icon">
+                            <img src="../docs/img/target.png" alt="Target" class="img-light">
+                            <img src="../docs/img/target white.png" alt="Target" class="img-dark">
+                        </div>
+                        <div class="feature-content">
+                            <h3>Recomendações à tua medida.</h3>
+                            <p>Quanto mais usas, melhor te entendemos. As sugestões evoluem contigo.</p>
+                        </div>
+                    </div>
+
+                    <div class="feature-item">
+                        <div class="feature-icon">
+                            <img src="../docs/img/watchlist.png" alt="watchlist" class="img-light">
+                            <img src="../docs/img/watchlist white.png" alt="watchlist" class="img-dark">
+                        </div>
+                        <div class="feature-content">
+                            <h3>A tua watchlist pessoal.</h3>
+                            <p>Guarda o que gostas, ignora o resto — cria a tua coleção perfeita de filmes e séries.</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+    </main>
 
     <footer class="footer">
       <div class="container footer-content">
@@ -94,7 +166,7 @@
         </p>
       </div>
     </footer>
-
     <script src="darkmode.js"></script>
+    <script src="hero.js"></script>
   </body>
 </html>
