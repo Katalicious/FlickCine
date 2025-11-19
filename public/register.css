@@ -40,7 +40,7 @@ select#sexo {
     cursor: pointer;
 }
 
-label {
+.box label {
     display: block;
     margin-bottom: 8px;
     font-weight: 600;

@@ -37,7 +37,6 @@ email.addEventListener('blur', function() {
 
 let password = document.getElementById('password')
 let confirm_password = document.getElementById('confirm-password');
-let mensagemerropassword = document.getElementById('mensagem-de-erro-palavra-passe');
 
 
 function validatePassword(){
