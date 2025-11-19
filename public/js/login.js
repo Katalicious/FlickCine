@@ -1,37 +1,45 @@
 document.addEventListener('DOMContentLoaded', function() {
-    
+
     const emailInput = document.getElementById('email');
-    const passwordInput = document.getElementById('password');
-    const form = document.querySelector('form');
+    const msgEmail = document.getElementById('BlurEmail');
 
     if (emailInput) {
         emailInput.addEventListener('blur', function() {
-            const value = this.value.trim();
+            const valor = this.value.trim();
             const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
 
-            if (value !== '' && !emailRegex.test(value)) {
-                this.setCustomValidity("Por favor, insere um email válido (ex: nome@exemplo.com).");
-                this.reportValidity();
+            if (valor === '') {
+                msgEmail.innerHTML = "O campo de email não pode estar vazio.";
+                msgEmail.style.color = 'red';
+            } else if (!emailRegex.test(valor)) {
+                msgEmail.innerHTML = "Por favor, insere um email válido.";
+                msgEmail.style.color = 'red';
             } else {
-                this.setCustomValidity(""); 
+                msgEmail.innerHTML = '';
             }
         });
 
         emailInput.addEventListener('input', function() {
-            this.setCustomValidity("");
+            msgEmail.innerHTML = '';
         });
     }
-    if (form) {
-        form.addEventListener('submit', function(event) {
-            let isValid = true;
-            if (!passwordInput.value.trim()) {
-                isValid = false;
-                passwordInput.setCustomValidity("A palavra-passe é obrigatória.");
-                passwordInput.reportValidity();
+
+    const passwordInput = document.getElementById('password');
+    const msgPw = document.getElementById('BlurPassword');
+
+    if (passwordInput) {
+        passwordInput.addEventListener('blur', function() {
+            const valor = this.value.trim();
+            if (valor === '') {
+                msgPw.innerHTML = "A palavra-passe é obrigatória.";
+                msgPw.style.color = 'red';
+            } else {
+                msgPw.innerHTML = '';
             }
-            if (!isValid) {
-                event.preventDefault();
-            }
+        });
+
+        passwordInput.addEventListener('input', function() {
+            msgPw.innerHTML = '';
         });
     }
 });

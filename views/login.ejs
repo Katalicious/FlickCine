@@ -1,30 +1,34 @@
 <!DOCTYPE html>
 <html lang="pt-PT">
-<head>
+  <head>
     <%- include('partials/head', { extraCss: 'register.css' }) %>
-</head>
-<body>
+  </head>
+  <body>
     <%- include('partials/header') %>
 
     <h1 class="criar-conta">Login</h1>
 
     <div class="box">
-        <form action="/login" method="POST">
-            <label for="email">Email:</label>
-            <input type="email" id="email" name="email" placeholder="O teu email" required />
+      <form action="/login" method="POST">
+        <label for="email">Email:</label>
+        <input type="email" id="email" name="email" placeholder="O teu email" required />
+        <p id="BlurEmail" style="margin-bottom: 15px; font-size: 0.9rem"></p>
 
-            <label for="password">Palavra-passe:</label>
-            <input type="password" id="password" name="password" required />
+        <label for="password">Palavra-passe:</label>
+        <input type="password" id="password" name="password" required />
+        <p id="BlurPassword" style="margin-bottom: 15px; font-size: 0.9rem"></p>
 
-            <button type="submit" class="botaoregisto" style="margin-top: 20px;">Entrar</button>
-            
-            <p class="parag-final">
-                Ainda não tens conta? <a href="/register">Regista-te</a>
-            </p>
-        </form>
+        <button type="submit" class="botaoregisto" style="margin-top: 10px">
+          Entrar
+        </button>
+
+        <p class="parag-final">
+          Ainda não tens conta? <a href="/register">Regista-te</a>
+        </p>
+      </form>
     </div>
 
     <%- include('partials/footer') %>
     <script src="/js/login.js"></script>
-</body>
+  </body>
 </html>
