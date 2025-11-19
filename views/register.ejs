@@ -1,98 +1,26 @@
 <!DOCTYPE html>
-<html lang="en">
-  <head>
-    <meta charset="UTF-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <link rel="stylesheet" href="register.css" />
-    <link rel="stylesheet" href="style-light.css" />
-    <link rel="stylesheet" href="style-dark.css" />
-    <title>Document</title>
-  </head>
-  <body>
-    <header class="header">
-      <div class="container header-content">
-        <a href="landing.html" class="logo">
-          <div class="logo-icon">
-            <img
-              src="../docs/img/Logo.png"
-              alt="FlickCine Logo"
-              class="img-light"
-            />
-            <img
-              src="../docs/img/Logo dark.png"
-              alt="FlickCine Logo"
-              class="img-dark"
-            />
-          </div>
-        </a>
-
-        <nav class="navbar">
-          <a href="landing.html">Home</a>
-          <a href="landing.html#features">Sobre nós</a>
-          <a href="#footer">Contacto</a>
-          <a href="swipe.html" class="highlight-link">Explora os teus gostos</a>
-        </nav>
-
-        <div class="actions">
-          <div class="theme-switch-wrapper">
-            <label class="theme-switch" for="checkbox">
-              <input type="checkbox" id="checkbox" />
-              <div class="slider round">
-                <span class="icon-sun">
-                  <img
-                    src="../docs/img/light.png"
-                    alt="Sun"
-                    class="img-light"
-                  />
-                  <img
-                    src="../docs/img/light_mode.png"
-                    alt="Sun"
-                    class="img-dark"
-                  />
-                </span>
-
-                <span class="icon-moon">
-                  <img
-                    src="../docs/img/dark_mode.png"
-                    alt="Moon"
-                    class="img-light"
-                  />
-                  <img src="../docs/img/dark.png" alt="Moon" class="img-dark" />
-                </span>
-              </div>
-            </label>
-          </div>
-          <a href="login.html" class="btn btn-login">Login</a>
-          <a href="register.html" class="btn btn-signup">Criar conta</a>
-        </div>
-      </div>
-    </header>
+<html lang="pt-PT">
+<head>
+    <%- include('partials/head', { extraCss: 'register.css' }) %>
+</head>
+<body>
+    <%- include('partials/header') %>
 
     <h1 class="criar-conta" id="criar-conta">Criar Conta</h1>
 
     <div class="box" id="create-account-box">
-      <form action="/register" method="post">
+      <form action="/register" method="POST">
         <label for="name">Nome:</label>
-        <input
-          type="text"
-          id="name"
-          name="name"
-          placeholder="O teu nome completo"
-          required
-        />
+        <input type="text" id="name" name="name" placeholder="O teu nome completo" required />
         <p id="BlurName"></p>
+
         <label for="idade">Insere a tua data de nascimento:</label>
         <input type="date" id="idade" name="idade" required />
-        <br />
+
         <label for="email">Email:</label>
-        <input
-          type="email"
-          id="email"
-          name="email"
-          placeholder="meuemail@exemplo.com"
-          required
-        />
+        <input type="email" id="email" name="email" placeholder="meuemail@exemplo.com" required />
         <p id="BlurEmail"></p>
+
         <label for="sexo">Sexo:</label>
         <select id="sexo" name="sexo" required>
           <option value="" disabled selected>Seleciona o teu sexo</option>
@@ -100,24 +28,18 @@
           <option value="feminino">Feminino</option>
           <option value="outro">Outro</option>
         </select>
-        <br />
+
         <label for="password">Palavra-passe:</label>
         <input type="password" id="password" name="password" required />
-        <br />
+
         <label for="confirm-password">Confirmar Palavra-passe:</label>
-        <input
-          type="password"
-          id="confirm-password"
-          name="confirm-password"
-          required
-        />
-        <br />
+        <input type="password" id="confirm-password" name="confirm-password" required />
 
         <div class="termos-condicoes-box">
-          <input id="terms-checkbox" type="checkbox" />
+          <input id="terms-checkbox" type="checkbox" required />
           <label for="terms-checkbox">
-            Ao criar uma conta, estás a concordar com os nossos
-            <a href="#">Termos e Condições</a>.</label>
+            Ao criar uma conta, estás a concordar com os nossos <a href="#">Termos e Condições</a>.
+          </label>
         </div>
 
         <button type="submit" class="botaoregisto">Registar conta</button>
@@ -133,88 +55,7 @@
       <p id="comprimento" class="invalid">Mínimo de <b>8 caracteres</b></p>
     </div>
 
-    <footer class="footer" id="footer">
-      <div class="container footer-content">
-        <div class="footer-left">
-          <a href="#" class="logo footer-logo">
-            <div class="logo-icon">
-              <img
-                src="../docs/img/Logo.png"
-                alt="FlickCine Logo"
-                class="img-light"
-              />
-              <img
-                src="../docs/img/Logo dark.png"
-                alt="FlickCine Logo"
-                class="img-dark"
-              />
-            </div>
-          </a>
-          <div class="social-icons">
-            <a href="#">
-              <img src="../docs/img/X Logo.png" alt="X" class="img-light" />
-              <img
-                src="../docs/img/X Logo white.png"
-                alt="X"
-                class="img-dark"
-              />
-            </a>
-            <a href="#">
-              <img
-                src="../docs/img/Logo Instagram.png"
-                alt="Instagram"
-                class="img-light"
-              />
-              <img
-                src="../docs/img/Logo Instagram white.png"
-                alt="Instagram"
-                class="img-dark"
-              />
-            </a>
-            <a href="#">
-              <img
-                src="../docs/img/Logo YouTube.png"
-                alt="YouTube"
-                class="img-light"
-              />
-              <img
-                src="../docs/img/Logo YouTube white.png"
-                alt="YouTube"
-                class="img-dark"
-              />
-            </a>
-            <a href="#">
-              <img
-                src="../docs/img/LinkedIn.png"
-                alt="LinkedIn"
-                class="img-light"
-              />
-              <img
-                src="../docs/img/LinkedIn white.png"
-                alt="LinkedIn"
-                class="img-dark"
-              />
-            </a>
-          </div>
-        </div>
-
-        <div class="footer-links">
-          <a href="landing.html#features">Sobre nós</a>
-          <a href="landing.html#footer">Contactos</a>
-          <a href="#">Política de privacidade</a>
-          <a href="#">Termos e condições</a>
-        </div>
-      </div>
-
-      <div class="footer-bottom">
-        <p>
-          Copyright 2025 © FlickCine. Todos os direitos reservados às respetivas
-          entidades.
-        </p>
-      </div>
-    </footer>
-    <script src="register.js"></script>
-    <script src="darkmode.js"></script>
-
-  </body>
+    <%- include('partials/footer') %>
+    <script src="/js/register.js"></script>
+</body>
 </html>
