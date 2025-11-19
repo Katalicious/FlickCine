@@ -135,3 +135,33 @@ select {
     color: #403747; 
     margin-bottom: 15px;
 }
+
+#mensagem-de-erro-palavra-passe {
+    text-align: left;
+    align-self: center;
+    display: none;
+    color: red;
+    font-size: 0.9rem;
+    margin-bottom: 10px;
+    
+}
+
+.valid {
+    border-color: green;
+}
+
+.valid:before {
+    position: relative;
+    left: -35px;
+    content: '✔';
+}
+
+.invalid {
+    border-color: red;
+}
+
+.invalid:before {
+    position: relative;
+    left: -35px;
+    content: '✖';
+}
