@@ -1,4 +1,8 @@
+
 document.addEventListener('DOMContentLoaded', function() {
+
+const form = document.getElementById('registo-form');
+
 
 const nome = document.getElementById('name');
 const mensagemerronome = document.getElementById('BlurName');
@@ -6,12 +10,15 @@ const mensagemerronome = document.getElementById('BlurName');
 nome.addEventListener('blur', function() {
     const trim = this.value.trim();
     if(trim === '' || trim == null) {
+        mensagemerronome.style.display = 'block';
         mensagemerronome.innerHTML = "Este campo não pode estar vazio.";
         mensagemerronome.style.color = 'red';
     } else if(trim.length < 3 || trim.length > 20) {
+        mensagemerronome.style.display = 'block';
         mensagemerronome.innerHTML = "Este campo deve conter entre 3 a 20 caracteres.";
         mensagemerronome.style.color = 'red';
     } else if(!/^[a-zA-Z\s]+$/.test(trim)) {
+        mensagemerronome.style.display = 'block';
         mensagemerronome.innerHTML = "Este campo permite apenas letras e espaços.";
         mensagemerronome.style.color = 'red';
     } else {
@@ -25,15 +32,68 @@ const mensagemerroemail = document.getElementById('BlurEmail');
 email.addEventListener('blur', function() {
     const trim = this.value.trim();
     if(trim === '' || trim == null) {
+        mensagemerroemail.style.display = 'block';
         mensagemerroemail.innerHTML = "Este campo não pode estar vazio.";
         mensagemerroemail.style.color = 'red';
     } else if(!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(trim)) {
+        mensagemerroemail.style.display = 'block';
         mensagemerroemail.innerHTML = "Por favor, insere um email válido.";
         mensagemerroemail.style.color = 'red';
     } else {
         mensagemerroemail.innerHTML = '';
     }
 });
+
+/* validação data nascimento */
+
+const inputDataNasc = document.getElementById('idade');
+const mensagemerroidade = document.getElementById('BlurDate');
+
+
+function ComputarIdade() {
+    const hoje = new Date();
+    const dataNasc = new Date(inputDataNasc.value);
+    
+    if (!inputDataNasc.value) {
+        mensagemerroidade.style.display = 'none';
+        return;
+    }
+
+    if (dataNasc > hoje) {
+        mensagemerroidade.style.display = 'block';
+        mensagemerroidade.innerHTML = "A data de nascimento não pode ser no futuro.";
+        mensagemerroidade.style.color = 'red';
+        return;
+    }
+
+    let idade = hoje.getFullYear() - dataNasc.getFullYear();
+    const m = hoje.getMonth() - dataNasc.getMonth();
+    if (m < 0 || (m === 0 && hoje.getDate() < dataNasc.getDate())) {
+        idade--;
+    }
+
+    if(idade < 18) {
+        mensagemerroidade.style.display = 'block';
+        mensagemerroidade.innerHTML = "Deve ser maior de 18 anos para se registar.";
+        mensagemerroidade.style.color = 'red';
+        event.preventDefault(); // Evento a fazer, addeventlistener submit no form
+    } else if (idade >= 18) {
+        mensagemerroidade.innerHTML = '';
+    }
+    
+    return idade;
+}
+
+inputDataNasc.addEventListener('blur', function() {
+    ComputarIdade();
+  
+});
+
+
+
+
+
+/* */
 
 let password = document.getElementById('password')
 let confirm_password = document.getElementById('confirm-password');
@@ -112,6 +172,8 @@ password.onkeyup = function() {
 };
 
 });
+
+
 
 const toggleSwitch = document.querySelector('.theme-switch input[type="checkbox"]');
 const currentTheme = localStorage.getItem('theme');

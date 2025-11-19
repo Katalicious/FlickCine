@@ -33,7 +33,7 @@ select#sexo {
     border: 1px solid #ccc;
     border-radius: 4px;
     background-color: #fff;
-    background-image: url('/docs/img/arrow-down.svg');
+    background-image: url('/img/arrow-down.svg');
     background-repeat: no-repeat;
     background-position: right 10px center;
     background-size: 20px;
@@ -104,7 +104,8 @@ select {
     background-color: #fff;
 }
 
-.box p {
+.box p #BlurName, .box p #BlurDate, .box p #BlurEmail {
+    display: none;
     margin-bottom: 20px;
 }
 

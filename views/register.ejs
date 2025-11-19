@@ -9,13 +9,14 @@
     <h1 class="criar-conta" id="criar-conta">Criar Conta</h1>
 
     <div class="box" id="create-account-box">
-      <form action="/register" method="POST">
+      <form id="registo-form" action="/register" method="POST">
         <label for="name">Nome:</label>
         <input type="text" id="name" name="name" placeholder="O teu nome completo" required />
         <p id="BlurName"></p>
 
         <label for="idade">Insere a tua data de nascimento:</label>
         <input type="date" id="idade" name="idade" required />
+        <p id="BlurDate"></p>
 
         <label for="email">Email:</label>
         <input type="email" id="email" name="email" placeholder="meuemail@exemplo.com" required />
