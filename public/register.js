@@ -5,14 +5,33 @@ const mensagemerronome = document.getElementById('BlurName');
 
 nome.addEventListener('blur', function() {
     const trim = this.value.trim();
-    if(trim.length < 3 || trim.length > 20 || !/^[a-zA-Z0-9]+$/.test(trim)) {
-        mensagemerronome.innerHTML = "Este campo deve conter entre 3 a 20 caracteres alfanuméricos.";
-        mensagemerronome.style.color = 'red';
-    } else if(trim === '' || trim == null) {
+    if(trim === '' || trim == null) {
         mensagemerronome.innerHTML = "Este campo não pode estar vazio.";
+        mensagemerronome.style.color = 'red';
+    } else if(trim.length < 3 || trim.length > 20) {
+        mensagemerronome.innerHTML = "Este campo deve conter entre 3 a 20 caracteres.";
+        mensagemerronome.style.color = 'red';
+    } else if(!/^[a-zA-Z\s]+$/.test(trim)) {
+        mensagemerronome.innerHTML = "Este campo permite apenas letras e espaços.";
         mensagemerronome.style.color = 'red';
     } else {
         mensagemerronome.innerHTML = '';
+    }
+});
+
+const email = document.getElementById('email');
+const mensagemerroemail = document.getElementById('BlurEmail');
+
+email.addEventListener('blur', function() {
+    const trim = this.value.trim();
+    if(trim === '' || trim == null) {
+        mensagemerroemail.innerHTML = "Este campo não pode estar vazio.";
+        mensagemerroemail.style.color = 'red';
+    } else if(!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(trim)) {
+        mensagemerroemail.innerHTML = "Por favor, insere um email válido.";
+        mensagemerroemail.style.color = 'red';
+    } else {
+        mensagemerroemail.innerHTML = '';
     }
 });
 
@@ -81,6 +100,14 @@ password.onkeyup = function() {
     } else {
         comprimento.classList.remove("valid");
         comprimento.classList.add("invalid");
+    }
+
+    let tudovalido = letra.classList.contains("valid") && maiúscula.classList.contains("valid") && numero.classList.contains("valid") && comprimento.classList.contains("valid");
+
+    if(tudovalido) {
+        document.getElementById("mensagem-de-erro-palavra-passe").style.display = "none";
+    } else {
+        document.getElementById("mensagem-de-erro-palavra-passe").style.display = "block";
     }
 
 };

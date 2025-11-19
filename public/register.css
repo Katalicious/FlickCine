@@ -9,6 +9,7 @@
 .box {
     max-width: 400px;
     margin: 50px auto;
+    margin-bottom: 20px;
     padding: 30px;
     background-color: rgba(255, 255, 255, 0.8); 
     border-radius: 8px;
@@ -24,6 +25,7 @@
 }
 
 select#sexo {
+    box-sizing: border-box;
     appearance: none;
     width: 100%;
     padding: 10px 35px 10px 10px;
@@ -43,6 +45,7 @@ label {
     margin-bottom: 8px;
     font-weight: 600;
     color: #403747; 
+    padding-bottom: 10px;
 }
 
 label[for="terms-checkbox"] {
@@ -70,7 +73,9 @@ input[type="text"], input[type="email"], input[type="password"] {
     border-radius: 4px;
     font-size: 1rem;
     margin-bottom: 15px;
+    box-sizing: border-box;
 }
+
 
 input[type="date"] {
     width: 100%;
@@ -80,6 +85,7 @@ input[type="date"] {
     font-size: 1rem;
     margin-bottom: 15px;
     background-color: #fff;
+    box-sizing: border-box;
 }
 
 input[type="checkbox"] {
@@ -96,6 +102,10 @@ select {
     font-size: 1rem;
     margin-bottom: 15px;
     background-color: #fff;
+}
+
+.box p {
+    margin-bottom: 20px;
 }
 
 .botaoregisto {
@@ -139,15 +149,33 @@ select {
 #mensagem-de-erro-palavra-passe {
     text-align: left;
     align-self: center;
+    box-sizing: border-box;
     display: none;
     color: red;
     font-size: 0.9rem;
-    margin-bottom: 10px;
+    margin-bottom: 50px;
+    max-height: auto;
+    padding: 30px 70px;
+    background-color: rgba(255, 255, 255, 0.8); 
+    border-radius: 8px;
+    box-shadow: 0 4px 8px rgba(0,0,0,0.1);
+    border: #403747 4px outset;
     
 }
 
+#mensagem-de-erro-palavra-passe h3 {
+    margin: 0 0 5px 0;
+    font-size: 1rem;
+    color:black;
+}
+
+#mensagem-de-erro-palavra-passe p {
+    padding-left: 40px;
+    margin: 0;
+}
+
 .valid {
-    border-color: green;
+    color: green;
 }
 
 .valid:before {
