@@ -45,7 +45,7 @@ label {
     color: #403747; 
 }
 
-label[for="checkbox"] {
+label[for="terms-checkbox"] {
     margin-left: 8px;
     font-weight: normal;
     text-align: left;
@@ -53,12 +53,12 @@ label[for="checkbox"] {
 
 }
 
-label[for="checkbox"] a {
+label[for="terms-checkbox"] a {
     color: #403747; 
     font-weight: bold;
 }
 
-label[for="checkbox"] a:hover {
+label[for="terms-checkbox"] a:hover {
     color: #1D1D1D;
     text-decoration: underline;
 }
