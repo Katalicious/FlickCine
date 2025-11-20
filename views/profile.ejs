@@ -1,15 +1,73 @@
 <!DOCTYPE html>
 <html lang="pt-PT">
 <head>
-    <%- include('partials/head') %>
+    <%- include('partials/head', { extraCss: 'profile.css' }) %>
 </head>
 <body>
     <%- include('partials/header') %>
-    
-    <main class="container" style="margin-top: 50px; min-height: 60vh;">
-        <h1>O meu perfil</h1>
-        <p>Bem-vindo à tua área pessoal.</p>
-        </main>
+
+    <div class="user-profile" id="sidebar">
+
+        <div class="profile-picture">
+            <img src="/img/avatar_placeholder.png" alt="Profile Avatar">
+        </div>
+        
+        <h2 class="username">Placeholder User</h2>
+
+        <div class="alterar-dados">
+            <a id="alterar-avatar">Alterar Avatar</a>
+            <a id="alterar-password">Alterar Palavra-passe</a>
+        </div>
+
+        <div class="controlo-watchlist">
+            <a id="remover-da-watchlist">Remover da Watchlist</a>
+            <a id="ver-mais-detalhes-filme">Ver Mais Detalhes</a>
+        </div>
+
+        <div class="filtros-ordenar-watchlist">
+            <label for="ordenar-watchlist">Ordenar por:</label>
+            <select id="ordenar-watchlist">
+                <option value="data-adicao">Data de Adição</option>
+                <option value="titulo-asc">Título (A-Z)</option>
+                <option value="titulo-desc">Título (Z-A)</option>
+                <option value="recente-antigo">Recente para Antigo</option>
+                <option value="antigo-recente">Antigo para Recente</option>
+            </select>
+
+            <label for="filtro-genero">Filtrar por Gênero:</label>
+            <select id="filtro-genero">
+                <option value="todos">Todos</option>
+                <option value="acao">Ação</option>
+                <option value="comedia">Comédia</option>
+                <option value="drama">Drama</option>
+                <option value="terror">Terror</option>
+                <option value="ficcao-cientifica">Ficção Científica</option>
+            </select>
+
+            <h3>Filtrar pela Data do Filme:</h3>
+            <label for="data-inicio">Data de Início:</label>
+            <input type="date" id="data-inicio" name="data-inicio">
+            <label for="data-fim">Data de Fim:</label>
+            <input type="date" id="data-fim" name="data-fim">
+
+            
+        </div>
+
+        
+    </div>    
+
+    <div class="icone-hamburger">
+        <button onclick="hamburgerMenu()">☰</button>
+    </div>
+
+    <div class="watchlist-section">
+            <h3>Minha Watchlist</h3>
+            <ul id="watchlist-movies">
+                <!-- Elementos dinamicos! -->
+                 <li></li>
+            </ul>
+    </div>
+
 
     <%- include('partials/footer') %>
     <script src="/js/profile.js"></script>

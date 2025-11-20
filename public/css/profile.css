@@ -1,0 +1,19 @@
+div.user-profile {
+    flex-direction: column;
+    align-items: flex-start;
+    padding: 20px;
+    align-items: center;
+    display: none;
+
+
+}
+
+div.profile-picture img {
+    width: 100px;
+    height: 100px;
+    max-width: none;    
+    display: block;
+    object-fit: cover;
+    border-radius: 50%;
+    margin-bottom: 15px;
+}
