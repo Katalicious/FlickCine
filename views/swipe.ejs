@@ -1,24 +1,42 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="pt-PT">
 <head>
-    <%- include('partials/head') %>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/swing/5.5.4/swing.min.js"></script>
-    <style>
-        /* Estilo rápido para os cartões não ficarem invisíveis se o JS falhar */
-        ul { list-style: none; padding: 0; position: relative; height: 400px; width: 300px; margin: 50px auto; }
-        li { position: absolute; width: 100%; height: 100%; background: #fff; border: 1px solid #ccc; border-radius: 8px; box-shadow: 0 2px 5px rgba(0,0,0,0.1); }
-    </style>
+    <%- include('partials/head', { extraCss: 'swipe.css' }) %>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
 </head>
 <body>
     <%- include('partials/header') %>
 
-    <main>
-        <ul>
-            <li style="z-index: 3; background-color: #eee;">Filme 1</li>
-            <li style="z-index: 2; background-color: #ddd;">Filme 2</li>
-            <li style="z-index: 1; background-color: #ccc;">Filme 3</li>
-        </ul>
-    </main>
+    <div class="swipe-stage">
+        <aside class="sidebar-streaming">
+            <div class="sidebar-header">Onde Ver</div>
+            
+            <div class="sidebar-section">
+                <h4>Subscrição</h4>
+                <div class="streaming-icons" id="stream-subs"></div>
+            </div>
+            
+            <div class="sidebar-section">
+                <h4>Alugar</h4>
+                <div class="streaming-icons" id="stream-rent"></div>
+            </div>
+            
+            <div class="sidebar-section">
+                <h4>Comprar</h4>
+                <div class="streaming-icons" id="stream-buy"></div>
+            </div>
+        </aside>
+
+        <div class="central-wrapper">
+            <div id="toast-container"></div>
+
+            <div class="card-stack-container" id="card-stack">
+                <div id="empty-state" style="display:none; text-align:center; color:#555; padding-top: 30%;">
+                    <h2>Não há mais filmes.</h2>
+                </div>
+            </div>
+        </div>
+    </div>
 
     <%- include('partials/footer') %>
     <script src="/js/swipe.js"></script>

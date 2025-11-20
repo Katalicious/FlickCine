@@ -1,0 +1,287 @@
+/* --- Configurações Globais --- */
+body {
+    background-color: #1D1D1D;
+    font-family: 'Inter', sans-serif;
+    overflow: hidden;
+    margin: 0;
+    height: 100vh;
+    display: flex;
+    flex-direction: column;
+}
+
+/* --- Layout Principal (Palco) --- */
+.swipe-stage {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 50px;
+    height: 100%;
+    width: 100%;
+    max-width: 1800px;
+    margin: 0 auto;
+    padding: 20px;
+    box-sizing: border-box;
+}
+
+/* --- Barra Lateral (Streaming Providers) --- */
+.sidebar-streaming {
+    width: 140px;
+    background: #dcdcdc;
+    border-radius: 20px;
+    padding: 20px 15px;
+    display: flex;
+    flex-direction: column;
+    gap: 30px;
+    height: 65vh;
+    box-shadow: 0 10px 30px rgba(0,0,0,0.5);
+    text-align: center;
+    overflow-y: auto;
+    flex-shrink: 0;
+}
+
+.sidebar-header {
+    font-size: 1rem;
+    font-weight: 800;
+    color: #333;
+    margin-bottom: 5px;
+    border-bottom: 2px solid #999;
+    padding-bottom: 10px;
+}
+
+.sidebar-section {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 10px;
+    width: 100%;
+}
+
+.sidebar-section h4 {
+    font-size: 0.7rem;
+    color: #555;
+    margin: 0;
+    text-transform: uppercase;
+    font-weight: 700;
+    width: 100%;
+    border-bottom: 1px solid #bbb;
+    padding-bottom: 5px;
+    margin-bottom: 5px;
+}
+
+.streaming-icons {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 10px;
+    width: 100%;
+    justify-items: center;
+}
+
+.provider-wrapper {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    width: 100%;
+}
+
+.provider-icon {
+    width: 40px;
+    height: 40px;
+    border-radius: 8px;
+    object-fit: cover;
+    box-shadow: 0 2px 5px rgba(0,0,0,0.2);
+}
+
+/* --- Contentor Central (Cartão + Toasts) --- */
+.central-wrapper {
+    position: relative;
+    width: 900px;
+    height: 75vh;
+    max-width: 65vw;
+}
+
+/* --- Pilha de Cartões --- */
+.card-stack-container {
+    width: 100%;
+    height: 100%;
+    position: relative;
+}
+
+.movie-card {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: #E8E8E8;
+    border-radius: 25px;
+    box-shadow: 0 20px 60px rgba(0,0,0,0.5);
+    display: flex;
+    flex-direction: column;
+    padding: 25px;
+    box-sizing: border-box;
+    cursor: grab;
+    user-select: none;
+    color: #1D1D1D;
+    overflow: hidden;
+}
+
+.movie-card.is-dragging {
+    cursor: grabbing;
+    transition: none;
+}
+
+/* --- Estrutura Interna do Cartão --- */
+.card-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 15px;
+    border-bottom: 1px solid #ccc;
+    padding-bottom: 10px;
+}
+
+.movie-rating { font-weight: bold; color: #555; }
+.movie-title { font-size: 1.8rem; font-weight: 900; text-transform: uppercase; letter-spacing: -1px; text-align: center; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; max-width: 60%;}
+.movie-meta { font-size: 0.9rem; color: #666; font-weight: 600; }
+
+.media-wrapper {
+    flex: 1;
+    background: #000;
+    border-radius: 15px;
+    overflow: hidden;
+    position: relative;
+    margin-bottom: 20px;
+    box-shadow: inset 0 0 20px rgba(0,0,0,0.5);
+}
+
+.media-wrapper iframe,
+.media-wrapper img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    pointer-events: auto;
+}
+
+.drag-layer {
+    position: absolute;
+    top: 0; left: 0; width: 100%; height: 85%;
+    z-index: 5;
+    background: transparent; 
+}
+
+.btn-details-inside {
+    position: absolute;
+    bottom: 60px;
+    right: 15px;
+    background: rgba(255, 255, 255, 0.9);
+    color: #1D1D1D;
+    padding: 8px 16px;
+    border-radius: 20px;
+    font-weight: bold;
+    font-size: 0.85rem;
+    text-decoration: none;
+    box-shadow: 0 4px 10px rgba(0,0,0,0.3);
+    z-index: 10;
+    display: flex;
+    align-items: center;
+    gap: 5px;
+    transition: transform 0.2s;
+}
+.btn-details-inside:hover { transform: scale(1.05); }
+
+.movie-description {
+    font-size: 0.95rem;
+    line-height: 1.5;
+    color: #333;
+    margin-bottom: 25px;
+    display: -webkit-box;
+    line-clamp: 3;
+    -webkit-box-orient: vertical;
+    overflow: hidden;
+    text-align: justify;
+}
+
+/* --- Botões de Ação --- */
+.action-buttons {
+    display: flex;
+    justify-content: center;
+    gap: 120px;
+    margin-top: auto;
+    height: 60px;
+}
+
+.action-btn {
+    border: none;
+    border-radius: 30px;
+    padding: 0 20px;
+    height: 50px;
+    font-weight: bold;
+    color: white;
+    cursor: pointer;
+    font-size: 1.1rem;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 0;
+    box-shadow: 0 5px 15px rgba(0,0,0,0.2);
+    transition: all 0.4s cubic-bezier(0.25, 1, 0.5, 1);
+    min-width: 50px;
+    overflow: hidden;
+    white-space: nowrap;
+}
+
+.action-btn .btn-label {
+    max-width: 0;
+    opacity: 0;
+    margin-left: 0;
+    transition: all 0.4s ease;
+    overflow: hidden;
+}
+
+.action-btn:hover {
+    min-width: 180px;
+    transform: scale(1.05);
+}
+
+.action-btn:hover .btn-label {
+    max-width: 200px;
+    opacity: 1;
+    margin-left: 10px;
+    transition-delay: 0.2s;
+}
+
+.btn-reject { background-color: #FF4B4B; }
+.btn-undo   { background-color: #FFA500; }
+.btn-like   { background-color: #4CAF50; }
+
+/* --- Notificações (Toasts) --- */
+#toast-container {
+    position: absolute;
+    top: 120px; 
+    left: 50%;
+    transform: translateX(-50%);
+    z-index: 2000;
+    pointer-events: none;
+    width: max-content;
+}
+
+.toast {
+    padding: 8px 20px;
+    border-radius: 30px;
+    color: white;
+    font-weight: bold;
+    font-size: 0.9rem;
+    box-shadow: 0 5px 20px rgba(0,0,0,0.3);
+    animation: fadeJump 0.4s forwards;
+    display: flex;
+    align-items: center;
+    gap: 10px;
+}
+.toast.success { background: #4caf4fd5; }
+.toast.error { background: #FF4B4Bd5; }
+.toast.info { background: #FFA500d5; }
+
+@keyframes fadeJump {
+    from { opacity: 0; transform: translateY(-20px); }
+    to { opacity: 1; transform: translateY(0); }
+}
