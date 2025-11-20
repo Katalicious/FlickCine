@@ -48,6 +48,10 @@ app.get('/profile', (req, res) => {
     res.render('profile');
 });
 
+app.get('/aboutus', (req, res) => {
+    res.render('aboutus');
+});
+
 // --- ROTAS DA API (Reativar estas linhas quando configurarmos os controllers) ---
 // app.use('/auth', authRoutes);
 // app.use('/user', userRoutes);
