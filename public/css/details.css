@@ -1,0 +1,90 @@
+body {
+}
+
+
+.navbar {
+display: flex;
+justify-content: space-between;
+padding: 15px 40px;
+background-color: white;
+border-bottom: 1px solid #ccc;
+}
+
+
+.navbar .logo {
+font-size: 24px;
+font-weight: bold;
+}
+
+
+.navbar nav a {
+margin: 0 15px;
+text-decoration: none;
+color: #444;
+}
+
+
+.movie-container {
+display: flex;
+padding: 40px;
+}
+
+
+.poster img {
+width: 350px;
+border-radius: 10px;
+box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2);
+}
+
+
+.movie-info {
+margin-left: 40px;
+max-width: 600px;
+}
+
+
+.movie-info h1 {
+font-size: 36px;
+margin-bottom: 10px;
+}
+
+
+.rating {
+font-size: 22px;
+font-weight: bold;
+margin: 15px 0;
+}
+
+
+.availability {
+background: #fff;
+padding: 20px;
+border-radius: 10px;
+box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+}
+
+
+.options {
+display: flex;
+justify-content: space-between;
+margin-top: 15px;
+}
+
+
+.service-logo {
+width: 60px;
+margin: 5px;
+}
+
+
+.synopsis {
+margin-top: 30px;
+}
+
+
+footer {
+text-align: center;
+padding: 20px;
+margin-top: 40px;
+background: #222;
+color: #fff;
