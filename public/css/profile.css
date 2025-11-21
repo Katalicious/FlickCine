@@ -136,3 +136,171 @@ input[type="date"] {
     margin-top: 10px;
     margin-bottom: 15px;
 }
+
+.popup-overlay {
+    display: none;
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background-color: rgba(0, 0, 0, 0.7);
+    z-index: 2000; 
+    align-items: center;
+    justify-content: center;
+    backdrop-filter: blur(3px);
+}
+
+.popup-box {
+    background-color: #ffffff;
+    padding: 40px;
+    border-radius: 10px;
+    width: 90%;
+    max-width: 500px;
+    position: relative;
+    box-shadow: 0 10px 25px rgba(0,0,0,0.2);
+    animation: popupFadeIn 0.3s ease-out;
+}
+
+@keyframes popupFadeIn {
+    from { opacity: 0; transform: translateY(-20px); }
+    to { opacity: 1; transform: translateY(0); }
+}
+
+.close-btn {
+    position: absolute;
+    top: 15px;
+    right: 20px;
+    font-size: 30px;
+    cursor: pointer;
+    color: #666;
+    line-height: 1;
+}
+
+.close-btn:hover { color: #000; }
+
+.popup-title {
+    margin-top: 0;
+    margin-bottom: 25px;
+    text-align: center;
+    color: #1D1D1D;
+    font-size: 1.8rem;
+}
+
+.popup-box input[type="password"], 
+.popup-box input[type="text"] {
+    width: 100%;
+    padding: 12px;
+    margin-bottom: 15px;
+    border: 1px solid #ccc;
+    border-radius: 4px;
+    box-sizing: border-box;
+    font-size: 1rem;
+}
+
+.popup-box label {
+    display: block;
+    margin-bottom: 5px;
+    font-weight: 600;
+    color: #333;
+}
+
+.btn-popup {
+    width: 100%;
+    padding: 12px;
+    margin-top: 10px;
+    background-color: #403747;
+    color: white;
+    border: none;
+    border-radius: 4px;
+    font-size: 1rem;
+    cursor: pointer;
+    font-weight: bold;
+}
+
+.btn-popup:hover {
+    opacity: 0.9;
+}
+
+.avatar-box {
+    max-width: 700px;
+}
+
+.avatar-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(100px, 1fr));
+    gap: 15px;
+    max-height: 400px;
+    overflow-y: auto;
+    padding: 10px;
+}
+
+.avatar-item {
+    cursor: pointer;
+    border-radius: 8px;
+    padding: 5px;
+    transition: transform 0.2s, background-color 0.2s;
+    border: 2px solid transparent;
+}
+
+.avatar-item img {
+    width: 100%;
+    display: block;
+    border-radius: 50%; 
+}
+
+.avatar-item:hover {
+    background-color: rgba(0,0,0,0.05);
+    transform: scale(1.05);
+}
+
+.avatar-item.selected {
+    border-color: #403747;
+    background-color: rgba(64, 55, 71, 0.1);
+}
+
+body.dark-mode .popup-box {
+    background-color: #1D1D1D;
+    color: #FFFFFF;
+    border: 1px solid rgba(255,255,255,0.1);
+}
+
+body.dark-mode .popup-title {
+    color: #FFFFFF;
+}
+
+body.dark-mode .close-btn {
+    color: #aaa;
+}
+body.dark-mode .close-btn:hover {
+    color: #fff;
+}
+
+body.dark-mode .popup-box label {
+    color: #ddd;
+}
+
+body.dark-mode .popup-box input {
+    background-color: #333;
+    border-color: #555;
+    color: white;
+}
+
+body.dark-mode .popup-box input:focus {
+    border-color: #fff;
+    outline: none;
+}
+
+body.dark-mode .avatar-item:hover {
+    background-color: rgba(255,255,255,0.1);
+}
+
+body.dark-mode .avatar-item.selected {
+    border-color: #FFFFFF;
+    background-color: rgba(255,255,255,0.15);
+}
+
+body.dark-mode .btn-popup {
+    background-color: #fff;
+    color: #1d1d1d;
+}

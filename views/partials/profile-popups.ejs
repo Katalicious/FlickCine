@@ -1,0 +1,45 @@
+<div id="popup-password" class="popup-overlay">
+    <div class="popup-box password-box">
+        <span class="close-btn" id="close-password">&times;</span>
+        
+        <h2 class="popup-title">Alterar Palavra-passe</h2>
+        
+        <form action="/profile/update-password" method="POST">
+            <label for="currentPass">Palavra-passe atual:</label>
+            <input type="password" id="currentPass" name="currentPassword" required placeholder="Insere a tua senha atual">
+
+            <label for="newPass">Nova palavra-passe:</label>
+            <input type="password" id="newPass" name="newPassword" required placeholder="Mínimo 8 caracteres">
+
+            <label for="confirmPass">Confirmar nova palavra-passe:</label>
+            <input type="password" id="confirmPass" name="confirmPassword" required placeholder="Repete a nova senha">
+
+            <button type="submit" class="botaoregisto btn-popup">Atualizar</button>
+        </form>
+    </div>
+</div>
+
+<div id="popup-avatar" class="popup-overlay">
+    <div class="popup-box avatar-box">
+        <div class="popup-header">
+            <h2 class="popup-title">Escolhe um Avatar</h2>
+            <span class="close-btn" id="close-avatar">&times;</span>
+        </div>
+        
+        <form action="/profile/update-avatar" method="POST" id="form-avatar">
+            <input type="hidden" name="avatarId" id="selectedAvatarInput">
+            
+            <div class="avatar-grid">
+                <% for(let i = 1; i <= 12; i++) { %>
+                    <div class="avatar-item" data-id="avatar_<%= i %>">
+                        <img src="https://api.dicebear.com/7.x/avataaars/svg?seed=<%= i * 99 %>&backgroundColor=transparent" alt="Avatar <%= i %>">
+                    </div>
+                <% } %>
+            </div>
+
+            <div class="popup-footer">
+                <button type="submit" class="botaoregisto btn-popup">Guardar Avatar</button>
+            </div>
+        </form>
+    </div>
+</div>
