@@ -6,12 +6,12 @@
 <body>
     <%- include('partials/header') %>
 
-    <div class="sidebar" id="sidebar">
-
+    <div class="profile-container">
+        <div class="sidebar" id="sidebar">
         <div class="profile-picture">
             <img src="/img/avatar_placeholder.png" alt="Profile Avatar">
         </div>
-        
+
         <h2 class="username">Placeholder User</h2>
 
         <div class="alterar-dados">
@@ -49,23 +49,20 @@
             <input type="date" id="data-inicio" name="data-inicio">
             <label for="data-fim">Data de Fim:</label>
             <input type="date" id="data-fim" name="data-fim">
-
-            
+        </div>
         </div>
 
-        
-    </div>    
-
-    <div class="watchlist-section">
+        <div class="watchlist-section">
             <h3>Minha Watchlist</h3>
             <ul id="watchlist-movies">
                 <!-- Elementos dinamicos! -->
                  <li></li>
             </ul>
-    </div>
+        </div>
+        </div>
 
 
-    <%- include('partials/footer') %>
-    <script src="/js/profile.js"></script>
+        <%- include('partials/footer') %>
+        <script src="/js/profile.js"></script>
 </body>
 </html>

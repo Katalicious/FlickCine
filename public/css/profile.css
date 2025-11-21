@@ -1,29 +1,82 @@
+.profile-container {
+    display: flex;
+    align-items: flex-start;
+    gap: 24px;
+    padding: 20px;
+}
+
 .sidebar {
-    height: 100%;
-    width: 160px;
-    position: fixed;
-    z-index: 1;
-    top: 0;
+    width: 250px;
+    position: -webkit-sticky;
+    position: sticky;
+    top: 70px;
     left: 0;
-    overflow-x: hidden;
-    padding-top: 20px;
-    padding-left: 20px;
-    background-color: white;
+    box-sizing: border-box;
+    margin-left: -20px;
+    margin-bottom: -20px;
+    margin-top: -20px;
+    padding: 16px 18px;
+    background-color: #ffffff;
+    overflow: visible;
 }
 
 .sidebar a { 
-    padding: 6px 8px 6px 16px;
-    text-decoration: none;
-    font-size: 25px;
     display: block;
+    padding: 8px 0;
+    text-decoration: none;
 }
 
 .sidebar a:hover {
-    color: #f1f1f1;
+    text-decoration: underline;
+}
+
+.sidebar h2.username {
+    font-size: 24px;
+    margin-bottom: 16px;
+}
+
+.sidebar h2.username:hover {
+    transition: 0.3s ease-in-out;
+    transform: scale(1.05);
+}
+
+.sidebar h3 {
+    margin-top: 16px;
+    margin-bottom: 16px;
+}
+
+
+.sidebar label[for="ordenar-watchlist"], .sidebar label[for="filtro-genero"] {
+    font-size: 18px;
+    font-weight: bold;
+    margin-top: 8px;
+    margin-bottom: 8px;
+    display: block;
+}
+
+div.alterar-dados div.controlo-watchlist div.filtros-ordenar-watchlist {
+    background-color: white;
+}
+
+.dark-mode .sidebar {
+    background-color: #333;
 }
 
 .dark-mode .sidebar a {
     color: #bbb;
+}
+
+.dark-mode .sidebar a:hover {
+    color: white;
+}
+
+.header, .footer {
+    z-index: 10;
+}
+
+.footer {
+    position: static;
+    background-color: #ffffff;
 }
 
 
@@ -59,6 +112,19 @@ div.watchlist-section ul {
     padding: 0;
 }
 
+select#ordenar-watchlist, select#filtro-genero {
+    box-sizing: border-box;
+    width: 100%;
+    padding: 10px;
+    font-size: 16px;
+    border: 1px solid #ccc;
+    border-radius: 4px;
+    background-color: #fff;
+    margin-top: 10px;
+    margin-bottom: 15px;
+}   
+
+
 input[type="date"] {
     box-sizing: border-box;
     width: 100%;
@@ -67,4 +133,6 @@ input[type="date"] {
     border: 1px solid #ccc;
     border-radius: 4px;
     background-color: #fff;
+    margin-top: 10px;
+    margin-bottom: 15px;
 }
