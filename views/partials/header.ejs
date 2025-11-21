@@ -10,7 +10,7 @@
     <nav class="navbar">
       <a href="/">Home</a>
       <a href="/#features">Sobre nós</a>
-      <a href="#footer">Contacto</a>
+      <a href="/#footer">Contacto</a>
       <a href="/swipe" class="highlight-link">Explora os teus gostos</a>
     </nav>
 
@@ -30,8 +30,27 @@
           </div>
         </label>
       </div>
-      <a href="/login" class="btn btn-login">Login</a>
-      <a href="/register" class="btn btn-signup">Criar conta</a>
+
+      <% if (typeof user !== 'undefined' && user) { %>
+        <a href="/profile" style="display: block; margin-left: 15px;">
+            <img 
+              src="<%= (user.avatar) ? '/img/avatars/' + user.avatar + '.png' : '/img/avatar_placeholder.png' %>" 
+              alt="O teu perfil" 
+              class="img-light" 
+              style="width: 40px; height: 40px; border-radius: 50%; object-fit: cover; border: 2px solid #1D1D1D;"
+            >
+            <img 
+              src="<%= (user.avatar) ? '/img/avatars/' + user.avatar + '.png' : '/img/avatar_placeholder.png' %>" 
+              alt="O teu perfil" 
+              class="img-dark" 
+              style="width: 40px; height: 40px; border-radius: 50%; object-fit: cover; border: 2px solid #FFFFFF;"
+            >
+        </a>
+      <% } else { %>
+        <a href="/login" class="btn btn-login">Login</a>
+        <a href="/register" class="btn btn-signup">Criar conta</a>
+      <% } %>
+
     </div>
   </div>
 </header>

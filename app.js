@@ -22,6 +22,24 @@ app.use(session({
     saveUninitialized: false
 }));
 
+app.use((req, res, next) => {
+    if (typeof req.session.isLoggedIn === 'undefined') {
+        req.session.isLoggedIn = false;
+    }
+
+    if (req.session.isLoggedIn) {
+        res.locals.user = {
+            id: 1,
+            name: 'Teste',
+            email: 'teste@flickcine.com',
+            avatar: 'avatar1'
+        };
+    } else {
+        res.locals.user = null;
+    }
+    next();
+});
+
 app.use(express.static(path.join(__dirname, 'public')));
 
 app.set('view engine', 'ejs');
@@ -46,6 +64,12 @@ app.get('/swipe', (req, res) => {
 
 app.get('/profile', (req, res) => {
     res.render('profile');
+});
+
+app.get('/debug/toggle', (req, res) => {
+    req.session.isLoggedIn = !req.session.isLoggedIn;
+    const paginaAnterior = req.get('Referer') || '/';
+    res.redirect(paginaAnterior);
 });
 
 // --- ROTAS DA API (Reativar estas linhas quando configurarmos os controllers) ---
