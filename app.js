@@ -66,6 +66,14 @@ app.get('/profile', (req, res) => {
     res.render('profile');
 });
 
+
+app.get('/details/:id', (req, res) => {
+    res.render('details', { 
+        movieId: req.params.id,
+        page: 'details' 
+    });
+});
+
 app.get('/debug/toggle', (req, res) => {
     req.session.isLoggedIn = !req.session.isLoggedIn;
     const paginaAnterior = req.get('Referer') || '/';

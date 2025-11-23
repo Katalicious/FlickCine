@@ -23,7 +23,7 @@ document.addEventListener('DOMContentLoaded', async () => {
 
     // --- Função Principal: Buscar Filmes ---
     async function fetchMovies() {
-        if (API_TOKEN.length < 20 || API_TOKEN.includes('COLA_AQUI')) {
+        if (API_TOKEN.length < 20 || API_TOKEN.includes('72d83bf0c330355616b7ba137687ca0b')) {
             movies = fallbackMovies; init(); return;
         }
 
@@ -133,7 +133,7 @@ document.addEventListener('DOMContentLoaded', async () => {
                 ${mediaContent}
                 <div class="drag-layer"></div>
                 
-                <a href="/filme/${movie.id}" class="btn-details-inside">
+                <a href="/details/${movie.id}" class="btn-details-inside">
                     <i class="fas fa-search"></i> Ver mais
                 </a>
             </div>

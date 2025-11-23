@@ -1,59 +1,100 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="pt-PT">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Document</title>
-    <link rel="stylesheet" href="/css/details.css">
-
-    <%- include('partials/head') %>
+    <%- include('partials/head', { extraCss: 'details.css' }) %>
+    <script>
+        const MOVIE_ID = "<%= movieId %>";
+    </script>
 </head>
 <body>
-</div>
+    <%- include('partials/header') %>
 
-
-    <section class="movie-info">
-    <h1>WICKED</h1>
-    <p class="year">2024 - M/6 - 2h40m</p>
-    <p class="rating">⭐ 10/10</p>
-
-
-        <div class="availability">
-        <h3>JustWatch</h3>
-        <div class="options">
+    <div class="container movie-details-container">
         
-            <div>
-            <h4>Subscrição</h4>
-            <img src="../images/skyshowtime.png" class="service-logo">
-</div>
-<div>
-    <h4>Alugar</h4>
-    <img src="../images/roku.png" class="service-logo">
-    <img src="../images/appletv.png" class="service-logo">
-    <img src="../images/youtube.png" class="service-logo">
-</div>
-<div>
-    <h4>Comprar</h4>
-    <img src="../images/roku.png" class="service-logo">
-    <img src="../images/appletv.png" class="service-logo">
-    <img src="../images/googleplay.png" class="service-logo">
-</div>
-</div>
-</div>
+        <div class="details-left">
+            <div class="poster-wrapper">
+                <img id="movie-poster" src="https://via.placeholder.com/500x750?text=A+Carregar..." alt="Poster" class="movie-poster">
+            </div>
+        </div>
 
+        <div class="details-right">
+            
+            <div class="movie-header-row">
+                <div class="movie-title-info">
+                    <h1 id="movie-title">A carregar...</h1>
+                    
+                    <div class="meta-row">
+                        <span id="movie-year" class="meta-tag">----</span>
+                        <span id="movie-age" class="meta-tag">--</span>
+                        <span id="movie-duration" class="meta-tag">--h --m</span>
+                    </div>
 
-<section class="synopsis">
-    <h3>Overview</h3>
-    <p>
-    Elphaba, a young woman ridiculed for her green skin, and Galinda, a popular girl,
-    become friends at Shiz University in the Land of Oz. After an encounter with the
-    Wonderful Wizard of Oz, their friendship reaches a crossroads.
-    </p>
-</section>
-</section>
-</main>
+                    <div class="rating-star">⭐ <strong id="movie-rating">--/10</strong></div>
+                </div>
 
-    <%- include('partials/footer') %>
-    <script src="/js/hero.js"></script>
+                <div class="streaming-box" id="streaming-container">
+                    <div class="jw-section logo-section">
+                        <span class="jw-brand">Onde Ver</span>
+                    </div>
+                    <div class="jw-section"><span class="no-stream">...</span></div>
+                    <div class="jw-section"><span class="no-stream">...</span></div>
+                    <div class="jw-section"><span class="no-stream">...</span></div>
+                </div>
+            </div>
+
+            <hr class="divider">
+
+            <div class="details-tabs">
+                <button class="tab-btn active" onclick="openTab(event, 'tab-overview')">Overview</button>
+                <button class="tab-btn" onclick="openTab(event, 'tab-details')">More details</button>
+                <button class="tab-btn" onclick="openTab(event, 'tab-similar')">More like this</button>
+            </div>
+
+            <div id="tab-overview" class="tab-content active">
+                <p class="synopsis" id="movie-description">A carregar sinopse...</p>
+                <div class="meta-list">
+                    <div class="meta-item">
+                        <span class="label">Genre</span>
+                        <span class="value" id="movie-genres">--</span>
+                    </div>
+                    <div class="meta-item">
+                        <span class="label">Starring</span>
+                        <span class="value" id="movie-cast">--</span>
+                    </div>
+                    <div class="meta-item">
+                        <span class="label">Created by</span>
+                        <span class="value" id="movie-director">--</span>
+                    </div>
+                </div>
+            </div>
+
+            <div id="tab-details" class="tab-content" style="display: none;">
+                <div class="meta-list">
+                    <div class="meta-item">
+                        <span class="label">Budget</span>
+                        <span class="value" id="movie-budget">--</span>
+                    </div>
+                    <div class="meta-item">
+                        <span class="label">Revenue</span>
+                        <span class="value" id="movie-revenue">--</span>
+                    </div>
+                    <div class="meta-item">
+                        <span class="label">Original Language</span>
+                        <span class="value" id="movie-language">--</span>
+                    </div>
+                    <div class="meta-item">
+                        <span class="label">Production</span>
+                        <span class="value" id="movie-production">--</span>
+                    </div>
+                </div>
+            </div>
+
+            <div id="tab-similar" class="tab-content" style="display: none;">
+                <div class="similar-movies-grid" id="similar-grid">
+                    </div>
+            </div>
+
+        </div> </div> <%- include('partials/footer') %>
+    <script src="/js/details.js"></script>
 </body>
 </html>

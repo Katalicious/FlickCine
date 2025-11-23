@@ -1,90 +1,422 @@
 body {
+    height: 100vh;
+    overflow: hidden;
+    display: flex;
+    flex-direction: column;
+    margin: 0;
 }
 
-
-.navbar {
-display: flex;
-justify-content: space-between;
-padding: 15px 40px;
-background-color: white;
-border-bottom: 1px solid #ccc;
+.movie-details-container {
+    flex: 1;
+    overflow: hidden;
+    width: 100%;
+    max-width: 1400px;
+    margin: 0 auto;
+    display: flex;
+    gap: 60px;
+    
+    /* AUMENTADO: Padding no topo para afastar do Header */
+    padding-top: 80px; 
+    padding-bottom: 0;
+    
+    align-items: flex-start;
+    padding-left: 5%;
+    padding-right: 5%;
+    height: 100%;
 }
 
-
-.navbar .logo {
-font-size: 24px;
-font-weight: bold;
+.details-left {
+    flex: 0 0 400px;
+    max-width: 100%;
+    position: relative;
+    z-index: 5;
+    
+    /* OPCIONAL: Se quiseres descer ainda mais só a capa */
+    /* margin-top: 20px; */ 
 }
 
-
-.navbar nav a {
-margin: 0 15px;
-text-decoration: none;
-color: #444;
+.poster-wrapper {
+    position: relative;
+    width: 100%;
+    aspect-ratio: 2 / 3;
+    border-radius: 15px;
+    overflow: hidden;
+    box-shadow: 0 0 30px rgba(0, 140, 255, 0.6);
+    border: 3px solid #0099ff;
+    background-color: #000;
 }
 
-
-.movie-container {
-display: flex;
-padding: 40px;
+.movie-poster {
+    width: 100%;
+    height: 100%;
+    display: block;
+    object-fit: cover;
+    object-position: center center;
 }
 
-
-.poster img {
-width: 350px;
-border-radius: 10px;
-box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2);
+.details-right {
+    flex: 1;
+    height: 100%;
+    overflow-y: auto; /* O scroll acontece aqui */
+    
+    /* Ajustes de espaçamento interno */
+    padding-right: 20px; 
+    padding-bottom: 100px; /* Espaço extra no fundo para não cortar texto */
+    
+    scrollbar-width: thin;
+    scrollbar-color: #888 transparent;
 }
 
-
-.movie-info {
-margin-left: 40px;
-max-width: 600px;
+.details-right::-webkit-scrollbar {
+    width: 8px;
 }
 
-
-.movie-info h1 {
-font-size: 36px;
-margin-bottom: 10px;
+.details-right::-webkit-scrollbar-track {
+    background: transparent;
 }
 
-
-.rating {
-font-size: 22px;
-font-weight: bold;
-margin: 15px 0;
+.details-right::-webkit-scrollbar-thumb {
+    background-color: rgba(136, 136, 136, 0.5);
+    border-radius: 20px;
 }
 
-
-.availability {
-background: #fff;
-padding: 20px;
-border-radius: 10px;
-box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+.movie-header-row {
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-start;
+    margin-bottom: 30px;
+    gap: 30px;
+    flex-wrap: wrap;
 }
 
-
-.options {
-display: flex;
-justify-content: space-between;
-margin-top: 15px;
+.movie-title-info h1 {
+    font-size: 3.5rem;
+    font-weight: 900;
+    margin-bottom: 15px;
+    line-height: 1;
+    text-transform: uppercase;
 }
 
-
-.service-logo {
-width: 60px;
-margin: 5px;
+.meta-row {
+    font-size: 1.1rem;
+    color: #666;
+    margin-bottom: 15px;
+    font-weight: 500;
+    display: flex;
+    align-items: center;
+    gap: 20px;
 }
 
+.meta-tag {
+    background-color: #e0e0e0;
+    padding: 4px 10px;
+    border-radius: 6px;
+    font-weight: 700;
+    color: #333;
+    font-size: 0.9rem;
+}
+
+.rating-star {
+    font-size: 1.6rem;
+    margin-top: 15px;
+    color: #ffd700;
+}
+
+.streaming-box {
+    background-color: #d1d1d1;
+    border-radius: 12px;
+    border: 1px solid #bbb;
+    display: flex;
+    align-items: stretch;
+    padding: 0;
+    overflow: hidden;
+    box-shadow: 0 4px 10px rgba(0,0,0,0.05);
+}
+
+.jw-section {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    padding: 12px 25px;
+    border-right: 1px solid #a0a0a0;
+    min-width: 90px;
+}
+
+.jw-section.no-border {
+    border-right: none;
+}
+
+.logo-section {
+    background-color: transparent;
+    padding-right: 25px;
+    padding-left: 25px;
+    justify-content: center;
+}
+
+.jw-brand {
+    font-weight: 800;
+    font-size: 1.2rem;
+    color: #000;
+    letter-spacing: -0.5px;
+    white-space: nowrap;
+}
+
+.jw-label {
+    font-size: 0.75rem;
+    text-transform: uppercase;
+    color: #444;
+    margin-bottom: 8px;
+    font-weight: 600;
+    letter-spacing: 0.5px;
+}
+
+.jw-icons {
+    display: flex;
+    gap: 8px;
+    flex-wrap: wrap;
+    justify-content: center;
+}
+
+.jw-icons img {
+    width: 36px;
+    height: 36px;
+    border-radius: 6px;
+    box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+    display: block;
+}
+
+.no-stream {
+    color: #777;
+    font-size: 1.2rem;
+    font-weight: bold;
+}
+
+.divider {
+    border: 0;
+    border-top: 1px solid #ccc;
+    margin: 40px 0;
+}
+
+.details-tabs {
+    display: flex;
+    gap: 50px;
+    margin-bottom: 30px;
+    border-bottom: 2px solid #e0e0e0;
+    padding-bottom: 0;
+}
+
+.tab-btn {
+    background: none;
+    border: none;
+    font-family: inherit;
+    font-weight: 600;
+    font-size: 1.2rem;
+    color: #888;
+    padding-bottom: 15px;
+    cursor: pointer;
+    position: relative;
+    margin-right: 0;
+    transition: color 0.3s;
+    margin-bottom: -2px;
+}
+
+.tab-btn:hover {
+    color: #555;
+}
+
+.tab-btn.active {
+    color: #1D1D1D;
+}
+
+.tab-btn.active::after {
+    content: '';
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    width: 100%;
+    height: 4px;
+    background-color: #1D1D1D;
+    border-radius: 4px 4px 0 0;
+}
+
+.tab-content {
+    animation: fadeEffect 0.5s;
+}
+
+@keyframes fadeEffect {
+    from {opacity: 0;}
+    to {opacity: 1;}
+}
 
 .synopsis {
-margin-top: 30px;
+    font-size: 1.2rem;
+    line-height: 1.7;
+    margin-bottom: 40px;
+    max-width: 100%;
+    text-align: justify;
 }
 
+.meta-list {
+    display: grid;
+    gap: 18px;
+}
 
-footer {
-text-align: center;
-padding: 20px;
-margin-top: 40px;
-background: #222;
-color: #fff;
+.meta-item {
+    display: grid;
+    grid-template-columns: 160px 1fr;
+    align-items: center;
+    font-size: 1.05rem;
+}
+
+.meta-item .label {
+    font-weight: 600;
+    color: #666;
+}
+
+.similar-movies-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(140px, 1fr));
+    gap: 25px;
+}
+
+.similar-card {
+    display: flex;
+    flex-direction: column;
+    text-decoration: none;
+    color: inherit;
+    transition: transform 0.2s;
+}
+
+.similar-card:hover {
+    transform: scale(1.05);
+}
+
+.similar-card img {
+    width: 100%;
+    aspect-ratio: 2/3;
+    border-radius: 10px;
+    object-fit: cover;
+    margin-bottom: 10px;
+    box-shadow: 0 5px 15px rgba(0,0,0,0.2);
+}
+
+.similar-card span {
+    font-size: 1rem;
+    font-weight: 600;
+    line-height: 1.3;
+}
+
+.footer {
+    flex-shrink: 0;
+    z-index: 10;
+    background-color: #ffffff;
+    border-top: 1px solid #ccc;
+}
+
+body.dark-mode .movie-details-container {
+    color: #fff;
+}
+
+body.dark-mode .streaming-box {
+    background-color: #2b2b2b;
+    border-color: #444;
+}
+
+body.dark-mode .jw-section {
+    border-right-color: #444;
+}
+
+body.dark-mode .logo-section {
+    background-color: transparent;
+}
+
+body.dark-mode .jw-brand {
+    color: #fff;
+}
+
+body.dark-mode .jw-label {
+    color: #bbb;
+}
+
+body.dark-mode .meta-row {
+    color: #aaa;
+}
+
+body.dark-mode .meta-tag {
+    background-color: #333;
+    color: #ddd;
+    border: 1px solid #444;
+}
+
+body.dark-mode .meta-item .label {
+    color: #aaa;
+}
+
+body.dark-mode .details-tabs {
+    border-bottom-color: #333;
+}
+
+body.dark-mode .tab-btn {
+    color: #666;
+}
+
+body.dark-mode .tab-btn:hover {
+    color: #999;
+}
+
+body.dark-mode .tab-btn.active {
+    color: #fff;
+}
+
+body.dark-mode .tab-btn.active::after {
+    background-color: #fff;
+}
+
+body.dark-mode .divider {
+    border-top-color: #333;
+}
+
+body.dark-mode .similar-card span {
+    color: #ddd;
+}
+
+body.dark-mode .footer {
+    background-color: #1d1d1d;
+    border-top-color: #333;
+}
+
+@media (max-width: 1100px) {
+    .movie-details-container {
+        flex-direction: column;
+        align-items: center;
+        padding-top: 20px;
+        overflow-x: hidden;
+    }
+    
+    .details-left {
+        flex: none;
+        width: 100%;
+        max-width: 350px;
+        margin-bottom: 40px;
+        position: static;
+        top: auto;
+    }
+
+    .movie-header-row {
+        flex-direction: column;
+        gap: 20px;
+        align-items: center;
+        text-align: center;
+    }
+
+    .meta-row {
+        justify-content: center;
+    }
+
+    .streaming-box {
+        width: 100%;
+        justify-content: space-between;
+        overflow-x: auto;
+    }
+}
