@@ -66,7 +66,7 @@ app.get('/register', (req, res) => {
     res.render('register');
 });
 
-app.get('/swipe', (req, res) => {
+app.get('/swipe', requireLogin, (req, res) => {
     res.render('swipe');
 });
 
