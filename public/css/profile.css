@@ -101,6 +101,10 @@ div.profile-picture img {
 }
 
 div.watchlist-section {
+    min-height: 100vh;
+    overflow-y: scroll;
+    scrollbar-color: red transparent;
+    scrollbar-width: thin;
     margin-top: 30px;
     width: 100%;
     padding-left: 50px;
@@ -334,3 +338,4 @@ body.dark-mode .btn-popup {
     background-color: #fff;
     color: #1d1d1d;
 }
+

@@ -40,6 +40,14 @@ app.use((req, res, next) => {
     next();
 });
 
+const requireLogin = (req, res, next) => {
+    if (req.session.isLoggedIn) {
+        next(); 
+    } else {
+        res.redirect('/login'); // passar isto para middleware assim que possivel.
+    }
+};
+
 app.use(express.static(path.join(__dirname, 'public')));
 
 app.set('view engine', 'ejs');
@@ -62,7 +70,7 @@ app.get('/swipe', (req, res) => {
     res.render('swipe');
 });
 
-app.get('/profile', (req, res) => {
+app.get('/profile', requireLogin, (req, res) => {
     res.render('profile');
 });
 
