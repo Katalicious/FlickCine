@@ -2,6 +2,8 @@ require('dotenv').config();
 const express = require('express');
 const session = require('express-session');
 const path = require('path');
+const Database = require('better-sqlite3');
+const bcrypt = require('bcrypt');
 
 // --- ROTAS (Comentadas temporariamente até ajustarmos a lógica) ---
 // const authRoutes = require('./routes/authRoutes');
@@ -9,6 +11,9 @@ const path = require('path');
 // const swipeRoutes = require('./routes/swipeRoutes');
 // const watchlistRoutes = require('./routes/watchlistRoutes');
 // const detailsRoutes = require('./routes/detailsRoutes');
+
+const createAcRoutes = require('./routes/createAcRoutes'); 
+
 
 const app = express();
 const PORT = 3000;
@@ -50,6 +55,8 @@ const requireLogin = (req, res, next) => {
 
 app.use(express.static(path.join(__dirname, 'public')));
 
+app.use('/auth', createAcRoutes);
+
 app.set('view engine', 'ejs');
 app.set('views', path.join(__dirname, 'views'));
 
@@ -60,6 +67,38 @@ app.get('/', (req, res) => {
 
 app.get('/login', (req, res) => {
     res.render('login');
+});
+
+const dbPath = path.join(__dirname, 'db', 'flickcine.sqlite');
+let db;
+try {
+    db = new Database(dbPath);
+} catch (err) {
+    console.error('Não foi possível abrir a base de dados:', err.message);
+}
+
+app.post('/login', async (req, res) => {
+    const { email, password } = req.body;
+    if (!email || !password) {
+        return res.status(400).render('login');
+    }
+    if (!db) return res.status(500).render('login');
+
+    try {
+        const row = db.prepare('SELECT * FROM Utilizador WHERE Email = ?').get(email);
+        if (!row) {
+            return res.status(401).render('login');
+        }
+        const match = await bcrypt.compare(password, row.Password_Hash);
+        if (!match) return res.status(401).render('login');
+
+        req.session.isLoggedIn = true;
+        req.session.user = { id: row.Utilizador_ID, name: row.Name, email: row.Email, avatar: row.Avatar };
+        res.redirect('/swipe');
+    } catch (err) {
+        console.error('Login error:', err);
+        res.status(500).render('login');
+    }
 });
 
 app.get('/register', (req, res) => {

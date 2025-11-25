@@ -171,6 +171,44 @@ password.onkeyup = function() {
 
 };
 
+    const params = new URLSearchParams(window.location.search);
+    if (params.get('registered') === '1') {
+        const modal = document.createElement('div');
+        modal.style.position = 'fixed';
+        modal.style.left = '50%';
+        modal.style.top = '20%';
+        modal.style.transform = 'translateX(-50%)';
+        modal.style.background = '#fff';
+        modal.style.padding = '18px 24px';
+        modal.style.border = '1px solid #ccc';
+        modal.style.borderRadius = '8px';
+        modal.style.boxShadow = '0 6px 20px rgba(0,0,0,0.12)';
+        modal.style.zIndex = 9999;
+        modal.textContent = 'Registo efetuado com sucesso. A redirecionar para o login...';
+        document.body.appendChild(modal);
+        setTimeout(() => {
+            window.location.href = '/login';
+        }, 1800);
+        history.replaceState(null, '', window.location.pathname);
+    }
+
+    if (params.get('error') === 'duplicate') {
+        const modal = document.createElement('div');
+        modal.style.position = 'fixed';
+        modal.style.left = '50%';
+        modal.style.top = '20%';
+        modal.style.transform = 'translateX(-50%)';
+        modal.style.background = '#fff';
+        modal.style.padding = '18px 24px';
+        modal.style.border = '1px solid #e74c3c';
+        modal.style.borderRadius = '8px';
+        modal.style.boxShadow = '0 6px 20px rgba(0,0,0,0.12)';
+        modal.style.zIndex = 9999;
+        modal.textContent = 'O email já está em uso. Por favor utiliza outro email.';
+        document.body.appendChild(modal);
+        history.replaceState(null, '', window.location.pathname);
+    }
+
 });
 
 
