@@ -21,12 +21,12 @@
   "homepage": "https://github.com/Katalicious/FlickCine2#readme",
   "dependencies": {
     "bcrypt": "^6.0.0",
+    "better-sqlite3": "^12.4.6",
     "dotenv": "^17.2.3",
     "ejs": "^3.1.10",
     "express": "^5.1.0",
     "express-session": "^1.18.2",
     "nodemon": "^3.1.11",
-    "sqlite3": "^5.1.7",
     "swing": "^3.1.4"
   }
 }
