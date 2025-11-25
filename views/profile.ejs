@@ -12,7 +12,7 @@
             <img src="/img/avatar_placeholder.png" alt="Profile Avatar">
         </div>
 
-        <h2 class="username">Placeholder User</h2>
+        <h2 class="username"><%= user.Nome_de_Utilizador %></h2>
 
         <div class="alterar-dados">
             <a href="#" id="alterar-avatar">Alterar Avatar</a>
@@ -56,7 +56,7 @@
             
             <% if (typeof user !== 'undefined' && user) { %>
                 <h3>A minha Watchlist</h3>
-                <p>Olá, <%= user.username %>! Aqui está a tua watchlist personalizada.</p>
+                <p>Olá, <%= user.Nome_de_Utilizador %>! Aqui está a tua watchlist personalizada.</p>
                 <ul id="watchlist-movies">
                     <li><a href="/details/${movie.id}"><img src="/img/Wicked_ForGoodCover.jpg" alt="Movie 1"></a></li>
                     <li><a href="/details/${movie.id}"><img src="/img/Fallout_Cover.jpg" alt="Movie 2"></a></li>

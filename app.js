@@ -110,7 +110,29 @@ app.get('/swipe', requireLogin, (req, res) => {
 });
 
 app.get('/profile', requireLogin, (req, res) => {
-    res.render('profile');
+    const userID = req.session && req.session.user && req.session.user.id;
+    if (!userID) {
+        return res.status(401).redirect('/login');
+    }
+
+    try {
+    const row = db.prepare('SELECT Utilizador_ID, Name, Email, Data_De_Nascimento, Género, Idade FROM Utilizador WHERE Utilizador_ID = ?').get(userID);
+    if (!row) return res.status(404).send('Utilizador não encontrado');
+
+    const user = {
+        id: row.Utilizador_ID,
+        Nome_de_Utilizador: row.Name,
+        email: row.Email,
+        dataDeNascimento: row.Data_De_Nascimento,
+        genero: row.Género,
+        idade: row.Idade
+    };
+
+    res.render('profile', { user });
+    } catch (err) {
+        console.error(err);
+        res.status(500).send('Erro interno do servidor');
+    }
 });
 
 

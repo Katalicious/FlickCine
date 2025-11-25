@@ -194,3 +194,29 @@ select {
     left: -35px;
     content: '✖';
 }
+
+.modal {
+    position: fixed;
+    left: 50%;
+    top: 20%;
+    transform: translate(-50%, 0); /* Simplified transform */
+    background: #fff;
+    padding: 18px 24px;
+    border: 1px solid #ccc;
+    border-radius: 8px;
+    box-shadow: 0 6px 20px rgba(0,0,0,0.12);
+    z-index: 9999;
+    display: none; 
+    align-items: center;
+    justify-content: center;
+}
+
+.modal.is-visible {
+    display: flex; 
+}
+
+.modal-icon {
+    width: 24px;
+    margin-right: 12px;
+    vertical-align: middle;
+}
