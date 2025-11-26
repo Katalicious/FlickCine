@@ -7,6 +7,8 @@ const path = require('path')
 const dbPath = path.resolve(__dirname, '../db/flickcine.sqlite')
 const db = new Database(dbPath)
 
+db.exec(`PRAGMA foreign_keys = ON;`)
+
 db.exec(`CREATE TABLE IF NOT EXISTS Utilizador (
 	Utilizador_ID INTEGER PRIMARY KEY AUTOINCREMENT,
 	Name TEXT,
@@ -45,11 +47,20 @@ router.post('/register', async (req, res) => {
 		return res.status(400).send('A palavra-passe e a confirmação não coincidem.')
 	}
 
+
 	try {
 		const passwordHash = await bcrypt.hash(password, 10)
 		const idadeComputed = computeAgeFromDate(dataDeNascimento)
-		const insert = db.prepare(`INSERT INTO Utilizador (Name, Email, Password_Hash, Data_De_Nascimento, Género, Idade, Swipes_Restantes) VALUES (?, ?, ?, ?, ?, ?, ?)`)
-		insert.run(name, email, passwordHash, dataDeNascimento, genero, idadeComputed, 10)
+		const insert = db.prepare(`INSERT INTO Utilizador (Name, Email, Password_Hash, Data_De_Nascimento, Género, Idade, Avatar, Swipes_Restantes) VALUES (?, ?, ?, ?, ?, ?, ?, ?)`)
+
+		const avatarseed = email;
+		const avatarUrl = `https://api.dicebear.com/7.x/avataaars/svg?seed=${encodeURIComponent(avatarseed)}&backgroundColor=transparent`;
+
+		const response = await fetch(avatarUrl);
+		const arrayBuf = await response.arrayBuffer();
+		const avatarBuffer = Buffer.from(arrayBuf);
+
+		insert.run(name, email, passwordHash, dataDeNascimento, genero, idadeComputed, avatarBuffer, 10)
 		return res.redirect('/register?registered=1')
 	} catch (err) {
 		if (err && err.code && err.code.includes('SQLITE_CONSTRAINT')) {

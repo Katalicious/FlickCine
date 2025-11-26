@@ -9,7 +9,7 @@
     <div class="profile-container">
         <div class="sidebar" id="sidebar">
         <div class="profile-picture">
-            <img src="/img/avatar_placeholder.png" alt="Profile Avatar">
+            <img src="<%= (user && user.id) ? ('/avatars/' + user.id) : '/img/avatar_placeholder.png' %>" alt="Profile Avatar">
         </div>
 
         <h2 class="username"><%= user.Nome_de_Utilizador %></h2>
