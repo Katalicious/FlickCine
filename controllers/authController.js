@@ -100,7 +100,7 @@ exports.getProfile = (req, res) => {
             SELECT f.tmbd_ID as id, f.Titulo as title, f.Capa as poster
             FROM Watchlist w
             JOIN Swipes s ON w.Swipe_ID = s.SWIPE_ID
-            JOIN Filmes f ON s.tmbd_ID = f.tmbd_ID
+            JOIN "Filmes/séries" f ON s.tmbd_ID = f.tmbd_ID  
             WHERE w.Utilizador_ID = ?
         `).all(userId);
 
