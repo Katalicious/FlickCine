@@ -34,13 +34,13 @@
       <% if (typeof user !== 'undefined' && user) { %>
         <a href="/profile" style="display: block; margin-left: 15px;">
             <img 
-              src="<%= (user.avatar) ? '/img/avatars/' + user.avatar + '.png' : '/img/avatar_placeholder.png' %>" 
+              src="<%= (user && user.id) ? ('/avatars/' + user.id) : '/img/avatar_placeholder.png' %>" 
               alt="O teu perfil" 
               class="img-light" 
               style="width: 40px; height: 40px; border-radius: 50%; object-fit: cover; border: 2px solid #1D1D1D;"
             >
             <img 
-              src="<%= (user.avatar) ? '/img/avatars/' + user.avatar + '.png' : '/img/avatar_placeholder.png' %>" 
+              src="<%= (user && user.id) ? ('/avatars/' + user.id) : '/img/avatar_placeholder.png' %>"
               alt="O teu perfil" 
               class="img-dark" 
               style="width: 40px; height: 40px; border-radius: 50%; object-fit: cover; border: 2px solid #FFFFFF;"
