@@ -36,7 +36,7 @@ router.post('/interaction', (req, res) => {
     try {
         const insertTransaction = db.transaction(() => {
             const insertMovie = db.prepare(`
-                INSERT OR IGNORE INTO Filmes (tmbd_ID, Titulo, Capa, Sinopse) 
+                INSERT OR IGNORE INTO "Filmes/Séries" (tmbd_ID, Titulo, Capa, Sinopse) 
                 VALUES (?, ?, ?, ?)
             `);
             insertMovie.run(tmdbId, title, poster, overview);
