@@ -14,11 +14,8 @@ body {
     margin: 0 auto;
     display: flex;
     gap: 60px;
-    
-    /* AUMENTADO: Padding no topo para afastar do Header */
     padding-top: 80px; 
-    padding-bottom: 0;
-    
+    padding-bottom: 50px;
     align-items: flex-start;
     padding-left: 5%;
     padding-right: 5%;
@@ -26,13 +23,10 @@ body {
 }
 
 .details-left {
-    flex: 0 0 400px;
+    flex: 0 0 370px;
     max-width: 100%;
     position: relative;
-    z-index: 5;
-    
-    /* OPCIONAL: Se quiseres descer ainda mais só a capa */
-    /* margin-top: 20px; */ 
+    z-index: 3;
 }
 
 .poster-wrapper {
@@ -57,12 +51,9 @@ body {
 .details-right {
     flex: 1;
     height: 100%;
-    overflow-y: auto; /* O scroll acontece aqui */
-    
-    /* Ajustes de espaçamento interno */
+    overflow-y: auto;
     padding-right: 20px; 
-    padding-bottom: 100px; /* Espaço extra no fundo para não cortar texto */
-    
+    padding-bottom: 100px; 
     scrollbar-width: thin;
     scrollbar-color: #888 transparent;
 }

@@ -1,7 +1,7 @@
 document.addEventListener('DOMContentLoaded', async () => {
     const stackContainer = document.getElementById('card-stack');
     const emptyState = document.getElementById('empty-state');
-    
+
     let movies = [];
     let activeIndex = 0;
     let lastAction = null; 
@@ -39,7 +39,7 @@ document.addEventListener('DOMContentLoaded', async () => {
 
     function renderCards() {
         stackContainer.innerHTML = '';
-
+        
         if (activeIndex >= movies.length) {
             fetchMovies();
             return;
@@ -65,10 +65,8 @@ document.addEventListener('DOMContentLoaded', async () => {
         }
 
         let mediaContent;
-        // 'trailerId'
-        // Se não enviar, usa o poster como fallback seguro.
         if (isActive && movie.trailerId) {
-            mediaContent = `<iframe src="https://www.youtube.com/embed/${movie.trailerId}?autoplay=1&mute=1&controls=0&modestbranding=1&rel=0&loop=1" frameborder="0" allow="autoplay; encrypted-media" allowfullscreen></iframe>`;
+            mediaContent = `<iframe src="https://www.youtube.com/embed/${movie.trailerId}?autoplay=1&mute=1&controls=1&modestbranding=1&rel=0&loop=1" frameborder="0" allow="autoplay; encrypted-media" allowfullscreen></iframe>`;
         } else {
             const posterSrc = movie.poster ? movie.poster : 'https://via.placeholder.com/500x750?text=Sem+Imagem';
             mediaContent = `<img src="${posterSrc}" alt="${movie.title}" draggable="false">`;
@@ -85,7 +83,9 @@ document.addEventListener('DOMContentLoaded', async () => {
 
             <div class="media-wrapper">
                 ${mediaContent}
-                <div class="drag-layer"></div> <a href="/details/${movie.id}" class="btn-details-inside" onmousedown="event.stopPropagation()">
+                <div class="drag-layer"></div>
+                
+                <a href="/details/${movie.id}" class="btn-details-inside" onmousedown="event.stopPropagation()">
                     <i class="fas fa-search"></i> Ver mais
                 </a>
             </div>
@@ -97,15 +97,17 @@ document.addEventListener('DOMContentLoaded', async () => {
             <div class="action-buttons">
                 <button class="action-btn btn-reject" onmousedown="event.stopPropagation()" onclick="triggerSwipe('left')">
                     <i class="fas fa-times"></i>
-                    <span class="btn-label">Passar</span>
+                    <span class="btn-label">Sem interesse</span>
                 </button>
+                
                 <button class="action-btn btn-undo" onmousedown="event.stopPropagation()" onclick="handleUndo()">
                     <i class="fas fa-undo"></i>
                     <span class="btn-label">Desfazer</span>
                 </button>
+                
                 <button class="action-btn btn-like" onmousedown="event.stopPropagation()" onclick="triggerSwipe('right')">
                     <i class="fas fa-check"></i>
-                    <span class="btn-label">Gosto</span>
+                    <span class="btn-label">Adicionar à watchlist</span>
                 </button>
             </div>
         `;
@@ -117,7 +119,6 @@ document.addEventListener('DOMContentLoaded', async () => {
         const rent = document.getElementById('stream-rent');
         const buy = document.getElementById('stream-buy');
         
-        // Limpar sidebar
         if(subs) subs.innerHTML = ''; 
         if(rent) rent.innerHTML = ''; 
         if(buy) buy.innerHTML = '';
@@ -150,7 +151,7 @@ document.addEventListener('DOMContentLoaded', async () => {
         const icon = type === 'success' ? 'check' : type === 'error' ? 'times' : 'undo';
         t.innerHTML = `<i class="fas fa-${icon}"></i> ${msg}`;
         c.appendChild(t);
-
+        
         setTimeout(() => {
             t.style.transition = "opacity 0.5s ease";
             t.style.opacity = '0';
@@ -166,10 +167,8 @@ document.addEventListener('DOMContentLoaded', async () => {
             
             isDragging = true;
             startX = (e.type === 'touchstart') ? e.touches[0].clientX : e.clientX;
-            
             card.classList.add('is-dragging');
-            card.style.transition = 'none';
-
+            card.style.transition = 'none'; 
             document.addEventListener('mousemove', move);
             document.addEventListener('touchmove', move, {passive: false});
             document.addEventListener('mouseup', end);
@@ -178,11 +177,9 @@ document.addEventListener('DOMContentLoaded', async () => {
 
         const move = (e) => {
             if(!isDragging) return;
-            if(e.type === 'touchmove') e.preventDefault(); 
-            
+            if(e.type === 'touchmove') e.preventDefault();
             const x = (e.type === 'touchmove') ? e.touches[0].clientX : e.clientX;
             currentX = x - startX;
-        
             card.style.transform = `translateX(${currentX}px) rotate(${currentX * 0.05}deg)`;
         };
 
@@ -190,7 +187,6 @@ document.addEventListener('DOMContentLoaded', async () => {
             if(!isDragging) return;
             isDragging = false;
             card.classList.remove('is-dragging');
-            
             document.removeEventListener('mousemove', move);
             document.removeEventListener('touchmove', move);
             document.removeEventListener('mouseup', end);
@@ -237,9 +233,8 @@ document.addEventListener('DOMContentLoaded', async () => {
                 overview: currentMovie.description,
                 year: currentMovie.year
             })
-        }).catch(err => console.error("Erro ao guardar na DB:", err));
+        }).catch(err => console.error("Erro DB:", err));
 
-        // Animação Visual
         const x = dir === 'right' ? 1000 : -1000;
         const r = dir === 'right' ? 20 : -20;
         card.style.transition = 'transform 0.4s ease-out';
@@ -262,17 +257,14 @@ document.addEventListener('DOMContentLoaded', async () => {
             showToast("Nada para desfazer!", "info"); 
             return; 
         }
-        //  base de dados já guardou o swipe.
-        // criar uma rota '/swipe/undo' no backend.
         
         activeIndex = lastAction.index;
         lastAction = null;
+        showToast("Ação desfeita!", "info");
         
-        showToast("Ação desfeita (Visualmente)", "info");
-        renderCards(); 
+        renderCards();
         updateSidebar(activeIndex);
     };
 
-    // Iniciar tudo
     fetchMovies();
 });

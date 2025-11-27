@@ -18,8 +18,6 @@ router.get('/feed', async (req, res) => {
 
 router.post('/interaction', (req, res) => {
     const { tmdbId, title, poster, liked, disliked, overview, year } = req.body;
-    
-    // Debug: Ver quem está a tentar dar swipe
     console.log("--> RECEBI SWIPE!");
     console.log("User na Sessão:", req.session.user ? req.session.user.id : "Nenhum");
     console.log("Dados do Filme:", tmdbId, title, liked ? "(LIKE)" : "(DISLIKE)");
@@ -37,8 +35,6 @@ router.post('/interaction', (req, res) => {
 
     try {
         const insertTransaction = db.transaction(() => {
-            // 1. Inserir Filme (se não existir)
-            // Nota: Removemos colunas problemáticas para simplificar o teste
             const insertMovie = db.prepare(`
                 INSERT OR IGNORE INTO Filmes (tmbd_ID, Titulo, Capa, Sinopse) 
                 VALUES (?, ?, ?, ?)

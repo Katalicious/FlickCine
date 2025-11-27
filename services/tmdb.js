@@ -13,32 +13,61 @@ const options = {
 
 async function getRandomMovies() {
     try {
-        const randomPage = Math.floor(Math.random() * 50) + 1;
-        const url = `${BASE_URL}/discover/movie?include_adult=false&include_video=false&language=pt-PT&page=${randomPage}&sort_by=popularity.desc`;
+        const randomPage = Math.floor(Math.random() * 20) + 1;
+        const discoverUrl = `${BASE_URL}/discover/movie?include_adult=false&include_video=false&language=pt-PT&page=${randomPage}&sort_by=popularity.desc&watch_region=PT&with_watch_monetization_types=flatrate|free|ads|rent|buy`;
 
-        const response = await fetch(url, options);
-        if (!response.ok) throw new Error('Erro API TMDB');
+        const response = await fetch(discoverUrl, options);
+        if (!response.ok) throw new Error('Erro API TMDB Discover');
 
         const data = await response.json();
-        
+
         let shuffled = data.results.sort(() => 0.5 - Math.random());
-        let selectedMovies = shuffled.slice(0, 10);
+        let selectedBasicMovies = shuffled.slice(0, 10);
 
-        const formattedMovies = selectedMovies.map(m => ({
-            id: m.id,
-            title: m.title,
-            original_title: m.original_title,
-            year: m.release_date ? m.release_date.split('-')[0] : 'N/A',
-            rating: m.vote_average ? m.vote_average.toFixed(1) : 'N/A',
-            description: m.overview || "Sem descrição disponível.",
-            poster: m.poster_path ? `https://image.tmdb.org/t/p/w780${m.poster_path}` : null,
-            backdrop: m.backdrop_path ? `https://image.tmdb.org/t/p/original${m.backdrop_path}` : null
-        })).filter(m => m.poster);
+        const detailedMovies = await Promise.all(selectedBasicMovies.map(async (basicMovie) => {
+            try {
+                const detailUrl = `${BASE_URL}/movie/${basicMovie.id}?language=pt-PT&append_to_response=watch/providers,videos`;
+                const detailRes = await fetch(detailUrl, options);
+                
+                if(!detailRes.ok) return null;
 
-        return formattedMovies;
+                const details = await detailRes.json();
+                const videos = details.videos?.results || [];
+                const trailer = videos.find(v => v.site === 'YouTube' && v.type === 'Trailer') || videos[0];
+
+                const ptProviders = details['watch/providers']?.results?.PT || {};
+                
+                const mapProvider = (list) => (list || []).map(p => ({
+                    icon: p.logo_path ? `https://image.tmdb.org/t/p/original${p.logo_path}` : null,
+                    name: p.provider_name
+                })).filter(p => p.icon);
+                return {
+                    id: details.id,
+                    title: details.title,
+                    original_title: details.original_title,
+                    year: details.release_date ? details.release_date.split('-')[0] : 'N/A',
+                    rating: details.vote_average ? details.vote_average.toFixed(1) : 'N/A',
+                    description: details.overview || "Sem descrição disponível.",
+                    poster: details.poster_path ? `https://image.tmdb.org/t/p/w780${details.poster_path}` : null,
+                    backdrop: details.backdrop_path ? `https://image.tmdb.org/t/p/original${details.backdrop_path}` : null,
+
+                    trailerId: trailer ? trailer.key : null,
+                    providers: {
+                        subs: mapProvider(ptProviders.flatrate),
+                        rent: mapProvider(ptProviders.rent),
+                        buy: mapProvider(ptProviders.buy)
+                    }
+                };
+
+            } catch (innerErr) {
+                console.error(`Erro ao buscar detalhes do filme ${basicMovie.id}:`, innerErr);
+                return null;
+            }
+        }));
+        return detailedMovies.filter(m => m !== null && m.poster);
 
     } catch (error) {
-        console.error(error);
+        console.error("Erro Geral TMDB:", error.message);
         return [];
     }
 }
