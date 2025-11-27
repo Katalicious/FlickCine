@@ -1,11 +1,28 @@
 document.addEventListener('DOMContentLoaded', async () => {
     const stackContainer = document.getElementById('card-stack');
     const emptyState = document.getElementById('empty-state');
-
+    
+    // --- Referências aos Sons ---
+    const soundAccept = document.getElementById('sound-accept');
+    const soundReject = document.getElementById('sound-reject');
+    
+    // --- Configurações Iniciais ---
     let movies = [];
     let activeIndex = 0;
     let lastAction = null; 
 
+    // --- Função para Tocar Sons ---
+    function playSound(type) {
+        const audio = (type === 'accept') ? soundAccept : soundReject;
+        
+        if (audio) {
+            audio.currentTime = 0;
+            audio.volume = 0.4;   
+            audio.play().catch(e => console.log("Audio play blocked:", e));
+        }
+    }
+
+    // --- 1. Buscar Filmes ao Backend ---
     async function fetchMovies() {
         try {
             const response = await fetch('/swipe/feed');
@@ -37,6 +54,7 @@ document.addEventListener('DOMContentLoaded', async () => {
         updateSidebar(activeIndex); 
     }
 
+    // --- 2. Renderizar Cartões ---
     function renderCards() {
         stackContainer.innerHTML = '';
         
@@ -63,7 +81,6 @@ document.addEventListener('DOMContentLoaded', async () => {
             el.style.transform = 'scale(0.95) translateY(10px)';
             el.style.opacity = '0.5';
         }
-
         let mediaContent;
         if (isActive && movie.trailerId) {
             mediaContent = `<iframe src="https://www.youtube.com/embed/${movie.trailerId}?autoplay=1&mute=1&controls=1&modestbranding=1&rel=0&loop=1" frameborder="0" allow="autoplay; encrypted-media" allowfullscreen></iframe>`;
@@ -114,27 +131,22 @@ document.addEventListener('DOMContentLoaded', async () => {
         stackContainer.appendChild(el);
     }
 
+    // --- 3. Sidebar ---
     function updateSidebar(index) {
         const subs = document.getElementById('stream-subs');
         const rent = document.getElementById('stream-rent');
         const buy = document.getElementById('stream-buy');
         
-        if(subs) subs.innerHTML = ''; 
-        if(rent) rent.innerHTML = ''; 
-        if(buy) buy.innerHTML = '';
-
+        if(subs) subs.innerHTML = ''; if(rent) rent.innerHTML = ''; if(buy) buy.innerHTML = '';
         if (index >= movies.length) return;
+        
         const movie = movies[index];
-
         const renderList = (list, container) => {
             if (!list?.length || !container) return;
             container.innerHTML = list.map(p => `
-                <div class="provider-wrapper">
-                    <img src="${p.icon}" class="provider-icon" title="${p.name}">
-                </div>
+                <div class="provider-wrapper"><img src="${p.icon}" class="provider-icon" title="${p.name}"></div>
             `).join('');
         };
-
         if (movie.providers) {
             renderList(movie.providers.subs, subs);
             renderList(movie.providers.rent, rent);
@@ -142,16 +154,15 @@ document.addEventListener('DOMContentLoaded', async () => {
         }
     }
 
+    // --- 4. Toasts ---
     function showToast(msg, type) {
         const c = document.getElementById('toast-container');
         if (!c) return;
-
         const t = document.createElement('div');
         t.className = `toast ${type}`;
         const icon = type === 'success' ? 'check' : type === 'error' ? 'times' : 'undo';
         t.innerHTML = `<i class="fas fa-${icon}"></i> ${msg}`;
         c.appendChild(t);
-        
         setTimeout(() => {
             t.style.transition = "opacity 0.5s ease";
             t.style.opacity = '0';
@@ -159,12 +170,12 @@ document.addEventListener('DOMContentLoaded', async () => {
         }, 2000);
     }
 
+    // --- 5. Drag & Drop ---
     function initDragEvents(card) {
         let isDragging = false, startX = 0, currentX = 0;
 
         const start = (e) => {
             if(e.target.closest('button') || e.target.closest('a') || e.target.tagName === 'IFRAME') return;
-            
             isDragging = true;
             startX = (e.type === 'touchstart') ? e.touches[0].clientX : e.clientX;
             card.classList.add('is-dragging');
@@ -211,9 +222,15 @@ document.addEventListener('DOMContentLoaded', async () => {
         }
     }
 
+    // --- 6. Trigger Swipe ---
     window.triggerSwipe = async (dir) => {
         const card = document.querySelector('.current-card');
         if(!card) return;
+        if (dir === 'right') {
+            playSound('accept');
+        } else {
+            playSound('reject');
+        }
 
         lastAction = { index: activeIndex, dir: dir };
 
@@ -252,12 +269,11 @@ document.addEventListener('DOMContentLoaded', async () => {
         }, 300);
     };
 
-window.handleUndo = async () => {
-        if (!lastAction) { 
-            showToast("Nada para desfazer!", "info"); 
-            return; 
-        }
-        
+    // --- 7. Undo ---
+    window.handleUndo = async () => {
+        if (!lastAction) { showToast("Nada para desfazer!", "info"); return; }
+        playSound('reject');
+
         try {
             const res = await fetch('/swipe/undo', { method: 'POST' });
             const data = await res.json();
@@ -267,7 +283,7 @@ window.handleUndo = async () => {
             activeIndex = lastAction.index;
             lastAction = null;
             
-            showToast("Ação desfeita e removida!", "info");
+            showToast("Ação desfeita!", "info");
             
             renderCards();
             updateSidebar(activeIndex);
@@ -277,6 +293,7 @@ window.handleUndo = async () => {
             showToast("Erro ao desfazer ação.", "error");
         }
     };
+
 
     fetchMovies();
 });
