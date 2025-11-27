@@ -14,7 +14,7 @@ router.get('/register', (req, res) => {
 });
 
 router.get('/profile', authMiddleware, authController.getProfile);
-router.get('/avatar/:id', authController.getAvatarImage);
+router.get('/avatars/:id', authController.getAvatarImage);
 router.get('/update-avatar', authMiddleware, authController.updateAvatar);
 
 router.post('/login', authController.login);

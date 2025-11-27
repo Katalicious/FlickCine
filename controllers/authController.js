@@ -109,7 +109,7 @@ exports.getProfile = (req, res) => {
             Nome_de_Utilizador: user.Name,
             email: user.Email,
             idade: user.Idade,
-            avatarUrl: `/auth/avatar/${user.Utilizador_ID}` 
+            avatarUrl: `/avatars/${user.Utilizador_ID}` 
         };
 
         res.render('profile', { user: userDisplay, watchlist: watchlist });
@@ -128,7 +128,7 @@ exports.getAvatarImage = (req, res) => {
             res.setHeader('Content-Type', 'image/svg+xml');
             res.send(user.Avatar);
         } else {
-            res.redirect('/img/avatar_placeholder.png'); 
+            res.redirect('/images/default-avatar.svg'); 
         }
     } catch (err) {
         console.error(err);
