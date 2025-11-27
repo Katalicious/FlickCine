@@ -1,7 +1,7 @@
 const Database = require('better-sqlite3');
 const path = require('path');
 
-const dbPath = path.join(__dirname, 'flickcine.sqlite');
+const dbPath = path.join(__dirname, 'FlickCine.sqlite');
 
 const db = new Database(dbPath, { 
     verbose: console.log 
