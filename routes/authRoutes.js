@@ -17,6 +17,8 @@ router.get('/profile', authMiddleware, authController.getProfile);
 router.get('/avatars/:id', authController.getAvatarImage);
 router.get('/update-avatar', authMiddleware, authController.updateAvatar);
 
+router.post('/profile/update-avatar', authMiddleware, authController.updateAvatar);
+
 router.post('/login', authController.login);
 router.post('/register', authController.register);
 router.get('/logout', authController.logout);

@@ -89,3 +89,19 @@ body.dark-mode .img-light {
 body.dark-mode .img-dark {
     display: block !important;
 }
+
+body.dark-mode .dropdown-content {
+    background-color: #1d1d1d;
+    color: #FFFFFF;
+    box-shadow: 0px 8px 20px rgba(0,0,0,0.6);
+}
+
+body.dark-mode .dropdown-content a {
+    color: #FFFFFF;
+}
+
+body.dark-mode .dropdown-content a:hover {
+    background-color: rgba(255,255,255,0.04);
+}
+
+

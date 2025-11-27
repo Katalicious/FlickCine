@@ -46,6 +46,14 @@
               style="width: 40px; height: 40px; border-radius: 50%; object-fit: cover; border: 2px solid #FFFFFF;"
             >
         </a>
+
+        <div class="dropdown">
+          <button class="dropbtn"><%= user.Nome_de_Utilizador || user.name || user.Name || 'Perfil' %> ▾</button>
+          <div class="dropdown-content">
+            <a href="/profile">Perfil</a>
+            <a href="/logout">Logout</a>
+          </div>
+        </div>
       <% } else { %>
         <a href="/login" class="btn btn-login">Login</a>
         <a href="/register" class="btn btn-signup">Criar conta</a>

@@ -139,7 +139,12 @@ exports.getAvatarImage = (req, res) => {
 exports.updateAvatar = async (req, res) => {
     try {
         const userId = req.session.user.id;
-        const seed = Math.floor(Math.random() * 100000); 
+        let seed;
+        if (req.body && req.body.avatarId) {
+            const m = String(req.body.avatarId).match(/avatar_(\d+)/);
+            if (m) seed = parseInt(m[1], 10) * 99;
+        }
+        if (!seed) seed = Math.floor(Math.random() * 100000);
         const avatarUrl = `https://api.dicebear.com/7.x/avataaars/svg?seed=${seed}&backgroundColor=transparent`;
 
         const response = await fetch(avatarUrl);

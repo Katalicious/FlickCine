@@ -9,7 +9,7 @@
     <div class="profile-container">
         <div class="sidebar" id="sidebar">
         <div class="profile-picture">
-            <img src="<%= (user && user.id) ? ('/avatars/' + user.id) : '/img/avatar_placeholder.png' %>" alt="Profile Avatar"> 
+            <img src="<%= (user && user.id) ? ('/avatars/' + user.id) : '/img/avatar_placeholder.png' %>" alt="Profile Avatar">
         </div>
 
         <h2 class="username"><%= user.Nome_de_Utilizador %></h2>
@@ -67,9 +67,7 @@
             </li>
         <% }); %>
     <% } else { %>
-        <li style="color: white; list-style: none; padding: 20px;">
-            Ainda não tens filmes favoritos. Vai ao Swipe!
-        </li>
+        <p>Ainda não tens filmes favoritos. Começa a explorar os teus gostos!</p>
     <% } %>
 </ul>
 
