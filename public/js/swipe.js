@@ -252,18 +252,30 @@ document.addEventListener('DOMContentLoaded', async () => {
         }, 300);
     };
 
-    window.handleUndo = () => {
+window.handleUndo = async () => {
         if (!lastAction) { 
             showToast("Nada para desfazer!", "info"); 
             return; 
         }
         
-        activeIndex = lastAction.index;
-        lastAction = null;
-        showToast("Ação desfeita!", "info");
-        
-        renderCards();
-        updateSidebar(activeIndex);
+        try {
+            const res = await fetch('/swipe/undo', { method: 'POST' });
+            const data = await res.json();
+            
+            if (!data.success) throw new Error("Erro no servidor");
+
+            activeIndex = lastAction.index;
+            lastAction = null;
+            
+            showToast("Ação desfeita e removida!", "info");
+            
+            renderCards();
+            updateSidebar(activeIndex);
+
+        } catch (err) {
+            console.error(err);
+            showToast("Erro ao desfazer ação.", "error");
+        }
     };
 
     fetchMovies();

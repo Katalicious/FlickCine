@@ -11,20 +11,29 @@ const options = {
     }
 };
 
-async function getRandomMovies() {
+async function getRandomMovies(excludedIds = []) {
     try {
-        const randomPage = Math.floor(Math.random() * 20) + 1;
-        const discoverUrl = `${BASE_URL}/discover/movie?include_adult=false&include_video=false&language=pt-PT&page=${randomPage}&sort_by=popularity.desc&watch_region=PT&with_watch_monetization_types=flatrate|free|ads|rent|buy`;
+        let attempts = 0;
+        let selectedBasicMovies = [];
 
-        const response = await fetch(discoverUrl, options);
-        if (!response.ok) throw new Error('Erro API TMDB Discover');
+        while (selectedBasicMovies.length < 10 && attempts < 3) {
+            attempts++;
+            const randomPage = Math.floor(Math.random() * 20) + 1;
+            const discoverUrl = `${BASE_URL}/discover/movie?include_adult=false&include_video=false&language=pt-PT&page=${randomPage}&sort_by=popularity.desc&watch_region=PT&with_watch_monetization_types=flatrate|free|ads|rent|buy`;
 
-        const data = await response.json();
+            const response = await fetch(discoverUrl, options);
+            if (!response.ok) continue;
 
-        let shuffled = data.results.sort(() => 0.5 - Math.random());
-        let selectedBasicMovies = shuffled.slice(0, 10);
+            const data = await response.json();
 
-        const detailedMovies = await Promise.all(selectedBasicMovies.map(async (basicMovie) => {
+            const freshMovies = data.results.filter(m => !excludedIds.includes(m.id));
+
+            selectedBasicMovies = [...selectedBasicMovies, ...freshMovies];
+        }
+
+        let shuffled = selectedBasicMovies.sort(() => 0.5 - Math.random()).slice(0, 10);
+
+        const detailedMovies = await Promise.all(shuffled.map(async (basicMovie) => {
             try {
                 const detailUrl = `${BASE_URL}/movie/${basicMovie.id}?language=pt-PT&append_to_response=watch/providers,videos`;
                 const detailRes = await fetch(detailUrl, options);
@@ -34,13 +43,13 @@ async function getRandomMovies() {
                 const details = await detailRes.json();
                 const videos = details.videos?.results || [];
                 const trailer = videos.find(v => v.site === 'YouTube' && v.type === 'Trailer') || videos[0];
-
                 const ptProviders = details['watch/providers']?.results?.PT || {};
                 
                 const mapProvider = (list) => (list || []).map(p => ({
                     icon: p.logo_path ? `https://image.tmdb.org/t/p/original${p.logo_path}` : null,
                     name: p.provider_name
                 })).filter(p => p.icon);
+
                 return {
                     id: details.id,
                     title: details.title,
@@ -50,7 +59,6 @@ async function getRandomMovies() {
                     description: details.overview || "Sem descrição disponível.",
                     poster: details.poster_path ? `https://image.tmdb.org/t/p/w780${details.poster_path}` : null,
                     backdrop: details.backdrop_path ? `https://image.tmdb.org/t/p/original${details.backdrop_path}` : null,
-
                     trailerId: trailer ? trailer.key : null,
                     providers: {
                         subs: mapProvider(ptProviders.flatrate),
@@ -60,10 +68,10 @@ async function getRandomMovies() {
                 };
 
             } catch (innerErr) {
-                console.error(`Erro ao buscar detalhes do filme ${basicMovie.id}:`, innerErr);
                 return null;
             }
         }));
+
         return detailedMovies.filter(m => m !== null && m.poster);
 
     } catch (error) {
