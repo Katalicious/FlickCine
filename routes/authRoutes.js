@@ -14,11 +14,11 @@ router.get('/register', (req, res) => {
 });
 
 router.get('/profile', authMiddleware, authController.getProfile);
+router.get('/avatar/:id', authController.getAvatarImage);
+router.get('/update-avatar', authMiddleware, authController.updateAvatar);
 
 router.post('/login', authController.login);
-router.post('/auth/register', authController.register);
 router.post('/register', authController.register);
-
 router.get('/logout', authController.logout);
 
 module.exports = router;
