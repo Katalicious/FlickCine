@@ -1,5 +1,4 @@
 document.addEventListener('DOMContentLoaded', async () => {
-    
     // Configurações da API
     const API_TOKEN = 'Bearer eyJhbGciOiJIUzI1NiJ9.eyJhdWQiOiI3MmQ4M2JmMGMzMzAzNTU2MTZiN2JhMTM3Njg3Y2EwYiIsIm5iZiI6MTc2MzE0NDE2OC45NDIwMDAyLCJzdWIiOiI2OTE3NzFlOGVhY2ZmZTY1YjIzYTQ4MjEiLCJzY29wZXMiOlsiYXBpX3JlYWQiXSwidmVyc2lvbiI6MX0.bokDuW-bSLdQte8pwa7SPNpAzP4x66g75oPa8y13pb4';
     const BASE_URL = 'https://api.themoviedb.org/3';
@@ -55,8 +54,6 @@ document.addEventListener('DOMContentLoaded', async () => {
         
         const posterUrl = data.poster_path ? IMG_BASE + data.poster_path : 'https://via.placeholder.com/500x750?text=Sem+Poster';
         document.getElementById('movie-poster').src = posterUrl;
-
-        // 2. Overview e Créditos
         document.getElementById('movie-description').innerText = data.overview || "Sinopse não disponível.";
         document.getElementById('movie-genres').innerText = data.genres.map(g => g.name).join(', ');
         

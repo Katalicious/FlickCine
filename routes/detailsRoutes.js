@@ -1,10 +1,12 @@
 const express = require('express');
 const router = express.Router();
-const path = require('path');
+const authMiddleware = require('../middlewares/authMiddleware');
 
-// detalhes de cada filme ou série render com o ejs
-router.get('/', (req, res) => {
-	res.send('Details root');
+router.get('/:id', authMiddleware, (req, res) => {
+    res.render('details', { 
+        movieId: req.params.id,
+        page: 'details'
+    });
 });
 
 module.exports = router;

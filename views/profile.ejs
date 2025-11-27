@@ -57,44 +57,21 @@
             <% if (typeof user !== 'undefined' && user) { %>
                 <h3>A minha Watchlist</h3>
                 <p>Olá, <%= user.Nome_de_Utilizador %>! Aqui está a tua watchlist personalizada.</p>
-                <ul id="watchlist-movies">
-                    <li><a href="/details/${movie.id}"><img src="/img/Wicked_ForGoodCover.jpg" alt="Movie 1"></a></li>
-                    <li><a href="/details/${movie.id}"><img src="/img/Fallout_Cover.jpg" alt="Movie 2"></a></li>
-                    <li><a href="/details/${movie.id}"><img src="/img/Wicked_ForGoodCover.jpg" alt="Movie 3"></a></li>
-                    <li><a href="/details/${movie.id}"><img src="/img/Fallout_Cover.jpg" alt="Movie 4"></a></li>
-                    <li><a href="/details/${movie.id}"><img src="/img/Wicked_ForGoodCover.jpg" alt="Movie 5"></a></li>
-                    <li><a href="/details/${movie.id}"><img src="/img/Fallout_Cover.jpg" alt="Movie 6"></a></li>
-
-                    <li><a href="/details/${movie.id}"><img src="/img/Wicked_ForGoodCover.jpg" alt="Movie 7"></a></li>
-                    <li><a href="/details/${movie.id}"><img src="/img/Fallout_Cover.jpg" alt="Movie 8"></a></li>
-                    <li><a href="/details/${movie.id}"><img src="/img/Wicked_ForGoodCover.jpg" alt="Movie 9"></a></li>
-                    <li><a href="/details/${movie.id}"><img src="/img/Fallout_Cover.jpg" alt="Movie 10"></a></li>
-                    <li><a href="/details/${movie.id}"><img src="/img/Wicked_ForGoodCover.jpg" alt="Movie 11"></a></li>
-                    <li><a href="/details/${movie.id}"><img src="/img/Fallout_Cover.jpg" alt="Movie 12"></a></li> 
-
-                    <li><a href="/details/${movie.id}"><img src="/img/Wicked_ForGoodCover.jpg" alt="Movie 13"></a></li>
-                    <li><a href="/details/${movie.id}"><img src="/img/Fallout_Cover.jpg" alt="Movie 14"></a></li>
-                    <li><a href="/details/${movie.id}"><img src="/img/Wicked_ForGoodCover.jpg" alt="Movie 15"></a></li>
-                    <li><a href="/details/${movie.id}"><img src="/img/Fallout_Cover.jpg" alt="Movie 16"></a></li>
-                    <li><a href="/details/${movie.id}"><img src="/img/Wicked_ForGoodCover.jpg" alt="Movie 17"></a></li>
-                    <li><a href="/details/${movie.id}"><img src="/img/Fallout_Cover.jpg" alt="Movie 18"></a></li>
-
-                    <li><a href="/details/${movie.id}"><img src="/img/Wicked_ForGoodCover.jpg" alt="Movie 19"></a></li>
-                    <li><a href="/details/${movie.id}"><img src="/img/Fallout_Cover.jpg" alt="Movie 20"></a></li>
-                    <li><a href="/details/${movie.id}"><img src="/img/Wicked_ForGoodCover.jpg" alt="Movie 21"></a></li>
-                    <li><a href="/details/${movie.id}"><img src="/img/Fallout_Cover.jpg" alt="Movie 22"></a></li>
-                    <li><a href="/details/${movie.id}"><img src="/img/Wicked_ForGoodCover.jpg" alt="Movie 23"></a></li>
-                    <li><a href="/details/${movie.id}"><img src="/img/Fallout_Cover.jpg" alt="Movie 24"></a></li>
-
-                    <li><a href="/details/${movie.id}"><img src="/img/Wicked_ForGoodCover.jpg" alt="Movie 25"></a></li>
-                    <li><a href="/details/${movie.id}"><img src="/img/Fallout_Cover.jpg" alt="Movie 26"></a></li>
-                    <li><a href="/details/${movie.id}"><img src="/img/Wicked_ForGoodCover.jpg" alt="Movie 27"></a></li>
-                    <li><a href="/details/${movie.id}"><img src="/img/Fallout_Cover.jpg" alt="Movie 28"></a></li>
-                    <li><a href="/details/${movie.id}"><img src="/img/Wicked_ForGoodCover.jpg" alt="Movie 29"></a></li>
-                    <li><a href="/details/${movie.id}"><img src="/img/Fallout_Cover.jpg" alt="Movie 30"></a></li>
-
-
-                </ul>
+            <ul id="watchlist-movies">
+    <% if (typeof watchlist !== 'undefined' && watchlist.length > 0) { %>
+        <% watchlist.forEach(movie => { %>
+            <li>
+                <a href="/details/<%= movie.id %>">
+                    <img src="<%= movie.poster %>" alt="<%= movie.title %>" title="<%= movie.title %>">
+                </a>
+            </li>
+        <% }); %>
+    <% } else { %>
+        <li style="color: white; list-style: none; padding: 20px;">
+            Ainda não tens filmes favoritos. Vai ao Swipe!
+        </li>
+    <% } %>
+</ul>
 
             <% } else { %>
                 <h3>A tua watchlist não está disponível visto que não estás conectado.</h3>
