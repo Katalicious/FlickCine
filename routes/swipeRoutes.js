@@ -6,10 +6,14 @@ const tmdb = require('../services/tmdb');
 router.get('/', (req, res) => {
     res.render('swipe');
 });
+
+// --- ROTA DE FEED ---
 router.get('/feed', async (req, res) => {
     try {
         if (!req.session || !req.session.user) return res.status(401).json({ error: 'Não autorizado' });
         const userId = req.session.user.id;
+
+        // 1. Verificar pendentes
         const pendingSwipes = db.prepare(`
             SELECT tmbd_ID FROM Swipes 
             WHERE Utilizador_ID = ? AND liked = 0 AND disliked = 0
@@ -24,15 +28,21 @@ router.get('/feed', async (req, res) => {
 
         } else {
             console.log(`User ${userId} precisa de novos filmes.`);
+            
+            // 2. Gerar novos (excluindo histórico)
             const history = db.prepare(`
                 SELECT tmbd_ID FROM Swipes 
                 WHERE Utilizador_ID = ? AND (liked = 1 OR disliked = 1)
             `).all(userId);
             const excludedIds = history.map(row => row.tmbd_ID);
+
             movies = await tmdb.getRandomMovies(excludedIds);
+
+            // 3. Guardar na BD
             const insertPending = db.transaction((movieList) => {
                 const stmtMovie = db.prepare(`
-                    INSERT OR IGNORE INTO "Filmes/séries" (tmbd_ID, Titulo, Capa, Sinopse, Data_de_Lan√ßamento) 
+                    INSERT OR IGNORE INTO "Filmes/séries" 
+                    ("tmbd_ID", "Titulo", "Capa", "Sinopse", "Data_de_Lançamento") 
                     VALUES (?, ?, ?, ?, ?)
                 `);
                 
@@ -58,6 +68,7 @@ router.get('/feed', async (req, res) => {
     }
 });
 
+// --- ROTA DE INTERAÇÃO ---
 router.post('/interaction', (req, res) => {
     const { tmdbId, title, poster, liked, disliked, overview, year } = req.body;
     
@@ -76,12 +87,21 @@ router.post('/interaction', (req, res) => {
             let swipeId;
 
             if (existingSwipe) {
+                // Atualizar swipe existente
                 db.prepare(`
                     UPDATE Swipes SET liked = ?, disliked = ? 
                     WHERE SWIPE_ID = ?
                 `).run(liked, disliked, existingSwipe.SWIPE_ID);
                 swipeId = existingSwipe.SWIPE_ID;
             } else {
+                // ALTERAÇÃO: Usar nomes com acentos corretos
+                db.prepare(`
+                    INSERT OR IGNORE INTO "Filmes/séries" 
+                    ("tmbd_ID", "Titulo", "Capa", "Sinopse", "Data_de_Lançamento") 
+                    VALUES (?, ?, ?, ?, ?)
+                `).run(tmdbId, title, poster, overview, year);
+
+                // Criar novo swipe
                 const info = db.prepare(`
                     INSERT INTO Swipes (tmbd_ID, Utilizador_ID, liked, disliked, undo)
                     VALUES (?, ?, ?, ?, 0)
@@ -89,6 +109,7 @@ router.post('/interaction', (req, res) => {
                 swipeId = info.lastInsertRowid;
             }
 
+            // Adicionar à Watchlist se for Like
             if (liked === 1) {
                 db.prepare(`INSERT OR IGNORE INTO Watchlist (Utilizador_ID, Swipe_ID) VALUES (?, ?)`).run(userId, swipeId);
             }
@@ -102,6 +123,7 @@ router.post('/interaction', (req, res) => {
     }
 });
 
+// --- ROTA DE UNDO ---
 router.post('/undo', (req, res) => {
     if (!req.session || !req.session.user) return res.status(401).json({ success: false });
     const userId = req.session.user.id;
@@ -115,9 +137,11 @@ router.post('/undo', (req, res) => {
             `).get(userId);
 
             if (!lastSwipe) return;
+
             if (lastSwipe.liked === 1) {
                 db.prepare('DELETE FROM Watchlist WHERE Swipe_ID = ?').run(lastSwipe.SWIPE_ID);
             }
+
             db.prepare(`
                 UPDATE Swipes SET liked = 0, disliked = 0 
                 WHERE SWIPE_ID = ?
