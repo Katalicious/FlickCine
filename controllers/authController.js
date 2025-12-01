@@ -163,3 +163,38 @@ exports.updateAvatar = async (req, res) => {
         res.redirect('/profile?error=1');
     }
 };
+exports.updatePassword = async (req, res) => {
+    try {
+        const { currentPassword, newPassword, confirmPassword } = req.body;
+        const userId = req.session.user.id;
+        
+        if (!currentPassword || !newPassword || !confirmPassword) {
+            return res.redirect('/profile?error=empty_fields');
+        }
+
+        if (newPassword !== confirmPassword) {
+            return res.redirect('/profile?error=mismatch');
+        }
+
+        const user = db.prepare('SELECT Password_Hash FROM Utilizador WHERE Utilizador_ID = ?').get(userId);
+
+        if (!user) return res.redirect('/logout');
+
+        const match = await bcrypt.compare(currentPassword, user.Password_Hash);
+        if (!match) {
+            return res.redirect('/profile?error=wrong_current');
+        }
+
+        const newHashedPassword = await bcrypt.hash(newPassword, 10);
+
+        const update = db.prepare('UPDATE Utilizador SET Password_Hash = ? WHERE Utilizador_ID = ?');
+        update.run(newHashedPassword, userId);
+
+        console.log(`Password alterada para o utilizador ${userId}`);
+        res.redirect('/profile?success=password_updated');
+
+    } catch (err) {
+        console.error("Erro ao mudar password:", err);
+        res.redirect('/profile?error=server');
+    }
+};
