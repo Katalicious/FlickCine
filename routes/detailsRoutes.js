@@ -1,4 +1,4 @@
-require('dotenv').config(); // Garante que lê o .env
+require('dotenv').config();
 const express = require('express');
 const router = express.Router();
 const authMiddleware = require('../middlewares/authMiddleware');
