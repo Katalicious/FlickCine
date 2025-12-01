@@ -101,3 +101,70 @@ const urlParams = new URLSearchParams(window.location.search);
     const newUrl = window.location.protocol + "//" + window.location.host + window.location.pathname;
     window.history.replaceState({path: newUrl}, '', newUrl);
   }
+let movieToDeleteId = null;
+const confirmModal = document.getElementById('confirm-modal');
+const btnConfirm = document.getElementById('btn-modal-confirm');
+const btnCancel = document.getElementById('btn-modal-cancel');
+
+window.removerFilme = (id) => {
+    movieToDeleteId = id;
+    if (confirmModal) confirmModal.style.display = 'flex';
+};
+
+if (btnCancel) {
+    btnCancel.addEventListener('click', () => {
+        confirmModal.style.display = 'none';
+        movieToDeleteId = null;
+    });
+}
+
+if (btnConfirm) {
+    btnConfirm.addEventListener('click', async () => {
+        if (!movieToDeleteId) return;
+        confirmModal.style.display = 'none';
+
+        try {
+            const res = await fetch('/watchlist/remove', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({ movieId: movieToDeleteId })
+            });
+            
+            const data = await res.json();
+
+            if (data.success) {
+                const el = document.getElementById(`movie-${movieToDeleteId}`);
+                if(el) {
+                    el.style.transition = 'opacity 0.5s, transform 0.5s';
+                    el.style.opacity = '0';
+                    el.style.transform = 'scale(0.8)';
+                    setTimeout(() => el.remove(), 500);
+                }
+                createToast('Filme removido da watchlist!', 'success');
+            } else {
+                createToast('Erro ao remover filme.', 'error');
+            }
+        } catch (err) {
+            console.error(err);
+            createToast('Erro de conexão.', 'error');
+        }
+    });
+}
+
+window.addEventListener('click', (e) => {
+    if (e.target === confirmModal) confirmModal.style.display = 'none';
+});
+
+function createToast(msg, type) {
+    const container = document.getElementById('toast-container');
+    if (!container) return;
+    const toast = document.createElement('div');
+    toast.className = `toast ${type}`;
+    let icon = type === 'success' ? 'check-circle' : 'times-circle';
+    toast.innerHTML = `<i class="fas fa-${icon}"></i> ${msg}`;
+    container.appendChild(toast);
+    setTimeout(() => {
+        toast.style.opacity = '0';
+        setTimeout(() => toast.remove(), 500);
+    }, 3000);
+}

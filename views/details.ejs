@@ -12,8 +12,19 @@
     <div class="container movie-details-container">
         
         <div class="details-left">
-            <div class="poster-wrapper">
-                <img id="movie-poster" src="https://via.placeholder.com/500x750?text=A+Carregar..." alt="Poster" class="movie-poster">
+           <div class="poster-wrapper">
+             <img id="movie-poster" src="<%= movie.poster %>" alt="<%= movie.             title %>" class="movie-poster">
+              
+             <% if (typeof inWatchlist !== 'undefined' && inWatchlist) { %>
+                    <div 
+                      id="btn-remove-details" 
+                       class="btn-lixo-overlay" 
+                       data-movie-id="<%= movieId %>"
+                        title="Remover da Watchlist">
+                      <img src="/img/lixo.png" alt="Remover">
+                      <span class="tooltip-text">Remover</span>
+                 </div>
+             <% } %>
             </div>
         </div>
 
@@ -21,7 +32,7 @@
             
             <div class="movie-header-row">
                 <div class="movie-title-info">
-                    <h1 id="movie-title">A carregar...</h1>
+                    <h1 id="movie-title"><%= movie.title %></h1>
                     
                     <div class="meta-row">
                         <span id="movie-year" class="meta-tag">----</span>
@@ -51,7 +62,9 @@
             </div>
 
             <div id="tab-overview" class="tab-content active">
-                <p class="synopsis" id="movie-description">A carregar sinopse...</p>
+                <p class="synopsis" id="movie-description">
+                     <%= movie.description || "Sinopse não disponível." %>
+                </p>
                 <div class="meta-list">
                     <div class="meta-item">
                         <span class="label">Genre</span>
@@ -92,6 +105,17 @@
             <div id="tab-similar" class="tab-content" style="display: none;">
                 <div class="similar-movies-grid" id="similar-grid">
                     </div>
+            </div>
+
+            <div id="confirm-modal" class="custom-modal-overlay">
+                 <div class="custom-modal-box">
+                    <h3>Tens a certeza?</h3>
+                    <p>Queres mesmo remover este filme da tua Watchlist?</p>
+                    <div class="modal-actions">
+                        <button id="btn-modal-cancel" class="btn-modal btn-cancel">Cancelar</button>
+                     <button id="btn-modal-confirm" class="btn-modal btn-confirm">Sim, remover</button>
+                    </div>
+                </div>
             </div>
 
         </div> </div> <%- include('partials/footer') %>

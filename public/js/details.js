@@ -1,12 +1,87 @@
 document.addEventListener('DOMContentLoaded', async () => {
-    // Configurações da API
-    const API_TOKEN = 'Bearer eyJhbGciOiJIUzI1NiJ9.eyJhdWQiOiI3MmQ4M2JmMGMzMzAzNTU2MTZiN2JhMTM3Njg3Y2EwYiIsIm5iZiI6MTc2MzE0NDE2OC45NDIwMDAyLCJzdWIiOiI2OTE3NzFlOGVhY2ZmZTY1YjIzYTQ4MjEiLCJzY29wZXMiOlsiYXBpX3JlYWQiXSwidmVyc2lvbiI6MX0.bokDuW-bSLdQte8pwa7SPNpAzP4x66g75oPa8y13pb4';
-    const BASE_URL = 'https://api.themoviedb.org/3';
+  
     const IMG_BASE = 'https://image.tmdb.org/t/p/w780';
     const ICON_BASE = 'https://image.tmdb.org/t/p/original';
 
-    if (!MOVIE_ID) return;
+    if (typeof MOVIE_ID !== 'undefined' && MOVIE_ID) {
+        fetchMovieDetails();
+    }
 
+    const btnRemove = document.getElementById('btn-remove-details');
+    const confirmModal = document.getElementById('confirm-modal');
+    const btnConfirmModal = document.getElementById('btn-modal-confirm');
+    const btnCancelModal = document.getElementById('btn-modal-cancel');
+    let idToRemove = null;
+
+
+    if (btnRemove) {
+        btnRemove.addEventListener('click', (e) => {
+            e.stopPropagation();
+            idToRemove = btnRemove.getAttribute('data-movie-id');
+            if(confirmModal) confirmModal.style.display = 'flex';
+        });
+    }
+
+    if (btnCancelModal) {
+        btnCancelModal.addEventListener('click', () => {
+            if(confirmModal) confirmModal.style.display = 'none';
+        });
+    }
+
+    if (btnConfirmModal) {
+        btnConfirmModal.addEventListener('click', async () => {
+            if (!idToRemove) return;
+            if(confirmModal) confirmModal.style.display = 'none';
+
+            try {
+                const response = await fetch('/watchlist/remove', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({ movieId: idToRemove })
+                });
+
+                const result = await response.json();
+
+                if (result.success) {
+                    showDetailsToast('Removido com sucesso!', 'success');
+                    setTimeout(() => {
+                        window.location.reload();
+                    }, 1500);
+                } else {
+                    alert("Erro ao remover.");
+                }
+            } catch (error) {
+                console.error("Erro:", error);
+            }
+        });
+    }
+    function showDetailsToast(msg, type) {
+        let container = document.getElementById('toast-container');
+        if (!container) {
+            container = document.createElement('div');
+            container.id = 'toast-container';
+            container.style.position = 'fixed';
+            container.style.bottom = '30px';
+            container.style.left = '50%';
+            container.style.transform = 'translateX(-50%)';
+            container.style.zIndex = '9999';
+            document.body.appendChild(container);
+        }
+
+        const toast = document.createElement('div');
+        toast.className = `toast ${type}`;
+        toast.style.backgroundColor = type === 'success' ? '#2ecc71' : '#e74c3c';
+        toast.style.color = 'white';
+        toast.style.padding = '12px 20px';
+        toast.style.borderRadius = '50px';
+        toast.style.fontWeight = 'bold';
+        toast.style.boxShadow = '0 5px 15px rgba(0,0,0,0.3)';
+        toast.innerText = msg;
+        
+        container.appendChild(toast);
+    }
+
+    // --- 2. Lógica das Tabs ---
     window.openTab = function(evt, tabName) {
         var i, tabContent, tabLinks;
         tabContent = document.getElementsByClassName("tab-content");
@@ -23,12 +98,11 @@ document.addEventListener('DOMContentLoaded', async () => {
         evt.currentTarget.classList.add("active");
     };
 
-    async function fetchMovieDetails() {
+async function fetchMovieDetails() {
         try {
-            const url = `${BASE_URL}/movie/${MOVIE_ID}?language=pt-PT&append_to_response=credits,watch/providers,similar,release_dates`;
-            const options = { headers: { accept: 'application/json', Authorization: API_TOKEN } };
-
-            const response = await fetch(url, options);
+            const url = `/details/api/${MOVIE_ID}`;
+            const response = await fetch(url);
+            
             if (!response.ok) throw new Error('Erro ao buscar filme');
             const data = await response.json();
 
@@ -36,7 +110,6 @@ document.addEventListener('DOMContentLoaded', async () => {
 
         } catch (error) {
             console.error("Erro:", error);
-            document.getElementById('movie-title').innerText = "Erro ao carregar filme.";
         }
     }
 
@@ -46,55 +119,54 @@ document.addEventListener('DOMContentLoaded', async () => {
         const minutes = data.runtime ? data.runtime % 60 : 0;
         const age = data.adult ? "18+" : "M/12";
 
-        document.getElementById('movie-title').innerText = data.title;
-        document.getElementById('movie-year').innerText = year;
-        document.getElementById('movie-age').innerText = age;
-        document.getElementById('movie-duration').innerText = `${hours}h ${minutes}m`;
-        document.getElementById('movie-rating').innerText = data.vote_average ? `${data.vote_average.toFixed(1)}/10` : 'N/A';
+        if(document.getElementById('movie-year')) document.getElementById('movie-year').innerText = year;
+        if(document.getElementById('movie-age')) document.getElementById('movie-age').innerText = age;
+        if(document.getElementById('movie-duration')) document.getElementById('movie-duration').innerText = `${hours}h ${minutes}m`;
         
-        const posterUrl = data.poster_path ? IMG_BASE + data.poster_path : 'https://via.placeholder.com/500x750?text=Sem+Poster';
-        document.getElementById('movie-poster').src = posterUrl;
-        document.getElementById('movie-description').innerText = data.overview || "Sinopse não disponível.";
-        document.getElementById('movie-genres').innerText = data.genres.map(g => g.name).join(', ');
+        const vote = data.vote_average ? data.vote_average.toFixed(1) : 'N/A';
+        if(document.getElementById('movie-rating')) document.getElementById('movie-rating').innerText = `${vote}/10`;
+        
+        if(document.getElementById('movie-genres')) document.getElementById('movie-genres').innerText = data.genres.map(g => g.name).join(', ');
         
         const director = data.credits.crew.find(c => c.job === 'Director')?.name || 'N/A';
         const cast = data.credits.cast.slice(0, 3).map(c => c.name).join(', ');
         
-        document.getElementById('movie-director').innerText = director;
-        document.getElementById('movie-cast').innerText = cast;
+        if(document.getElementById('movie-director')) document.getElementById('movie-director').innerText = director;
+        if(document.getElementById('movie-cast')) document.getElementById('movie-cast').innerText = cast;
 
         const formatMoney = (val) => val ? val.toLocaleString('en-US', { style: 'currency', currency: 'USD' }) : 'N/A';
-        document.getElementById('movie-budget').innerText = formatMoney(data.budget);
-        document.getElementById('movie-revenue').innerText = formatMoney(data.revenue);
-        document.getElementById('movie-language').innerText = data.original_language.toUpperCase();
-        document.getElementById('movie-production').innerText = data.production_companies[0]?.name || 'N/A';
+        if(document.getElementById('movie-budget')) document.getElementById('movie-budget').innerText = formatMoney(data.budget);
+        if(document.getElementById('movie-revenue')) document.getElementById('movie-revenue').innerText = formatMoney(data.revenue);
+        if(document.getElementById('movie-language')) document.getElementById('movie-language').innerText = data.original_language.toUpperCase();
+        if(document.getElementById('movie-production')) document.getElementById('movie-production').innerText = data.production_companies[0]?.name || 'N/A';
+
         const grid = document.getElementById('similar-grid');
-        grid.innerHTML = '';
-        const similar = (data.similar?.results || []).filter(m => m.poster_path).slice(0, 4);
-        
-        similar.forEach(sim => {
-            const card = document.createElement('a');
-            card.href = `/details/${sim.id}`;
-            card.className = 'similar-card';
-            card.innerHTML = `
-                <img src="${IMG_BASE + sim.poster_path}" alt="${sim.title}">
-                <span>${sim.title}</span>
-            `;
-            grid.appendChild(card);
-        });
+        if (grid) {
+            grid.innerHTML = '';
+            const similar = (data.similar?.results || []).filter(m => m.poster_path).slice(0, 4);
+            
+            similar.forEach(sim => {
+                const card = document.createElement('a');
+                card.href = `/details/${sim.id}`;
+                card.className = 'similar-card';
+                card.innerHTML = `
+                    <img src="${IMG_BASE + sim.poster_path}" alt="${sim.title}">
+                    <span>${sim.title}</span>
+                `;
+                grid.appendChild(card);
+            });
+        }
 
         renderStreamingBox(data['watch/providers']?.results?.PT);
     }
 
     function renderStreamingBox(providers) {
         const container = document.getElementById('streaming-container');
+        if(!container) return;
         
         const generateIcons = (list) => {
             if (!list || list.length === 0) return '<span class="no-stream">-</span>';
-            return list.map(p => {
-                if(!p.logo_path) return '';
-                return `<img src="${ICON_BASE + p.logo_path}" alt="${p.provider_name}" title="${p.provider_name}">`;
-            }).join('');
+            return list.map(p => `<img src="${ICON_BASE + p.logo_path}" alt="${p.provider_name}" title="${p.provider_name}">`).join('');
         };
 
         const subs = generateIcons(providers?.flatrate);
@@ -102,25 +174,10 @@ document.addEventListener('DOMContentLoaded', async () => {
         const buy  = generateIcons(providers?.buy);
 
         container.innerHTML = `
-            <div class="jw-section logo-section">
-                <span class="jw-brand">Onde Ver</span>
-            </div>
-            
-            <div class="jw-section">
-                <span class="jw-label">Subscrição</span>
-                <div class="jw-icons">${subs}</div>
-            </div>
-
-            <div class="jw-section">
-                <span class="jw-label">Alugar</span>
-                <div class="jw-icons">${rent}</div>
-            </div>
-
-            <div class="jw-section no-border">
-                <span class="jw-label">Comprar</span>
-                <div class="jw-icons">${buy}</div>
-            </div>
+            <div class="jw-section logo-section"><span class="jw-brand">Onde Ver</span></div>
+            <div class="jw-section"><span class="jw-label">Subscrição</span><div class="jw-icons">${subs}</div></div>
+            <div class="jw-section"><span class="jw-label">Alugar</span><div class="jw-icons">${rent}</div></div>
+            <div class="jw-section no-border"><span class="jw-label">Comprar</span><div class="jw-icons">${buy}</div></div>
         `;
     }
-    fetchMovieDetails();
 });

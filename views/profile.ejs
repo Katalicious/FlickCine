@@ -57,19 +57,29 @@
             <% if (typeof user !== 'undefined' && user) { %>
                 <h3>A minha Watchlist</h3>
                 <p>Olá, <%= user.Nome_de_Utilizador %>! Aqui está a tua watchlist personalizada.</p>
-            <ul id="watchlist-movies">
+    <ul id="watchlist-movies">
     <% if (typeof watchlist !== 'undefined' && watchlist.length > 0) { %>
         <% watchlist.forEach(movie => { %>
-            <li>
-                <a href="/details/<%= movie.id %>">
-                    <img src="<%= movie.poster %>" alt="<%= movie.title %>" title="<%= movie.title %>">
-                </a>
+            
+                <li id="movie-<%= movie.id %>" class="movie-card-item">
+                
+                     <a href="/details/<%= movie.id %>" class="movie-link">
+                        <img src="<%= movie.poster %>" alt="<%= movie.title %>" class="movie-poster">
+                    </a>
+
+                <div class="trash-circle" onclick="event.stopPropagation(); removerFilme('<%= movie.id %>')">
+                    <img src="/img/lixo.png" alt="Remover">
+                </div>
+
+                </li>
+
+            <% }); %>
+        <% } else { %>
+            <li style="width: 100%; text-align: center; color: #777; list-style: none;">
+                <p>Ainda não tens filmes favoritos. Começa a explorar os teus gostos!</p>
             </li>
-        <% }); %>
-    <% } else { %>
-        <p>Ainda não tens filmes favoritos. Começa a explorar os teus gostos!</p>
-    <% } %>
-</ul>
+        <% } %>
+    </ul>
 
             <% } else { %>
                 <h3>A tua watchlist não está disponível visto que não estás conectado.</h3>
@@ -79,7 +89,17 @@
 
         </div>
         </div>
-        
+            <div id="confirm-modal" class="custom-modal-overlay">
+                 <div class="custom-modal-box">
+                    <h3>Tens a certeza?</h3>
+                    <p>Queres mesmo remover este filme da tua Watchlist?</p>
+                    <div class="modal-actions">
+                        <button id="btn-modal-cancel" class="btn-modal btn-cancel">Cancelar</button>
+                     <button id="btn-modal-confirm" class="btn-modal btn-confirm">Sim, remover</button>
+                    </div>
+                </div>
+            </div>
+
         <div id="toast-container"></div>
 
         <%- include('partials/profile-popups') %>
