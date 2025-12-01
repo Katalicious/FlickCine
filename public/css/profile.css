@@ -338,4 +338,36 @@ body.dark-mode .btn-popup {
     background-color: #fff;
     color: #1d1d1d;
 }
+#toast-container {
+    position: fixed;
+    bottom: 30px;
+    left: 50%;
+    transform: translateX(-50%);
+    z-index: 9999;
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+}
 
+.toast {
+    min-width: 250px;
+    padding: 12px 20px;
+    border-radius: 50px;
+    color: white;
+    font-weight: bold;
+    font-family: sans-serif;
+    box-shadow: 0 5px 15px rgba(0,0,0,0.3);
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    animation: slideUp 0.3s ease-out;
+}
+
+.toast.success { background-color: #2ecc71; } 
+.toast.error { background-color: #e74c3c; }
+.toast.info { background-color: #3498db; }  
+
+@keyframes slideUp {
+    from { transform: translateY(20px); opacity: 0; }
+    to { transform: translateY(0); opacity: 1; }
+}
