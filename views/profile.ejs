@@ -44,10 +44,10 @@
             </select>
 
             <h3>Filtrar pela Data do Filme:</h3>
-            <label for="data-inicio">Data de Início:</label>
-            <input type="date" id="data-inicio" name="data-inicio">
-            <label for="data-fim">Data de Fim:</label>
-            <input type="date" id="data-fim" name="data-fim">
+            <label for="start-date">Data de Início:</label>
+            <input type="date" id="start-date" name="start-date">
+            <label for="end-date">Data de Fim:</label>
+            <input type="date" id="end-date" name="end-date">
         </div>
         </div>
 
@@ -103,6 +103,9 @@
 
         <%- include('partials/profile-popups') %>
         <%- include('partials/footer') %>
+        <script>
+            window.globalWatchlistData = <%- JSON.stringify(typeof watchlist !== 'undefined' ? watchlist : []) %>;
+        </script>
         <script src="/js/profile.js"></script>
 </body>
 </html>

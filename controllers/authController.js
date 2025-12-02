@@ -97,10 +97,15 @@ exports.getProfile = (req, res) => {
         const user = db.prepare('SELECT * FROM Utilizador WHERE Utilizador_ID = ?').get(userId);
 
         const watchlist = db.prepare(`
-            SELECT f.tmbd_ID as id, f.Titulo as title, f.Capa as poster
+            SELECT f.tmbd_ID as id,
+                   f.Titulo as title,
+                   f.Capa as poster,
+                   f."Data_de_Lançamento" as Data_de_Lancamento,
+                   f.Generos as Generos,
+                   w.Swipe_ID as SWIPE_ID
             FROM Watchlist w
             JOIN Swipes s ON w.Swipe_ID = s.SWIPE_ID
-            JOIN "Filmes/séries" f ON s.tmbd_ID = f.tmbd_ID  
+            JOIN "Filmes/séries" f ON s.tmbd_ID = f.tmbd_ID
             WHERE w.Utilizador_ID = ?
         `).all(userId);
 
