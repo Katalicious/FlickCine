@@ -1,6 +1,7 @@
 document.addEventListener('DOMContentLoaded', async () => {
     const stackContainer = document.getElementById('card-stack');
     const emptyState = document.getElementById('empty-state');
+    const loadingSpinner = document.getElementById('loading-spinner');
     
     // --- Referências aos Sons ---
     const soundAccept = document.getElementById('sound-accept');
@@ -25,6 +26,10 @@ document.addEventListener('DOMContentLoaded', async () => {
     // --- 1. Buscar Filmes ao Backend ---
   async function fetchMovies() {
         try {
+            if (loadingSpinner) loadingSpinner.style.display = 'flex';
+
+            if (emptyState) emptyState.style.display = 'none';
+
             const response = await fetch('/swipe/feed');
             if (!response.ok) throw new Error('Falha');
             const data = await response.json();
@@ -50,6 +55,12 @@ document.addEventListener('DOMContentLoaded', async () => {
             }
         } catch (e) {
             console.error(e);
+            if (emptyState) {
+                emptyState.innerHTML = "<h2>Erro de conexão. Tenta novamente.</h2>";
+                emptyState.style.display = 'block';
+            }
+        } finally {
+            if (loadingSpinner) loadingSpinner.style.display = 'none';
         }
     }
 
@@ -79,7 +90,7 @@ document.addEventListener('DOMContentLoaded', async () => {
             btnContainer.style.textAlign = 'center';
             btnContainer.style.marginTop = '50%';
             btnContainer.innerHTML = `
-                <h2 style="color:white; margin-bottom:20px;">Viste este lote!</h2>
+                <h2 style="color:white; margin-bottom:20px;">Chegaste ao fim dos teus 10 swipes!</h2>
                 <button id="btn-load-more" style="
                     background-color: #e50914; 
                     color: white; 

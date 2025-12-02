@@ -39,41 +39,6 @@
     <p>Copyright 2025 © FlickCine. Todos os direitos reservados às respetivas entidades.</p>
   </div>
 
-  <a href="/debug/toggle" id="debug-btn" style="
-      position: fixed;
-      bottom: 20px;
-      right: 20px;
-      background-color: #e50914;
-      color: white;
-      padding: 12px 25px;
-      border-radius: 50px;
-      font-weight: bold;
-      text-decoration: none;
-      box-shadow: 0 4px 15px rgba(0,0,0,0.4);
-      z-index: 9999;
-      font-family: sans-serif;
-      border: 2px solid white;
-      transition: transform 0.2s, background-color 0.2s;
-      display: flex;
-      align-items: center;
-      gap: 8px;
-      font-size: 0.9rem;
-  ">
-      <% if (typeof user !== 'undefined' && user) { %>
-          <span>🛑 Logout (Simular)</span>
-      <% } else { %>
-          <span>🟢 Login (Simular)</span>
-      <% } %>
-  </a>
-
-  <script>
-      const debugBtn = document.getElementById('debug-btn');
-      if(debugBtn) {
-          debugBtn.onmouseover = () => debugBtn.style.transform = 'scale(1.05) translateY(-2px)';
-          debugBtn.onmouseout = () => debugBtn.style.transform = 'scale(1) translateY(0)';
-      }
-  </script>
-
 </footer>
 
 <script src="/js/darkmode.js"></script>
