@@ -17,7 +17,6 @@ try {
         if (req.session.lastVisitDate !== hoje) {
             db.prepare('UPDATE Utilizador SET Swipes_Restantes = 30 WHERE Utilizador_ID = ?').run(userId);
             req.session.lastVisitDate = hoje;
-            console.log(`Novo dia para user ${userId}. Contador reposto a 30.`);
         }
 
         const user = db.prepare('SELECT Swipes_Restantes FROM Utilizador WHERE Utilizador_ID = ?').get(userId);
@@ -35,7 +34,7 @@ try {
             movies = await tmdb.getMoviesFromIds(ids);
 
         } else {
-            console.log(`User ${userId}: Gerando novos filmes.`);
+            if (user.Swipes_Restantes <= 0) return res.json({ limitReached: true, swipesRemaining: 0 });
 
             const history = db.prepare(`
                 SELECT tmbd_ID FROM Swipes 
@@ -87,11 +86,11 @@ try {
             insertTransaction(movies);
         }
         
-        res.json(movies);
+        res.json({ movies, swipesRemaining: user.Swipes_Restantes });
 
     } catch (err) {
         console.error("Erro no feed:", err);
-        res.status(500).json({ error: 'Erro ao buscar filmes' });
+        res.status(500).json({ error: 'Erro ao buscar filmes ou séries' });
     }
 });
 
@@ -104,6 +103,10 @@ router.post('/interaction', (req, res) => {
 
     try {
         const updateTransaction = db.transaction(() => {
+            const user = db.prepare('SELECT Swipes_Restantes FROM Utilizador WHERE Utilizador_ID = ?').get(userId);
+            
+            if (user.Swipes_Restantes <= 0) throw new Error("LIMIT_REACHED");
+
             const update = db.prepare(`
                 UPDATE Swipes SET liked = ?, disliked = ? 
                 WHERE Utilizador_ID = ? AND tmbd_ID = ?
@@ -126,8 +129,11 @@ router.post('/interaction', (req, res) => {
         });
 
         updateTransaction();
-        res.json({ success: true });
+        const updatedUser = db.prepare('SELECT Swipes_Restantes FROM Utilizador WHERE Utilizador_ID = ?').get(userId);
+        res.json({ success: true, swipesRemaining: updatedUser.Swipes_Restantes });
+
     } catch (err) {
+        if (err.message === "LIMIT_REACHED") return res.json({ success: false, limitReached: true });
         console.error("Erro interaction:", err);
         res.status(500).json({ success: false });
     }
@@ -153,9 +159,10 @@ router.post('/undo', (req, res) => {
         });
         
         undoTransaction();
-        res.json({ success: true });
+        const updatedUser = db.prepare('SELECT Swipes_Restantes FROM Utilizador WHERE Utilizador_ID = ?').get(userId);
+        res.json({ success: true, swipesRemaining: updatedUser.Swipes_Restantes });
+
     } catch (err) {
-        console.error("Erro undo:", err);
         res.status(500).json({ success: false });
     }
 });

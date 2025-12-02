@@ -24,26 +24,31 @@ document.addEventListener('DOMContentLoaded', async () => {
     }
 
     // --- 1. Buscar Filmes ao Backend ---
-  async function fetchMovies() {
+    async function fetchMovies() {
         try {
             if (loadingSpinner) loadingSpinner.style.display = 'flex';
-
             if (emptyState) emptyState.style.display = 'none';
 
             const response = await fetch('/swipe/feed');
             if (!response.ok) throw new Error('Falha');
+            
             const data = await response.json();
+
+            if (typeof data.swipesRemaining !== 'undefined') {
+                updateProgressUI(data.swipesRemaining);
+            }
 
             if (data.limitReached) {
                 showLimitMessage();
                 return;
             }
 
-            if (data && data.length > 0) {
-                movies = data; 
-                activeIndex = 0;
+            const movieList = data.movies || data; 
 
-                lastAction = null; 
+            if (movieList && movieList.length > 0) {
+                movies = movieList; 
+                activeIndex = 0;
+                lastAction = null;
 
                 if (emptyState) emptyState.style.display = 'none';
                 init();
@@ -87,21 +92,18 @@ document.addEventListener('DOMContentLoaded', async () => {
         stackContainer.innerHTML = '';
         if (activeIndex >= movies.length) {
             const btnContainer = document.createElement('div');
-            btnContainer.style.textAlign = 'center';
-            btnContainer.style.marginTop = '50%';
+            btnContainer.className = 'end-stack-container';
+            
             btnContainer.innerHTML = `
-                <h2 style="color:white; margin-bottom:20px;">Chegaste ao fim dos teus 10 swipes!</h2>
-                <button id="btn-load-more" style="
-                    background-color: #e50914; 
-                    color: white; 
-                    padding: 15px 30px; 
-                    border: none; 
-                    border-radius: 30px; 
-                    font-size: 1.2rem; 
-                    cursor: pointer;
-                    font-weight: bold;
-                    box-shadow: 0 4px 15px rgba(229,9,20,0.4);
-                ">Carregar mais 10</button>
+                <div class="end-stack-content">
+                    <i class="fas fa-film" style="font-size: 3rem; margin-bottom: 15px; opacity: 0.5;"></i>
+                    <h2>Viste as 10 Sugestões que tínhamos para ti!</h2>
+                    <p>Queres continuar a explorar?</p>
+                    
+                    <button id="btn-load-more" class="btn-load-more">
+                        <i class="fas fa-sync-alt"></i> Carregar mais 10
+                    </button>
+                </div>
             `;
             stackContainer.appendChild(btnContainer);
 
@@ -298,7 +300,19 @@ document.addEventListener('DOMContentLoaded', async () => {
                 overview: currentMovie.description,
                 year: currentMovie.year
             })
-        }).catch(err => console.error("Erro DB:", err));
+        })
+        .then(res => res.json())
+        .then(data => {
+            if (data.limitReached) {
+                alert("Atingiste o teu limite diário de 30 swipes! Volta amanhã.");
+                window.location.reload();
+                return;
+            }
+            if (typeof data.swipesRemaining !== 'undefined') {
+                updateProgressUI(data.swipesRemaining);
+            }
+        })
+        .catch(err => console.error("Erro DB:", err));
 
         const x = dir === 'right' ? 1000 : -1000;
         const r = dir === 'right' ? 20 : -20;
@@ -325,6 +339,10 @@ document.addEventListener('DOMContentLoaded', async () => {
         try {
             const res = await fetch('/swipe/undo', { method: 'POST' });
             const data = await res.json();
+
+            if (typeof data.swipesRemaining !== 'undefined') {
+                updateProgressUI(data.swipesRemaining);
+            }
             
             if (!data.success) throw new Error("Erro no servidor");
 
@@ -341,7 +359,45 @@ document.addEventListener('DOMContentLoaded', async () => {
             showToast("Erro ao desfazer ação.", "error");
         }
     };
+    function updateProgressUI(current) {
+        const max = 30;
+        const percent = Math.max(0, Math.min(100, (current / max) * 100));
+        
+        const fill = document.getElementById('progress-fill');
+        const count = document.getElementById('swipes-count');
+        
+        if(fill) {
+            fill.style.height = `${percent}%`;
+            if(current > 15) fill.style.background = 'linear-gradient(to top, #2ecc71, #27ae60)'; 
+            else if(current > 5) fill.style.background = 'linear-gradient(to top, #f1c40f, #f39c12)'; 
+            else fill.style.background = 'linear-gradient(to top, #e50914, #c0392b)';
+        }
+        if(count) count.innerText = current;
+    }
 
+    function startTimer() {
+        const timerEl = document.getElementById('reset-timer');
+        if(!timerEl) return;
 
+        const updateTimer = () => {
+            const now = new Date();
+            const tomorrow = new Date(now);
+            tomorrow.setDate(tomorrow.getDate() + 1);
+            tomorrow.setHours(0, 0, 0, 0);
+            
+            const diff = tomorrow - now;
+            
+            const hours = Math.floor((diff % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
+            const minutes = Math.floor((diff % (1000 * 60 * 60)) / (1000 * 60));
+            const seconds = Math.floor((diff % (1000 * 60)) / 1000);
+            
+            timerEl.innerText = `${String(hours).padStart(2, '0')}:${String(minutes).padStart(2, '0')}:${String(seconds).padStart(2, '0')}`;
+        };
+
+        updateTimer();
+        setInterval(updateTimer, 1000);
+    }
+    
+    startTimer();
     fetchMovies();
 });

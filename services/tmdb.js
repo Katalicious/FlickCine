@@ -31,29 +31,22 @@ async function fetchDetailsForList(movieList) {
             const detailRes = await fetch(detailUrl, options);
             
             if(!detailRes.ok) return null;
-
-            // AQUI: Usamos 'details' por extenso como pediste
             const details = await detailRes.json();
             
             // --- 3. Normalizar Dados ---
             
-            // Título
             const title = details.title || details.name;
             const originalTitle = details.original_title || details.original_name;
-            
-            // Data
+        
             const releaseDate = details.release_date || details.first_air_date || '';
             const year = releaseDate ? releaseDate.split('-')[0] : 'N/A';
 
-            // Duração
             const runtime = details.runtime || (details.episode_run_time && details.episode_run_time.length > 0 ? details.episode_run_time[0] : 0);
 
-            // Trailer
             const videos = details.videos?.results || [];
             const trailer = videos.find(v => v.site === 'YouTube' && v.type === 'Trailer') || videos[0];
             const trailerUrl = trailer ? `https://www.youtube.com/watch?v=${trailer.key}` : '';
 
-            // Providers
             const ptProviders = details['watch/providers']?.results?.PT || {};
             const mapProvider = (list) => (list || []).map(p => ({
                 icon: p.logo_path ? `https://image.tmdb.org/t/p/original${p.logo_path}` : null,
@@ -66,7 +59,6 @@ async function fetchDetailsForList(movieList) {
                 buy: mapProvider(ptProviders.buy)
             };
 
-            // Listas de Texto
             const genres = details.genres ? details.genres.map(g => g.name).join(', ') : '';
             const cast = details.credits?.cast ? details.credits.cast.slice(0, 5).map(c => c.name).join(', ') : '';
             
@@ -77,7 +69,6 @@ async function fetchDetailsForList(movieList) {
                 makers = details.production_companies.slice(0, 3).map(c => c.name).join(', ');
             }
 
-            // --- Retornar Objeto ---
             return {
                 id: id, 
                 title: title,
