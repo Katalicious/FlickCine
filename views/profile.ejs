@@ -19,10 +19,6 @@
             <a href="#" id="alterar-password">Alterar Palavra-passe</a>
         </div>
 
-        <div class="controlo-watchlist">
-            <a href="/details/${movie.id}" id="ver-mais-detalhes-filme">Ver Mais Detalhes</a>
-        </div>
-
         <div class="filtros-ordenar-watchlist">
             <label for="ordenar-watchlist">Ordenar por:</label>
             <select id="ordenar-watchlist">
@@ -33,14 +29,35 @@
                 <option value="antigo-recente">Antigo para Recente</option>
             </select>
 
-            <label for="filtro-genero">Filtrar por Gênero:</label>
+            <label for="filtro-genero">Filtrar por Género:</label>
             <select id="filtro-genero">
                 <option value="todos">Todos</option>
-                <option value="acao">Ação</option>
-                <option value="comedia">Comédia</option>
-                <option value="drama">Drama</option>
-                <option value="terror">Terror</option>
-                <option value="ficcao-cientifica">Ficção Científica</option>
+                <option value="Ação">Ação</option>
+                <option value="Aventura">Aventura</option>
+                <option value="Animação">Animação</option>
+                <option value="Comédia">Comédia</option>
+                <option value="Crime">Crime</option>
+                <option value="Documentário">Documentário</option>
+                <option value="Drama">Drama</option>
+                <option value="Família">Família</option>
+                <option value="Fantasia">Fantasia</option>
+                <option value="História">História</option>
+                <option value="Terror">Terror</option>
+                <option value="Música">Música</option>
+                <option value="Mistério">Mistério</option>
+                <option value="Romance">Romance</option>
+                <option value="Ficção científica">Ficção Científica</option>
+                <option value="Thriller">Thriller</option>
+                <option value="Guerra">Guerra</option>
+                <option value="Faroeste">Faroeste</option>
+                <option value="Action & Adventure">Ação e Aventura</option>
+                <option value="Sci-Fi & Fantasy">Sci-Fi e Fantasia</option>
+                <option value="Kids">Infantil</option>
+                <option value="Reality">Reality TV</option>
+                <option value="Soap">Novelas</option>
+                <option value="News">Notícias</option>
+                <option value="Talk">Talk Show</option>
+                <option value="War & Politics">Guerra e Política</option>
             </select>
 
             <h3>Filtrar pela Data do Filme:</h3>
@@ -56,8 +73,8 @@
             <% if (typeof user !== 'undefined' && user) { %>
                 <h3>A minha Watchlist</h3>
                 <p>Olá, <%= user.Nome_de_Utilizador %>! Aqui está a tua watchlist personalizada.</p>
-    <ul id="watchlist-movies">
-    <% if (typeof watchlist !== 'undefined' && watchlist.length > 0) { %>
+        <ul id="watchlist-movies">
+        <% if (typeof watchlist !== 'undefined' && watchlist.length > 0) { %>
         <% watchlist.forEach(movie => { %>
             
                 <li id="movie-<%= movie.id %>" class="movie-card-item">
@@ -104,7 +121,7 @@
         <%- include('partials/profile-popups') %>
         <%- include('partials/footer') %>
         <script>
-            window.globalWatchlistData = <%- JSON.stringify(typeof watchlist !== 'undefined' ? watchlist : []) %>;
+            window.globalWatchlistData = JSON.parse('<%- JSON.stringify(typeof watchlist !== "undefined" ? watchlist : []) %>');
         </script>
         <script src="/js/profile.js"></script>
 </body>

@@ -1,39 +1,19 @@
 document.addEventListener("DOMContentLoaded", function () {
   const btnAvatar = document.getElementById("alterar-avatar");
   const btnPassword = document.getElementById("alterar-password");
-
   const popupAvatar = document.getElementById("popup-avatar");
   const popupPassword = document.getElementById("popup-password");
-
   const closeAvatar = document.getElementById("close-avatar");
   const closePassword = document.getElementById("close-password");
 
-  function openPopup(popupElement) {
-    if (popupElement) popupElement.style.display = "flex";
-  }
+  function openPopup(el) { if(el) el.style.display = "flex"; }
+  function closePopup(el) { if(el) el.style.display = "none"; }
 
-  function closePopup(popupElement) {
-    if (popupElement) popupElement.style.display = "none";
-  }
-
-  if (btnAvatar) {
-    btnAvatar.addEventListener("click", (e) => {
-      e.preventDefault();
-      openPopup(popupAvatar);
-    });
-  }
-
-  if (btnPassword) {
-    btnPassword.addEventListener("click", (e) => {
-      e.preventDefault();
-      openPopup(popupPassword);
-    });
-  }
-
-  if (closeAvatar)
-    closeAvatar.addEventListener("click", () => closePopup(popupAvatar));
-  if (closePassword)
-    closePassword.addEventListener("click", () => closePopup(popupPassword));
+  if (btnAvatar) btnAvatar.addEventListener("click", (e) => { e.preventDefault(); openPopup(popupAvatar); });
+  if (btnPassword) btnPassword.addEventListener("click", (e) => { e.preventDefault(); openPopup(popupPassword); });
+  
+  if (closeAvatar) closeAvatar.addEventListener("click", () => closePopup(popupAvatar));
+  if (closePassword) closePassword.addEventListener("click", () => closePopup(popupPassword));
 
   window.addEventListener("click", (e) => {
     if (e.target === popupAvatar) closePopup(popupAvatar);
@@ -42,65 +22,154 @@ document.addEventListener("DOMContentLoaded", function () {
 
   const avatarItems = document.querySelectorAll(".avatar-item");
   const avatarInput = document.getElementById("selectedAvatarInput");
-
   avatarItems.forEach((item) => {
     item.addEventListener("click", function () {
       avatarItems.forEach((i) => i.classList.remove("selected"));
       this.classList.add("selected");
-      const id = this.getAttribute("data-id");
-      if (avatarInput) avatarInput.value = id;
-      console.log("Avatar selecionado:", id);
+      if (avatarInput) avatarInput.value = this.getAttribute("data-id");
     });
   });
-});
 
-const urlParams = new URLSearchParams(window.location.search);
-  const successParam = urlParams.get('success');
-  const errorParam = urlParams.get('error');
+  const urlParams = new URLSearchParams(window.location.search);
+  const success = urlParams.get('success');
+  const error = urlParams.get('error');
 
   const messages = {
     'password_updated': { text: 'Palavra-passe alterada com sucesso!', type: 'success' },
     'avatar_updated':   { text: 'Avatar atualizado!', type: 'success' },
     'mismatch':         { text: 'As palavras-passe não coincidem.', type: 'error' },
     'wrong_current':    { text: 'A palavra-passe atual está errada.', type: 'error' },
-    'empty_fields':     { text: 'Preenche todos os campos obrigatórios.', type: 'error' },
-    'server':           { text: 'Erro interno do servidor.', type: 'error' }
+    'empty_fields':     { text: 'Preenche todos os campos.', type: 'error' },
+    'server':           { text: 'Erro de servidor.', type: 'error' }
   };
 
-  if (successParam && messages[successParam]) {
-    showToast(messages[successParam].text, messages[successParam].type);
-    cleanUrl();
-  } else if (errorParam && messages[errorParam]) {
-    showToast(messages[errorParam].text, messages[errorParam].type);
-    cleanUrl();
+  if (success && messages[success]) showToast(messages[success].text, messages[success].type);
+  if (error && messages[error]) showToast(messages[error].text, messages[error].type);
+
+  if (success || error) cleanUrl();
+
+  const selectGenero = document.getElementById('filtro-genero');
+  const selectOrdem = document.getElementById('ordenar-watchlist');
+  const inputInicio = document.getElementById('start-date') || document.getElementById('data-inicio');
+  const inputFim = document.getElementById('end-date') || document.getElementById('data-fim');
+  const containerLista = document.getElementById('watchlist-movies');
+
+  const filmesOriginais = window.globalWatchlistData || [];
+
+  function normalizar(texto) {
+    return texto ? texto.normalize("NFD").replace(/[\u0300-\u036f]/g, "").toLowerCase() : "";
   }
 
-  function showToast(msg, type) {
+  function atualizarLista() {
+    let resultados = [...filmesOriginais];
+
+    if (selectGenero && selectGenero.value !== 'todos') {
+        const generoEscolhido = normalizar(selectGenero.value);
+        resultados = resultados.filter(filme => {
+            const generosFilme = normalizar(filme.Generos || filme.genres || "");
+            return generosFilme.includes(generoEscolhido);
+        });
+    }
+
+    const inicioVal = inputInicio ? inputInicio.value : null;
+    const fimVal = inputFim ? inputFim.value : null;
+
+    if (inicioVal || fimVal) {
+        const dataInicio = inicioVal ? new Date(inicioVal) : null;
+        const dataFim = fimVal ? new Date(fimVal) : null;
+
+        resultados = resultados.filter(filme => {
+            const dataStr = filme.Data_de_Lancamento || filme.Data_de_Lançamento || filme.full_date;
+            if (!dataStr) return false;
+            
+            const dataFilme = new Date(dataStr);
+            if (isNaN(dataFilme)) return false;
+
+            if (dataInicio && dataFilme < dataInicio) return false;
+            if (dataFim && dataFilme > dataFim) return false;
+            
+            return true;
+        });
+    }
+    if (selectOrdem) {
+        const ordem = selectOrdem.value;
+        resultados.sort((a, b) => {
+            const titleA = (a.title || a.Titulo || "").toString().toLowerCase();
+            const titleB = (b.title || b.Titulo || "").toString().toLowerCase();
+            const dateA = new Date(a.Data_de_Lancamento || a.Data_de_Lançamento || 0);
+            const dateB = new Date(b.Data_de_Lancamento || b.Data_de_Lançamento || 0);
+            const idA = a.SWIPE_ID || 0;
+            const idB = b.SWIPE_ID || 0;
+
+            if (ordem === 'titulo-asc') return titleA.localeCompare(titleB);
+            if (ordem === 'titulo-desc') return titleB.localeCompare(titleA);
+            if (ordem === 'recente-antigo') return dateB - dateA; 
+            if (ordem === 'antigo-recente') return dateA - dateB; 
+            if (ordem === 'data-adicao') return idB - idA;
+            return 0;
+        });
+    }
+
+    renderizarHTML(resultados);
+  }
+
+  function renderizarHTML(lista) {
+    if (!containerLista) return;
+    containerLista.innerHTML = '';
+
+    if (lista.length === 0) {
+        containerLista.innerHTML = '<li style="width:100%; text-align:center; color:#777; list-style:none;"><p>Nenhum filme encontrado.</p></li>';
+        return;
+    }
+
+    lista.forEach(movie => {
+        const li = document.createElement('li');
+        const id = movie.tmbd_ID || movie.id;
+        const poster = movie.poster || movie.Capa;
+        const title = movie.title || movie.Titulo;
+
+        li.id = `movie-${id}`;
+        li.className = 'movie-card-item';
+        
+        li.innerHTML = `
+            <a href="/details/${id}" class="movie-link">
+                <img src="${poster}" alt="${title}" class="movie-poster">
+            </a>
+            <div class="trash-circle" onclick="event.stopPropagation(); removerFilme('${id}')" title="Remover">
+                <img src="/img/lixo.png" alt="Remover">
+            </div>
+        `;
+        containerLista.appendChild(li);
+    });
+  }
+
+  if (selectGenero) selectGenero.addEventListener('change', atualizarLista);
+  if (selectOrdem) selectOrdem.addEventListener('change', atualizarLista);
+  if (inputInicio) inputInicio.addEventListener('change', atualizarLista);
+  if (inputFim) inputFim.addEventListener('change', atualizarLista);
+
+  atualizarLista();
+});
+
+function showToast(msg, type) {
     const container = document.getElementById('toast-container');
-    if (!container) return; 
-
-    const toast = document.createElement('div');
-    toast.className = `toast ${type}`;
-
-    let icon = 'info-circle';
-    if (type === 'success') icon = 'check-circle';
-    if (type === 'error') icon = 'times-circle';
-
-    toast.innerHTML = `<i class="fas fa-${icon}"></i> ${msg}`;
-    
-    container.appendChild(toast);
-
+    if (!container) return;
+    const t = document.createElement('div');
+    t.className = `toast ${type}`;
+    let icon = type === 'success' ? 'check-circle' : 'times-circle';
+    t.innerHTML = `<i class="fas fa-${icon}"></i> ${msg}`;
+    container.appendChild(t);
     setTimeout(() => {
-        toast.style.transition = "opacity 0.5s ease";
-        toast.style.opacity = '0';
-        setTimeout(() => toast.remove(), 500);
+        t.style.opacity = '0';
+        setTimeout(() => t.remove(), 500);
     }, 3000);
-  }
+}
 
-  function cleanUrl() {
+function cleanUrl() {
     const newUrl = window.location.protocol + "//" + window.location.host + window.location.pathname;
     window.history.replaceState({path: newUrl}, '', newUrl);
-  }
+}
+
 let movieToDeleteId = null;
 const confirmModal = document.getElementById('confirm-modal');
 const btnConfirm = document.getElementById('btn-modal-confirm');
@@ -134,206 +203,23 @@ if (btnConfirm) {
 
             if (data.success) {
                 const el = document.getElementById(`movie-${movieToDeleteId}`);
-                if(el) {
-                    el.style.transition = 'opacity 0.5s, transform 0.5s';
-                    el.style.opacity = '0';
-                    el.style.transform = 'scale(0.8)';
-                    setTimeout(() => el.remove(), 500);
+                if(el) el.remove();
+
+                if (window.globalWatchlistData) {
+                    window.globalWatchlistData = window.globalWatchlistData.filter(m => (m.id || m.tmbd_ID) != movieToDeleteId);
                 }
-                createToast('Filme removido da watchlist!', 'success');
+
+                showToast('Removido com sucesso!', 'success');
             } else {
-                createToast('Erro ao remover filme.', 'error');
+                showToast('Erro ao remover.', 'error');
             }
         } catch (err) {
             console.error(err);
-            createToast('Erro de conexão.', 'error');
+            showToast('Erro de conexão.', 'error');
         }
     });
 }
 
 window.addEventListener('click', (e) => {
     if (e.target === confirmModal) confirmModal.style.display = 'none';
-});
-
-function createToast(msg, type) {
-    const container = document.getElementById('toast-container');
-    if (!container) return;
-    const toast = document.createElement('div');
-    toast.className = `toast ${type}`;
-    let icon = type === 'success' ? 'check-circle' : 'times-circle';
-    toast.innerHTML = `<i class="fas fa-${icon}"></i> ${msg}`;
-    container.appendChild(toast);
-    setTimeout(() => {
-        toast.style.opacity = '0';
-        setTimeout(() => toast.remove(), 500);
-    }, 3000);
-}
-
-document.addEventListener('DOMContentLoaded', () => {
-  const startDateInput = document.getElementById('start-date');
-  const endDateInput = document.getElementById('end-date');
-  const watchlistContainer = document.getElementById('watchlist-movies');
-
-  if (typeof window.globalWatchlistData === 'undefined' || !watchlistContainer) {
-    console.error('Dados da watchlist não disponíveis.');
-    return;
-  }
-
-  function convertInputtoISO(dateStr) {
-    if (!dateStr) return null;
-    const parts = dateStr.split('-');
-    if (parts[0].length === 4) {
-      return dateStr;
-    } else if (parts[0].length === 2 && parts.length === 3) {
-      return `${parts[2]}-${parts[1]}-${parts[0]}`;
-    }
-    return null;
-  }
-
-  function applyDateFilter() {
-    const rawStartDate = startDateInput ? startDateInput.value : '';
-    const rawEndDate = endDateInput ? endDateInput.value : '';
-
-    const sqlliteStartDate = convertInputtoISO(rawStartDate);
-    const sqlliteEndDate = convertInputtoISO(rawEndDate);
-
-    let filteredMovies = (window.globalWatchlistData || []).slice();
-
-    if (!sqlliteStartDate && !sqlliteEndDate) {
-      updateWatchlistDisplay(filteredMovies);
-      return;
-    }
-
-    const StartDate = sqlliteStartDate ? new Date(sqlliteStartDate) : null;
-    const EndDate = sqlliteEndDate ? new Date(sqlliteEndDate) : null;
-
-    filteredMovies = filteredMovies.filter(movie => {
-      const rawMovieDate = movie.Data_de_Lancamento || movie.full_date || movie.fullDate || movie.Data_de_Lancamento;
-      if (!rawMovieDate) return false;
-      const asString = String(rawMovieDate).trim();
-
-      let movieDateObj = null;
-      if (/^\d{4}$/.test(asString)) {
-        movieDateObj = new Date(Number(asString), 0, 1);
-      } else {
-        const parsed = new Date(asString);
-        if (!isNaN(parsed)) movieDateObj = parsed;
-      }
-      if (!movieDateObj) return false;
-
-      if (StartDate && EndDate) {
-        return movieDateObj >= StartDate && movieDateObj <= EndDate;
-      } else if (StartDate) {
-        return movieDateObj >= StartDate;
-      } else if (EndDate) {
-        return movieDateObj <= EndDate;
-      }
-      return true;
-    });
-
-    updateWatchlistDisplay(filteredMovies);
-  }
-
-  function updateWatchlistDisplay(movies) {
-    watchlistContainer.innerHTML = '';
-    if (!movies || movies.length === 0) {
-      watchlistContainer.innerHTML = '<p>Nenhum filme encontrado para os critérios selecionados.</p>';
-      return;
-    }
-
-  const genreFilterSelect = document.getElementById('filtro-genero');
-  const SortSelect = document.getElementById('ordenar-watchlist');
-
-  function applyFilters() {
-    let currentData = (window.globalWatchlistData || []).slice();
-
-    const selectedGenre = genreFilterSelect ? genreFilterSelect.value : 'todos';
-    const rawStartDate = startDateInput ? startDateInput.value : '';
-    const rawEndDate = endDateInput ? endDateInput.value : '';
-    const sqlliteStartDate = convertInputtoISO(rawStartDate);
-    const sqlliteEndDate = convertInputtoISO(rawEndDate);
-    const StartDate = sqlliteStartDate ? new Date(sqlliteStartDate) : null;
-    const EndDate = sqlliteEndDate ? new Date(sqlliteEndDate) : null;
-
-    if (StartDate || EndDate) {
-      currentData = currentData.filter(movie => {
-        const rawMovieDate = movie.Data_de_Lancamento || movie.full_date || movie.fullDate || movie.Data_de_Lancamento;
-        if (!rawMovieDate) return false;
-        const asString = String(rawMovieDate).trim();
-        let movieDateObj = null;
-        if (/^\d{4}$/.test(asString)) {
-          movieDateObj = new Date(Number(asString), 0, 1);
-        } else {
-          const parsed = new Date(asString);
-          if (!isNaN(parsed)) movieDateObj = parsed;
-        }
-        if (!movieDateObj) return false;
-        if (StartDate && EndDate) return movieDateObj >= StartDate && movieDateObj <= EndDate;
-        if (StartDate) return movieDateObj >= StartDate;
-        if (EndDate) return movieDateObj <= EndDate;
-        return true;
-      });
-    }
-
-    if (selectedGenre && selectedGenre !== 'todos' && selectedGenre !== 'all') {
-      currentData = currentData.filter(movie => {
-        const gens = movie.Generos || movie.Genero || movie.generos || movie.Genres;
-        if (!gens) return false;
-        if (Array.isArray(gens)) return gens.includes(selectedGenre);
-        if (typeof gens === 'string') return gens.toLowerCase().includes(selectedGenre.toLowerCase());
-        return false;
-      });
-    }
-
-    const sortMethod = SortSelect ? SortSelect.value : 'data-adicao';
-
-    if (sortMethod === 'titulo-asc' || sortMethod === 'title_asc') {
-      currentData.sort((a, b) => (a.title || '').toString().localeCompare((b.title || '').toString()));
-    } else if (sortMethod === 'titulo-desc' || sortMethod === 'title_desc') {
-      currentData.sort((a, b) => (b.title || '').toString().localeCompare((a.title || '').toString()));
-    } else if (sortMethod === 'recente-antigo') {
-      currentData.sort((a, b) => new Date(b.Data_de_Lancamento) - new Date(a.Data_de_Lancamento));
-    } else if (sortMethod === 'antigo-recente') {
-      currentData.sort((a, b) => new Date(a.Data_de_Lancamento) - new Date(b.Data_de_Lancamento));
-    } else if (sortMethod === 'data-adicao') {
-      currentData.sort((a, b) => (b.SWIPE_ID || 0) - (a.SWIPE_ID || 0));
-    }
-
-    updateWatchlistDisplay(currentData);
-  }
-
-  if (genreFilterSelect) genreFilterSelect.addEventListener('change', applyFilters);
-  if (SortSelect) SortSelect.addEventListener('change', applyFilters);
-
-    movies.forEach(movie => {
-      const li = document.createElement('li');
-      const movieId = movie.tmbd_ID || movie.id || movie.TMDB_ID || movie.tmbdId || '';
-      const poster = movie.poster || movie.Capa || movie.capa || '';
-      const title = movie.title || movie.Titulo || '';
-
-      li.id = `movie-${movieId}`;
-      li.className = 'movie-item';
-      li.innerHTML = `
-        <a href="/details/${movieId}" class="movie-link">
-          <img src="${poster}" alt="${title}" class="movie-poster">
-        </a>
-        <div class="trash-circle" onclick="event.stopPropagation(); removerFilme('${movieId}')">
-          <img src="/img/lixo.png" alt="Remover">
-        </div>
-      `;
-      watchlistContainer.appendChild(li);
-    });
-  }
-
-  if (startDateInput) {
-    startDateInput.addEventListener('input', applyDateFilter);
-    startDateInput.addEventListener('keydown', (e) => { if (e.key === 'Enter') { e.preventDefault(); applyDateFilter(); } });
-  }
-  if (endDateInput) {
-    endDateInput.addEventListener('input', applyDateFilter);
-    endDateInput.addEventListener('keydown', (e) => { if (e.key === 'Enter') { e.preventDefault(); applyDateFilter(); } });
-  }
-
-  // Initial render
-  updateWatchlistDisplay(window.globalWatchlistData || []);
 });
