@@ -100,19 +100,24 @@ async function fetchDetailsForList(movieList) {
     return detailedContent.filter(m => m !== null && m.poster);
 }
 
-async function getRandomMovies(excludedIds = []) {
+async function getRandomMovies(excludedIds = [], preferredGenreId = null) {
     try {
         let attempts = 0;
         let selected = [];
-        
-        while (selected.length < 10 && attempts < 4) {
+        while (selected.length < 10 && attempts < 5) {
             attempts++;
-            const page = Math.floor(Math.random() * 20) + 1;
-            
             const isTv = Math.random() > 0.5;
             const type = isTv ? 'tv' : 'movie';
+            const page = Math.floor(Math.random() * 20) + 1;
             
-            const url = `${BASE_URL}/discover/${type}?include_adult=false&language=pt-PT&page=${page}&sort_by=popularity.desc&watch_region=PT&with_watch_monetization_types=flatrate|free|ads|rent|buy`;
+            let genreQuery = '';
+            if (preferredGenreId) {
+                const useSmartFilter = Math.random() < 0.8;
+                if (useSmartFilter) {
+                    genreQuery = `&with_genres=${preferredGenreId}`;
+                }
+            }
+            const url = `${BASE_URL}/discover/${type}?include_adult=false&language=pt-PT&page=${page}&sort_by=popularity.desc&watch_region=PT&with_watch_monetization_types=flatrate|free|ads|rent|buy${genreQuery}`;
 
             const res = await fetch(url, options);
             if (!res.ok) continue;
@@ -128,7 +133,6 @@ async function getRandomMovies(excludedIds = []) {
 
             selected = [...selected, ...fresh];
         }
-
         let shuffled = selected.sort(() => 0.5 - Math.random()).slice(0, 10);
         
         return await fetchDetailsForList(shuffled);

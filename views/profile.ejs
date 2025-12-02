@@ -121,7 +121,7 @@
         <%- include('partials/profile-popups') %>
         <%- include('partials/footer') %>
         <script>
-            window.globalWatchlistData = JSON.parse('<%- JSON.stringify(typeof watchlist !== "undefined" ? watchlist : []) %>');
+            window.globalWatchlistData = <%- JSON.stringify(typeof watchlist !== 'undefined' ? watchlist : []) %>;
         </script>
         <script src="/js/profile.js"></script>
 </body>

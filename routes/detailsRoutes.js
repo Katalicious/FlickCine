@@ -17,7 +17,7 @@ router.get('/api/:id', authMiddleware, async (req, res) => {
     let type = 'movie';
     if (movieId > TV_OFFSET) {
         type = 'tv';
-        movieId = movieId - TV_OFFSET; // Agora já não dá erro porque é 'let'
+        movieId = movieId - TV_OFFSET;
     }
 
     try {
@@ -32,8 +32,7 @@ router.get('/api/:id', authMiddleware, async (req, res) => {
         if (!response.ok) throw new Error(`Erro TMDB: ${response.status}`);
         
         const data = await response.json();
-        data.media_type = type; // Avisa o frontend que é uma série/filme
-        
+        data.media_type = type;
         res.json(data);
 
     } catch (error) {
@@ -48,7 +47,6 @@ router.get('/:id', authMiddleware, async (req, res) => {
     const userId = req.session.user.id;
 
     try {
-        // Usar o serviço tmdb.js para obter dados básicos
         const moviesList = await tmdb.getMoviesFromIds([movieId]);
         const movieData = moviesList && moviesList.length > 0 ? moviesList[0] : null;
 

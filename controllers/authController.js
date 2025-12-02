@@ -93,21 +93,56 @@ exports.getProfile = (req, res) => {
     try {
         if (!req.session.user) return res.redirect('/login');
         const userId = req.session.user.id;
-        
-        const user = db.prepare('SELECT * FROM Utilizador WHERE Utilizador_ID = ?').get(userId);
-
-        const watchlist = db.prepare(`
-            SELECT f.tmbd_ID as id,
-                   f.Titulo as title,
-                   f.Capa as poster,
-                   f."Data_de_Lançamento" as Data_de_Lancamento,
-                   f.Generos as Generos,
-                   w.Swipe_ID as SWIPE_ID
+        const { sort, genre, start, end } = req.query;
+        let sql = `
+            SELECT f.*, 
+                   w.Swipe_ID as SWIPE_ID,
+                   f.Capa as poster,    -- Alias para garantir que o JS encontra
+                   f.Titulo as title,   -- Alias para garantir que o JS encontra
+                   f.tmbd_ID as id
             FROM Watchlist w
             JOIN Swipes s ON w.Swipe_ID = s.SWIPE_ID
             JOIN "Filmes/séries" f ON s.tmbd_ID = f.tmbd_ID
             WHERE w.Utilizador_ID = ?
-        `).all(userId);
+        `;
+
+        const params = [userId];
+
+        if (genre && genre !== 'todos') {
+            const mapGenres = {
+                'acao': 'Ação', 'comedia': 'Comédia', 'drama': 'Drama',
+                'terror': 'Terror', 'ficcao-cientifica': 'Ficção científica',
+                'animacao': 'Animação', 'aventura': 'Aventura', 'familia': 'Família',
+                'fantasia': 'Fantasia', 'historia': 'História', 'musica': 'Música',
+                'misterio': 'Mistério', 'romance': 'Romance', 'thriller': 'Thriller',
+                'guerra': 'Guerra', 'faroeste': 'Faroeste', 'crime': 'Crime',
+                'documentario': 'Documentário'
+            };
+            const termo = mapGenres[genre] || genre; 
+            sql += ` AND f.Generos LIKE ?`;
+            params.push(`%${termo}%`);
+        }
+
+        if (start) {
+            sql += ` AND "Data_de_Lançamento" >= ?`; 
+            params.push(start);
+        }
+        if (end) {
+            sql += ` AND "Data_de_Lançamento" <= ?`;
+            params.push(end);
+        }
+
+        switch (sort) {
+            case 'titulo-asc': sql += ` ORDER BY f.Titulo ASC`; break;
+            case 'titulo-desc': sql += ` ORDER BY f.Titulo DESC`; break;
+            case 'recente-antigo': sql += ` ORDER BY "Data_de_Lançamento" DESC`; break;
+            case 'antigo-recente': sql += ` ORDER BY "Data_de_Lançamento" ASC`; break;
+            case 'data-adicao':
+            default: sql += ` ORDER BY w.Swipe_ID DESC`; break;
+        }
+
+        const user = db.prepare('SELECT * FROM Utilizador WHERE Utilizador_ID = ?').get(userId);
+        const watchlist = db.prepare(sql).all(...params);
 
         const userDisplay = {
             id: user.Utilizador_ID,
@@ -118,9 +153,33 @@ exports.getProfile = (req, res) => {
         };
 
         res.render('profile', { user: userDisplay, watchlist: watchlist });
+
     } catch (err) {
-        console.error(err);
-        res.status(500).send("Erro no perfil");
+        console.error("Erro no perfil:", err);
+
+        if (err.message.includes('no such column')) {
+             console.log("Tentando carregar perfil sem filtros de data devido a erro de colunas...");
+             try {
+                const fallbackSql = `
+                    SELECT f.*, w.Swipe_ID, f.Capa as poster, f.Titulo as title, f.tmbd_ID as id
+                    FROM Watchlist w
+                    JOIN Swipes s ON w.Swipe_ID = s.SWIPE_ID
+                    JOIN "Filmes/séries" f ON s.tmbd_ID = f.tmbd_ID
+                    WHERE w.Utilizador_ID = ?
+                    ORDER BY w.Swipe_ID DESC
+                `;
+                const fallbackList = db.prepare(fallbackSql).all(userId);
+                const user = db.prepare('SELECT * FROM Utilizador WHERE Utilizador_ID = ?').get(userId);
+                
+                return res.render('profile', { 
+                    user: { ...user, Nome_de_Utilizador: user.Name, avatarUrl: `/avatars/${user.Utilizador_ID}` }, 
+                    watchlist: fallbackList 
+                });
+             } catch (e2) {
+                 console.error("Erro fatal:", e2);
+             }
+        }
+        res.status(500).send("Erro ao carregar perfil: " + err.message);
     }
 };
 
