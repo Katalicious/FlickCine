@@ -13,7 +13,7 @@ document.addEventListener('DOMContentLoaded', async () => {
     const btnCancelModal = document.getElementById('btn-modal-cancel');
     let idToRemove = null;
 
-
+    // 1. Clicar no Lixo -> Abrir Modal
     if (btnRemove) {
         btnRemove.addEventListener('click', (e) => {
             e.stopPropagation();
@@ -55,6 +55,26 @@ document.addEventListener('DOMContentLoaded', async () => {
             }
         });
     }
+
+    async function removeMovie(id) {
+        try {
+            const response = await fetch('/watchlist/remove', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({ movieId: id })
+            });
+            const result = await response.json();
+            if (result.success) {
+                showDetailsToast('Removido com sucesso!', 'success');
+                setTimeout(() => window.location.reload(), 1500);
+            } else {
+                alert("Erro ao remover.");
+            }
+        } catch (error) {
+            console.error("Erro:", error);
+        }
+    }
+
     function showDetailsToast(msg, type) {
         let container = document.getElementById('toast-container');
         if (!container) {
@@ -98,60 +118,91 @@ document.addEventListener('DOMContentLoaded', async () => {
         evt.currentTarget.classList.add("active");
     };
 
-async function fetchMovieDetails() {
+    async function fetchMovieDetails() {
         try {
             const url = `/details/api/${MOVIE_ID}`;
             const response = await fetch(url);
-            
-            if (!response.ok) throw new Error('Erro ao buscar filme');
+            if (!response.ok) throw new Error('Erro ao buscar dados');
             const data = await response.json();
-
             updateUI(data);
-
         } catch (error) {
             console.error("Erro:", error);
         }
     }
 
     function updateUI(data) {
-        const year = data.release_date ? data.release_date.split('-')[0] : 'N/A';
-        const hours = data.runtime ? Math.floor(data.runtime / 60) : 0;
-        const minutes = data.runtime ? data.runtime % 60 : 0;
-        const age = data.adult ? "18+" : "M/12";
+        const isTv = data.media_type === 'tv' || !!data.name;
 
-        if(document.getElementById('movie-year')) document.getElementById('movie-year').innerText = year;
-        if(document.getElementById('movie-age')) document.getElementById('movie-age').innerText = age;
-        if(document.getElementById('movie-duration')) document.getElementById('movie-duration').innerText = `${hours}h ${minutes}m`;
-        
+        const title = data.title || data.name;
+        setText('movie-title', title);
+
+        const dateStr = data.release_date || data.first_air_date || '';
+        const year = dateStr.split('-')[0] || 'N/A';
+        setText('movie-year', year);
+
+        let runtime = data.runtime;
+        if (!runtime && data.episode_run_time && data.episode_run_time.length > 0) {
+            runtime = data.episode_run_time[0];
+        }
+
+        let durationText = 'N/A';
+        if (runtime) {
+            const h = Math.floor(runtime / 60);
+            const m = runtime % 60;
+            durationText = h > 0 ? `${h}h ${m}m` : `${m}m`;
+            if (isTv) durationText += " (ep)";
+        }
+        setText('movie-duration', durationText);
+
         const vote = data.vote_average ? data.vote_average.toFixed(1) : 'N/A';
-        if(document.getElementById('movie-rating')) document.getElementById('movie-rating').innerText = `${vote}/10`;
+        setText('movie-rating', `${vote}/10`);
+        setText('movie-description', data.overview || "Sinopse não disponível.");
         
-        if(document.getElementById('movie-genres')) document.getElementById('movie-genres').innerText = data.genres.map(g => g.name).join(', ');
-        
-        const director = data.credits.crew.find(c => c.job === 'Director')?.name || 'N/A';
-        const cast = data.credits.cast.slice(0, 3).map(c => c.name).join(', ');
-        
-        if(document.getElementById('movie-director')) document.getElementById('movie-director').innerText = director;
-        if(document.getElementById('movie-cast')) document.getElementById('movie-cast').innerText = cast;
+        const age = data.adult ? "18+" : "M/12";
+        setText('movie-age', age);
+
+        if(data.genres) {
+            setText('movie-genres', data.genres.map(g => g.name).join(', '));
+        }
+
+        if (data.credits) {
+            const cast = data.credits.cast ? data.credits.cast.slice(0, 3).map(c => c.name).join(', ') : 'N/A';
+            setText('movie-cast', cast);
+            let maker = 'N/A';
+            if (isTv && data.created_by && data.created_by.length > 0) {
+                maker = data.created_by.map(c => c.name).join(', ');
+            } else if (data.credits.crew) {
+                const dir = data.credits.crew.find(c => c.job === 'Director');
+                if (dir) maker = dir.name;
+            }
+            setText('movie-director', maker);
+        }
 
         const formatMoney = (val) => val ? val.toLocaleString('en-US', { style: 'currency', currency: 'USD' }) : 'N/A';
-        if(document.getElementById('movie-budget')) document.getElementById('movie-budget').innerText = formatMoney(data.budget);
-        if(document.getElementById('movie-revenue')) document.getElementById('movie-revenue').innerText = formatMoney(data.revenue);
-        if(document.getElementById('movie-language')) document.getElementById('movie-language').innerText = data.original_language.toUpperCase();
-        if(document.getElementById('movie-production')) document.getElementById('movie-production').innerText = data.production_companies[0]?.name || 'N/A';
+        setText('movie-budget', formatMoney(data.budget));
+        setText('movie-revenue', formatMoney(data.revenue));
+        
+        if (data.original_language) setText('movie-language', data.original_language.toUpperCase());
+        if (data.production_companies && data.production_companies[0]) {
+            setText('movie-production', data.production_companies[0].name);
+        }
 
         const grid = document.getElementById('similar-grid');
-        if (grid) {
+        if (grid && data.similar && data.similar.results) {
             grid.innerHTML = '';
-            const similar = (data.similar?.results || []).filter(m => m.poster_path).slice(0, 4);
+            const similar = data.similar.results.filter(m => m.poster_path).slice(0, 4);
             
             similar.forEach(sim => {
+                let simId = sim.id;
+                if (isTv) simId += 10000000;
+
+                const simTitle = sim.title || sim.name;
                 const card = document.createElement('a');
-                card.href = `/details/${sim.id}`;
+                card.href = `/details/${simId}`;
                 card.className = 'similar-card';
                 card.innerHTML = `
-                    <img src="${IMG_BASE + sim.poster_path}" alt="${sim.title}">
-                    <span>${sim.title}</span>
+                    <img src="${IMG_BASE + sim.poster_path}" alt="${simTitle}">
+                    <span>${simTitle}</span>
                 `;
                 grid.appendChild(card);
             });
@@ -159,7 +210,11 @@ async function fetchMovieDetails() {
 
         renderStreamingBox(data['watch/providers']?.results?.PT);
     }
-
+        function setText(id, text) {
+        const el = document.getElementById(id);
+        if(el) el.innerText = text;
+    }
+    
     function renderStreamingBox(providers) {
         const container = document.getElementById('streaming-container');
         if(!container) return;
