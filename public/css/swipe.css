@@ -465,3 +465,47 @@ body.dark-mode .btn-details-inside:hover {
     padding-top: 10px;
     width: 100%;
 }
+
+.end-stack-content h2,
+.limit-title {
+    color: #1d1d1d; /* Cinzento escuro */
+    font-size: 1.8rem;
+    margin-bottom: 10px;
+    font-weight: 800;
+}
+
+.end-stack-content p,
+.limit-text {
+    color: #555; 
+    font-size: 1.1rem;
+    margin-bottom: 25px;
+}
+
+.end-icon {
+    font-size: 3rem;
+    margin-bottom: 15px;
+    color: #ccc;
+}
+
+.limit-title {
+    color: #e50914; 
+}
+
+body.dark-mode .end-stack-content h2 {
+    color: #ffffff;
+}
+
+body.dark-mode .end-stack-content p,
+body.dark-mode .limit-text {
+    color: #aaaaaa;
+}
+
+body.dark-mode .end-icon {
+    color: rgba(255, 255, 255, 0.5);
+}
+
+.limit-message-container {
+    text-align: center;
+    padding: 20px;
+    margin-top: 20%;
+}

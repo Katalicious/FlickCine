@@ -30,48 +30,36 @@
         <div class="central-wrapper">
             <div id="toast-container"></div>
 
+            <div id="empty-state" style="display:none; text-align:center; padding-top: 150px;">
+                <h2 style="color: #e50914; font-size: 2rem; margin-bottom: 10px;">Sem filmes</h2>
+            </div>
+
             <div id="loading-spinner" class="loading-overlay" style="display: none;">
                 <div class="spinner"></div>
             </div>
 
             <div class="card-stack-container" id="card-stack">
-                <div id="empty-state" style="display:none; text-align:center; color:#555; padding-top: 30%;">
-                    <h2>Não há mais filmes.</h2>
                 </div>
-            </div>
         </div>
 
         <aside class="sidebar-stats">
             <div class="progress-panel">
                 <div class="progress-info">
-                    <span id="swipes-count">30</span><span>/30 Swipes</span>
+                    <span id="swipes-count">30</span><span style="font-size: 0.8em; opacity: 0.8;">/30</span>
                 </div>
                 <div class="progress-bar-bg">
-                    <div class="progress-bar-fill" id="progress-fill" style="width: 100%;"></div>
+                    <div class="progress-bar-fill" id="progress-fill" style="height: 100%;"></div>
                 </div>
                 <div class="timer-info">
-                    <span>Renova em: </span><span id="reset-timer">--:--:--</span>
+                    <span>Renova em:</span><br>
+                    <span id="reset-timer" style="font-weight: bold; color: white;">--:--:--</span>
                 </div>
             </div>
         </aside>
     </div>
 
-        <div class="central-wrapper">
-            <div id="toast-container"></div>
-            <div id="loading-spinner" class="loading-overlay" style="display: none;">
-                <div class="spinner"></div>
-            </div>
-
-            <div class="card-stack-container" id="card-stack">
-                <div id="empty-state" style="display:none; text-align:center; color:#555; padding-top: 30%;">
-                    <h2>Não há mais filmes.</h2>
-                </div>
-            </div>
-        </div>
-    </div>
-
-    <audio id="sound-accept" src="/audio/acceptedflick.mp3" preload="auto"></audio>
-    <audio id="sound-reject" src="/audio/rejectedflick.mp3" preload="auto"></audio>
+        <audio id="sound-accept" src="/audio/acceptedflick.mp3" preload="auto"></audio>
+        <audio id="sound-reject" src="/audio/rejectedflick.mp3" preload="auto"></audio>
 
     <%- include('partials/footer') %>
     <script src="/js/swipe.js"></script>

@@ -73,9 +73,9 @@ document.addEventListener('DOMContentLoaded', async () => {
         stackContainer.innerHTML = '';
         if (emptyState) {
             emptyState.innerHTML = `
-                <div style="text-align: center; padding: 20px;">
-                    <h2 style="color: #e50914;">Limite Atingido!</h2>
-                    <p style="color: #fff; margin-top: 10px;">Já viste os teus 30 filmes e séries de hoje. Volta amanhã!</p>
+                <div class="limit-message-container">
+                    <h2 class="limit-title">Limite Atingido!</h2>
+                    <p class="limit-text">Já viste os teus 30 filmes e séries de hoje. Volta amanhã!</p>
                 </div>
             `;
             emptyState.style.display = 'block';
@@ -93,11 +93,10 @@ document.addEventListener('DOMContentLoaded', async () => {
         if (activeIndex >= movies.length) {
             const btnContainer = document.createElement('div');
             btnContainer.className = 'end-stack-container';
-            
             btnContainer.innerHTML = `
                 <div class="end-stack-content">
-                    <i class="fas fa-film" style="font-size: 3rem; margin-bottom: 15px; opacity: 0.5;"></i>
-                    <h2>Viste as 10 Sugestões que tínhamos para ti!</h2>
+                    <i class="fas fa-film end-icon"></i>
+                    <h2>Viste este lote!</h2>
                     <p>Queres continuar a explorar?</p>
                     
                     <button id="btn-load-more" class="btn-load-more">
