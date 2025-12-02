@@ -23,29 +23,46 @@ document.addEventListener('DOMContentLoaded', async () => {
     }
 
     // --- 1. Buscar Filmes ao Backend ---
-    async function fetchMovies() {
+  async function fetchMovies() {
         try {
             const response = await fetch('/swipe/feed');
-            
-            if (!response.ok) throw new Error('Falha ao comunicar com o servidor');
-            
+            if (!response.ok) throw new Error('Falha');
             const data = await response.json();
+
+            if (data.limitReached) {
+                showLimitMessage();
+                return;
+            }
 
             if (data && data.length > 0) {
                 movies = data; 
                 activeIndex = 0;
-                
+
+                lastAction = null; 
+
                 if (emptyState) emptyState.style.display = 'none';
                 init();
             } else {
-                console.warn("Servidor não retornou filmes.");
+                if (emptyState) {
+                    emptyState.innerHTML = "<h2>Não há mais filmes por agora.</h2>";
+                    emptyState.style.display = 'block';
+                }
             }
         } catch (e) {
-            console.error("Erro fetchMovies:", e);
-            if (emptyState) {
-                emptyState.innerHTML = "<h2>Erro ao carregar filmes. Tenta recarregar a página.</h2>";
-                emptyState.style.display = 'block';
-            }
+            console.error(e);
+        }
+    }
+
+    function showLimitMessage() {
+        stackContainer.innerHTML = '';
+        if (emptyState) {
+            emptyState.innerHTML = `
+                <div style="text-align: center; padding: 20px;">
+                    <h2 style="color: #e50914;">Limite Atingido!</h2>
+                    <p style="color: #fff; margin-top: 10px;">Já viste os teus 30 filmes e séries de hoje. Volta amanhã!</p>
+                </div>
+            `;
+            emptyState.style.display = 'block';
         }
     }
 
@@ -57,9 +74,29 @@ document.addEventListener('DOMContentLoaded', async () => {
     // --- 2. Renderizar Cartões ---
     function renderCards() {
         stackContainer.innerHTML = '';
-        
         if (activeIndex >= movies.length) {
-            fetchMovies();
+            const btnContainer = document.createElement('div');
+            btnContainer.style.textAlign = 'center';
+            btnContainer.style.marginTop = '50%';
+            btnContainer.innerHTML = `
+                <h2 style="color:white; margin-bottom:20px;">Viste este lote!</h2>
+                <button id="btn-load-more" style="
+                    background-color: #e50914; 
+                    color: white; 
+                    padding: 15px 30px; 
+                    border: none; 
+                    border-radius: 30px; 
+                    font-size: 1.2rem; 
+                    cursor: pointer;
+                    font-weight: bold;
+                    box-shadow: 0 4px 15px rgba(229,9,20,0.4);
+                ">Carregar mais 10</button>
+            `;
+            stackContainer.appendChild(btnContainer);
+
+            document.getElementById('btn-load-more').addEventListener('click', () => {
+                fetchMovies();
+            });
             return;
         }
 

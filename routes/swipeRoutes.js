@@ -9,9 +9,18 @@ router.get('/', (req, res) => {
 
 // --- ROTA DE FEED ---
 router.get('/feed', async (req, res) => {
-    try {
+try {
         if (!req.session || !req.session.user) return res.status(401).json({ error: 'Não autorizado' });
         const userId = req.session.user.id;
+        const hoje = new Date().toLocaleDateString('pt-PT'); 
+        
+        if (req.session.lastVisitDate !== hoje) {
+            db.prepare('UPDATE Utilizador SET Swipes_Restantes = 30 WHERE Utilizador_ID = ?').run(userId);
+            req.session.lastVisitDate = hoje;
+            console.log(`Novo dia para user ${userId}. Contador reposto a 30.`);
+        }
+
+        const user = db.prepare('SELECT Swipes_Restantes FROM Utilizador WHERE Utilizador_ID = ?').get(userId);
 
         const pendingSwipes = db.prepare(`
             SELECT tmbd_ID FROM Swipes 
@@ -113,6 +122,7 @@ router.post('/interaction', (req, res) => {
                     db.prepare(`INSERT OR IGNORE INTO Watchlist (Utilizador_ID, Swipe_ID) VALUES (?, ?)`).run(userId, swipe.SWIPE_ID);
                 }
             }
+            db.prepare('UPDATE Utilizador SET Swipes_Restantes = Swipes_Restantes - 1 WHERE Utilizador_ID = ?').run(userId);
         });
 
         updateTransaction();
@@ -139,6 +149,7 @@ router.post('/undo', (req, res) => {
                 db.prepare('DELETE FROM Watchlist WHERE Swipe_ID = ?').run(lastSwipe.SWIPE_ID);
             }
             db.prepare(`UPDATE Swipes SET liked = 0, disliked = 0 WHERE SWIPE_ID = ?`).run(lastSwipe.SWIPE_ID);
+            db.prepare('UPDATE Utilizador SET Swipes_Restantes = Swipes_Restantes + 1 WHERE Utilizador_ID = ?').run(userId);
         });
         
         undoTransaction();
