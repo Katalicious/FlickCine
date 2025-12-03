@@ -8,6 +8,7 @@ const swipeRoutes = require('./routes/swipeRoutes');
 const detailsRoutes = require('./routes/detailsRoutes');
 const watchlistRoutes = require('./routes/watchlistRoutes');
 const authMiddleware = require('./middlewares/authMiddleware');
+const aboutRoutes = require('./routes/aboutRoutes');
 
 const app = express();
 const PORT = process.env.PORT || 3000;
@@ -40,6 +41,7 @@ app.use('/', authRoutes);
 app.use('/swipe', authMiddleware, swipeRoutes);
 app.use('/details', authMiddleware, detailsRoutes);
 app.use('/watchlist', authMiddleware, watchlistRoutes);
+app.use('/aboutus', aboutRoutes);
 
 app.use((req, res) => {
     res.status(404).send('Página não encontrada');

@@ -1,0 +1,194 @@
+.page-hero {
+  width: 100%;
+  height: 240px;
+  background-image: url('/img/header-about-us.jpg');
+  background-size: cover;
+  background-position: center;
+  background-repeat: no-repeat;
+  display: block;
+  margin-bottom: 30px;
+}
+
+.aboutus-main .container-aboutus-container {
+  max-width: 1000px;
+  margin: 0 auto 40px;
+  padding: 0 20px;
+}
+
+.aboutus-main h1 {
+  font-size: 2rem;
+  margin-bottom: 12px;
+}
+
+.aboutus-main p {
+  line-height: 1.8;
+  margin-bottom: 1.25rem;
+}
+
+.about-paragraph {
+  line-height: 1.8;
+  margin: 0 0 1.25rem 0;
+  max-width: 100%;
+  text-align: justify;
+  text-justify: inter-word;
+  -webkit-hyphens: auto;
+  -moz-hyphens: auto;
+  hyphens: auto;
+  text-align-last: left;
+  word-spacing: normal;
+}
+
+
+.equipa-container {
+  max-width: 1000px;
+  margin: 0 auto 60px;
+  padding: 0 20px;
+}
+
+.equipa-container h2 {
+  font-size: 1.6rem;
+  margin-bottom: 18px;
+}
+
+.membros-equipa {
+  display: grid;
+  grid-template-columns: repeat(1, 1fr);
+  gap: 22px;
+}
+
+@media (min-width: 640px) {
+  .membros-equipa { grid-template-columns: repeat(2, 1fr); }
+}
+
+@media (min-width: 992px) {
+  .membros-equipa { grid-template-columns: repeat(3, 1fr); }
+}
+
+.membro {
+  text-align: center;
+  padding: 12px 10px;
+  background: rgba(255,255,255,0.9);
+  border-radius: 10px;
+  box-shadow: 0 6px 18px rgba(64,55,71,0.06);
+  transition: transform 220ms cubic-bezier(.2,.9,.3,1);
+  will-change: transform;
+}
+
+.membro img.avatar {
+  width: 86px;
+  height: 86px;
+  object-fit: cover;
+  border-radius: 50%;
+  display: inline-block;
+  margin-bottom: 10px;
+  border: 3px solid rgba(64,55,71,0.06);
+}
+
+.card {
+  width: 100%;
+  height: 100%;
+  perspective: 1000px;
+}
+
+.card__inner {
+  position: relative;
+  width: 100%;
+  min-height: 180px;
+  transform-style: preserve-3d;
+  transition: transform 600ms cubic-bezier(.2,.9,.3,1);
+}
+
+.card__front,
+.card__back {
+  position: relative;
+  backface-visibility: hidden;
+  -webkit-backface-visibility: hidden;
+  width: 100%;
+  min-height: 180px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+}
+
+.card__back {
+  position: absolute;
+  top: 0;
+  left: 0;
+  transform: rotateY(180deg);
+}
+
+.card.is-flipped .card__inner {
+  transform: rotateY(180deg);
+}
+
+.card__back a {
+  color: inherit;
+  text-decoration: underline;
+}
+
+.card__back .socials {
+  display: flex;
+  gap: 12px;
+  align-items: center;
+  justify-content: center;
+  margin-top: 8px;
+}
+
+.card__back .social-icon {
+  width: 28px;
+  height: auto;
+  display: inline-block;
+}
+
+.dark-mode .card__back .social-icon {
+  filter: brightness(1.2) contrast(1.1);
+}
+.card__back .social-icon.icon-fallback {
+  filter: invert(1) brightness(2) contrast(1.2);
+}
+
+.membro h3 {
+  margin: 6px 0 4px;
+  font-size: 1rem;
+}
+
+.membro p {
+  margin: 0;
+  font-size: 0.9rem;
+}
+
+.dark-mode .membro {
+  background: rgba(40,40,45,0.28);
+  box-shadow: 0 6px 18px rgba(0,0,0,0.6);
+}
+
+.dark-mode .membro img.avatar {
+  border-color: rgba(255,255,255,0.08);
+}
+
+.dark-mode .page-hero {
+  filter: brightness(0.85) contrast(0.95);
+}
+
+.membro:hover,
+.membro:focus-within {
+  transform: translateY(-6px) scale(1.03);
+}
+
+.membro:active {
+  transform: translateY(-2px) scale(0.999);
+}
+
+
+div.container-aboutus-container {
+  display: block;
+  padding: 40px 20px 30px;
+}
+
+div.container-aboutus-container h1 {
+  font-size: 2.5rem;
+  margin-bottom: 1rem;
+  text-align: center;
+  text-transform: uppercase;
+}
