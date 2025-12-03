@@ -199,7 +199,7 @@ select {
     position: fixed;
     left: 50%;
     top: 20%;
-    transform: translate(-50%, 0); /* Simplified transform */
+    transform: translate(-50%, 0);
     background: #fff;
     padding: 18px 24px;
     border: 1px solid #ccc;

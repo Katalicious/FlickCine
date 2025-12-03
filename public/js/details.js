@@ -13,7 +13,6 @@ document.addEventListener('DOMContentLoaded', async () => {
     const btnCancelModal = document.getElementById('btn-modal-cancel');
     let idToRemove = null;
 
-    // 1. Clicar no Lixo -> Abrir Modal
     if (btnRemove) {
         btnRemove.addEventListener('click', (e) => {
             e.stopPropagation();
@@ -101,7 +100,6 @@ document.addEventListener('DOMContentLoaded', async () => {
         container.appendChild(toast);
     }
 
-    // --- 2. Lógica das Tabs ---
     window.openTab = function(evt, tabName) {
         var i, tabContent, tabLinks;
         tabContent = document.getElementsByClassName("tab-content");

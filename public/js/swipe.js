@@ -2,17 +2,12 @@ document.addEventListener('DOMContentLoaded', async () => {
     const stackContainer = document.getElementById('card-stack');
     const emptyState = document.getElementById('empty-state');
     const loadingSpinner = document.getElementById('loading-spinner');
-    
-    // --- Referências aos Sons ---
     const soundAccept = document.getElementById('sound-accept');
     const soundReject = document.getElementById('sound-reject');
-    
-    // --- Configurações Iniciais ---
+
     let movies = [];
     let activeIndex = 0;
     let lastAction = null; 
-
-    // --- Função para Tocar Sons ---
     function playSound(type) {
         const audio = (type === 'accept') ? soundAccept : soundReject;
         
@@ -23,7 +18,6 @@ document.addEventListener('DOMContentLoaded', async () => {
         }
     }
 
-    // --- 1. Buscar Filmes ao Backend ---
     async function fetchMovies() {
         try {
             if (loadingSpinner) loadingSpinner.style.display = 'flex';
@@ -87,7 +81,6 @@ document.addEventListener('DOMContentLoaded', async () => {
         updateSidebar(activeIndex); 
     }
 
-    // --- 2. Renderizar Cartões ---
     function renderCards() {
         stackContainer.innerHTML = '';
         if (activeIndex >= movies.length) {
@@ -180,7 +173,6 @@ document.addEventListener('DOMContentLoaded', async () => {
         stackContainer.appendChild(el);
     }
 
-    // --- 3. Sidebar ---
     function updateSidebar(index) {
         const subs = document.getElementById('stream-subs');
         const rent = document.getElementById('stream-rent');
@@ -203,7 +195,6 @@ document.addEventListener('DOMContentLoaded', async () => {
         }
     }
 
-    // --- 4. Toasts ---
     function showToast(msg, type) {
         const c = document.getElementById('toast-container');
         if (!c) return;
@@ -219,7 +210,6 @@ document.addEventListener('DOMContentLoaded', async () => {
         }, 2000);
     }
 
-    // --- 5. Drag & Drop ---
     function initDragEvents(card) {
         let isDragging = false, startX = 0, currentX = 0;
 
@@ -271,7 +261,6 @@ document.addEventListener('DOMContentLoaded', async () => {
         }
     }
 
-    // --- 6. Trigger Swipe ---
     window.triggerSwipe = async (dir) => {
         const card = document.querySelector('.current-card');
         if(!card) return;
@@ -330,7 +319,6 @@ document.addEventListener('DOMContentLoaded', async () => {
         }, 300);
     };
 
-    // --- 7. Undo ---
     window.handleUndo = async () => {
         if (!lastAction) { showToast("Nada para desfazer!", "info"); return; }
         playSound('reject');

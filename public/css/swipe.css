@@ -468,7 +468,7 @@ body.dark-mode .btn-details-inside:hover {
 
 .end-stack-content h2,
 .limit-title {
-    color: #1d1d1d; /* Cinzento escuro */
+    color: #1d1d1d; 
     font-size: 1.8rem;
     margin-bottom: 10px;
     font-weight: 800;

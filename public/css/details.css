@@ -525,7 +525,7 @@ body.dark-mode .custom-modal-box p { color: #aaa; }
 body.dark-mode .btn-cancel { background-color: #444; color: #fff; }
 
 .btn-confirm {
-    background-color: #e50914; /* Vermelho */
+    background-color: #e50914;
     color: white;
     box-shadow: 0 4px 10px rgba(229, 9, 20, 0.4);
 }

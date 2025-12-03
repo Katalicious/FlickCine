@@ -10,7 +10,6 @@ router.get('/', (req, res) => {
     res.render('swipe');
 });
 
-// --- ROTA DE FEED INTELIGENTE ---
 router.get('/feed', async (req, res) => {
     try {
         if (!req.session || !req.session.user) return res.status(401).json({ error: 'Não autorizado' });
@@ -121,7 +120,6 @@ router.get('/feed', async (req, res) => {
     }
 });
 
-// --- ROTA DE INTERAÇÃO  ---
 router.post('/interaction', (req, res) => {
     const { tmdbId, title, poster, liked, disliked, overview, year } = req.body; 
     const userId = req.session.user.id;
@@ -170,7 +168,6 @@ router.post('/interaction', (req, res) => {
     }
 });
 
-// --- ROTA DE UNDO ---
 router.post('/undo', (req, res) => {
     const userId = req.session.user.id;
     try {

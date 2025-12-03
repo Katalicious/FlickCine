@@ -2,7 +2,7 @@ require('dotenv').config();
 
 const BASE_URL = 'https://api.themoviedb.org/3';
 const TOKEN = process.env.TMDB_BEARER_TOKEN;
-const TV_OFFSET = 10000000; // Valor para distinguir Séries de Filmes na BD
+const TV_OFFSET = 10000000;
 
 const options = {
     method: 'GET',
@@ -12,11 +12,9 @@ const options = {
     }
 };
 
-// --- Função Auxiliar: Buscar detalhes (Filmes e Séries) ---
 async function fetchDetailsForList(movieList) {
     const detailedContent = await Promise.all(movieList.map(async (basicItem) => {
         try {
-            // 1. Detetar se é Filme ou Série
             let id = typeof basicItem === 'object' ? basicItem.id : basicItem;
             let type = 'movie';
             let realId = id;
@@ -26,15 +24,12 @@ async function fetchDetailsForList(movieList) {
                 realId = id - TV_OFFSET;
             }
 
-            // 2. Pedir detalhes à API
             const detailUrl = `${BASE_URL}/${type}/${realId}?language=pt-PT&append_to_response=watch/providers,videos,credits`;
             const detailRes = await fetch(detailUrl, options);
             
             if(!detailRes.ok) return null;
             const details = await detailRes.json();
-            
-            // --- 3. Normalizar Dados ---
-            
+
             const title = details.title || details.name;
             const originalTitle = details.original_title || details.original_name;
         

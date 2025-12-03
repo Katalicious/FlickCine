@@ -41,7 +41,6 @@ router.get('/api/:id', authMiddleware, async (req, res) => {
     }
 });
 
-// --- 2. ROTA DA PÁGINA (Carregamento Inicial) ---
 router.get('/:id', authMiddleware, async (req, res) => {
     const movieId = req.params.id;
     const userId = req.session.user.id;

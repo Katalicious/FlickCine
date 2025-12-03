@@ -44,7 +44,6 @@ email.addEventListener('blur', function() {
     }
 });
 
-/* validação data nascimento */
 
 const inputDataNasc = document.getElementById('idade');
 const mensagemerroidade = document.getElementById('BlurDate');
@@ -76,7 +75,7 @@ function ComputarIdade() {
         mensagemerroidade.style.display = 'block';
         mensagemerroidade.innerHTML = "Deve ser maior de 18 anos para se registar.";
         mensagemerroidade.style.color = 'red';
-        event.preventDefault(); // Evento a fazer, addeventlistener submit no form
+        event.preventDefault();
     } else if (idade >= 18) {
         mensagemerroidade.innerHTML = '';
     }
@@ -89,11 +88,6 @@ inputDataNasc.addEventListener('blur', function() {
   
 });
 
-
-
-
-
-/* */
 
 let password = document.getElementById('password')
 let confirm_password = document.getElementById('confirm-password');
@@ -109,8 +103,6 @@ function validatePassword(){
 
 password.onchange = validatePassword;
 confirm_password.onkeyup = validatePassword;
-
-/* Validação da palavra-passe com a mensagem de erro. */
 
 let letra = document.getElementById("letra");
 let maiúscula = document.getElementById("maiúscula");

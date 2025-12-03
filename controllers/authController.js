@@ -97,8 +97,8 @@ exports.getProfile = (req, res) => {
         let sql = `
             SELECT f.*, 
                    w.Swipe_ID as SWIPE_ID,
-                   f.Capa as poster,    -- Alias para garantir que o JS encontra
-                   f.Titulo as title,   -- Alias para garantir que o JS encontra
+                   f.Capa as poster,   
+                   f.Titulo as title,   
                    f.tmbd_ID as id
             FROM Watchlist w
             JOIN Swipes s ON w.Swipe_ID = s.SWIPE_ID
