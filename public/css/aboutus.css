@@ -40,19 +40,27 @@
 
 
 .equipa-container {
-  max-width: 1000px;
-  margin: 0 auto 60px;
+  display: flex;
+  width: 100%;
+  max-width: 1200px;
+  margin: 0 120px 60px auto;
   padding: 0 20px;
+  flex-direction: column;
 }
 
 .equipa-container h2 {
+  text-align: center;
+  display: flex;
   font-size: 1.6rem;
   margin-bottom: 18px;
+  margin-left: 330px;
 }
 
 .membros-equipa {
   display: grid;
-  grid-template-columns: repeat(1, 1fr);
+  width: 100%;
+  grid-template-columns: repeat(auto-fit, minmax(280px, max-content));
+  justify-content: center;
   gap: 22px;
 }
 
@@ -66,12 +74,14 @@
 
 .membro {
   text-align: center;
-  padding: 12px 10px;
-  background: rgba(255,255,255,0.9);
-  border-radius: 10px;
-  box-shadow: 0 6px 18px rgba(64,55,71,0.06);
-  transition: transform 220ms cubic-bezier(.2,.9,.3,1);
-  will-change: transform;
+  padding: 30px 20px;
+  background: rgba(255, 255, 255, 0.9);
+  border-radius: 15px;
+  box-shadow: 0 10px 30px rgba(64, 55, 71, 0.1);
+  transition: transform 0.3s cubic-bezier(.2, .9, .3, 1);
+  display: flex;
+  justify-content: center;
+  align-items: center;
 }
 
 .membro img.avatar {
