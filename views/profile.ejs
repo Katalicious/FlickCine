@@ -7,27 +7,30 @@
     <%- include('partials/header') %>
 
     <div class="profile-container">
+        
         <div class="sidebar" id="sidebar">
-        <div class="profile-picture">
-            <img src="<%= (user && user.id) ? ('/avatars/' + user.id) : '/img/avatar_placeholder.png' %>" alt="Profile Avatar">
-        </div>
+            
+            <div class="profile-picture">
+                <img src="<%= (user && user.id) ? ('/avatars/' + user.id) : '/img/avatar_placeholder.png' %>" alt="Profile Avatar">
+            </div>
+            <h2 class="username"><%= user.Nome_de_Utilizador %></h2>
 
-        <h2 class="username"><%= user.Nome_de_Utilizador %></h2>
+            <div class="alterar-dados">
+                <a href="#" id="alterar-avatar"><i class="fas fa-user-edit"></i> Alterar Avatar</a>
+                <a href="#" id="alterar-password"><i class="fas fa-key"></i> Alterar Palavra-passe</a>
+                </div>
 
-        <div class="alterar-dados">
-            <a href="#" id="alterar-avatar">Alterar Avatar</a>
-            <a href="#" id="alterar-password">Alterar Palavra-passe</a>
-        </div>
-
-        <div class="filtros-ordenar-watchlist">
-            <label for="ordenar-watchlist">Ordenar por:</label>
-            <select id="ordenar-watchlist">
-                <option value="data-adicao">Data de Adição</option>
-                <option value="titulo-asc">Título (A-Z)</option>
-                <option value="titulo-desc">Título (Z-A)</option>
-                <option value="recente-antigo">Recente para Antigo</option>
-                <option value="antigo-recente">Antigo para Recente</option>
-            </select>
+            <div class="filtros-ordenar-watchlist">
+                <h3>Filtros</h3>
+                
+                <label for="ordenar-watchlist">Ordenar por:</label>
+                <select id="ordenar-watchlist">
+                    <option value="data-adicao">Data de Adição</option>
+                    <option value="titulo-asc">Título (A-Z)</option>
+                    <option value="titulo-desc">Título (Z-A)</option>
+                    <option value="recente-antigo">Mais Recente</option>
+                    <option value="antigo-recente">Mais Antigo</option>
+                </select>
 
             <label for="filtro-genero">Filtrar por Género:</label>
             <select id="filtro-genero">
